@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  app:
+    container_name: elearning_api
+    build:
+      context: ./app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c "python manage.py wait_for_db && 
+             python manage.py migrate && 
+             python manage.py runserver 0.0.0.0:8000"
+    environment: 
+      - DB_HOST=database
+      - DB_NAME=elearning
+      - DB_USER=postgres
+      - DB_PASS=postgres
+    depends_on:
+      - cache
+      - database
+
+  database:
+    container_name: elearning_api_db
+    image: postgres:10-alpine
+    restart: always
+    # env_file: 
+    #   - .env
+    environment:
+      - POSTGRES_DB=elearning
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - pgdata:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
+  cache:
+    container_name: elearning_api_cache
+    image: memcached
+    ports:
+      - "11211:11211"
+    entrypoint:
+      - memcached
+      - -m 64
+volumes:
+  pgdata:
