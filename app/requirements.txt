@@ -7,3 +7,4 @@ django-memcache-status==2.2
 djangorestframework==3.11.0
 flake8>=3.8.4,<3.9.0
 psycopg2>=2.8.6,<2.9.0
+selenium==3.141.0

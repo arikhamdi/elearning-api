@@ -45,5 +45,6 @@ services:
     entrypoint:
       - memcached
       - -m 64
+
 volumes:
   pgdata:
