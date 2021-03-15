@@ -8,7 +8,7 @@ class SubjectModelTest(TestCase):
 
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            username='testuser',
+            email='testuser@mail.com',
             password='testpass123'
         )
         self.subject1 = Subject.objects.create(

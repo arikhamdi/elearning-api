@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 
 services:
   app:
@@ -19,15 +19,12 @@ services:
       - DB_USER=postgres
       - DB_PASS=postgres
     depends_on:
-      - cache
       - database
 
   database:
     container_name: elearning_api_db
     image: postgres:10-alpine
     restart: always
-    # env_file: 
-    #   - .env
     environment:
       - POSTGRES_DB=elearning
       - POSTGRES_USER=postgres
@@ -36,15 +33,6 @@ services:
       - pgdata:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
-
-  cache:
-    container_name: elearning_api_cache
-    image: memcached
-    ports:
-      - "11211:11211"
-    entrypoint:
-      - memcached
-      - -m 64
 
 volumes:
   pgdata:
