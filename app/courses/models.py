@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth import get_user_model
 
 
@@ -8,6 +10,11 @@ class Subject(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    class Meta:
+        ordering = ['title']
+        verbose_name = 'sujet'
+        verbose_name_plural = 'sujets'
 
 
 class Course(models.Model):
@@ -24,6 +31,11 @@ class Course(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    class Meta:
+        ordering = ['-created']
+        verbose_name = 'cours'
+        verbose_name_plural = 'cours'
+
 
 class Module(models.Model):
     course = models.ForeignKey(
@@ -35,16 +47,63 @@ class Module(models.Model):
     def __str__(self) -> str:
         return f'{self.title}'
 
+    class Meta:
+        ordering = ['order']
+
     def save(self, *args, **kwargs) -> None:
         # if it is the first module for the current course
         if self.course.modules.all().count() == 0 and not self.order:
             self.order = 1
-        # else: get the max value for the modules order field d-for the current course
+        # else: get the max value for the modules order field for the current course
         else:
             query = {
                 field.order: field.id for field in self.course.modules.all()
             }
             if not self.order or self.order in query:
-                new_order_value = max(query.keys())
-                self.order = new_order_value + 1
+                biggest_order_value = max(query.keys())
+                self.order = biggest_order_value + 1
         super(Module, self).save(*args, **kwargs)
+
+
+class Content(models.Model):
+    module = models.ForeignKey(
+        Module, on_delete=models.CASCADE, related_name='contents')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    item = GenericForeignKey('content_type', 'object_id')
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ['order']
+
+    def save(self, *args, **kwargs) -> None:
+        # if it is the first contenht for the current module
+        if self.module.contents.all().count() == 0 and not self.order:
+            self.order = 1
+        # else: get the max value for the content order field for the current module
+        else:
+            query = [field.order for field in self.module.contents.all()]
+            if not self.order or self.order in query:
+                biggest_order_value = max(query)
+                self.order = biggest_order_value + 1
+        super(Content, self).save(*args, **kwargs)
+
+
+class Text(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+
+
+class Image(models.Model):
+    title = models.CharField(max_length=200)
+    image = models.ImageField(max_length=250, upload_to='images')
+
+
+class File(models.Model):
+    title = models.CharField(max_length=200)
+    image = models.FileField(max_length=250, upload_to='files')
+
+
+class Video(models.Model):
+    title = models.CharField(max_length=200)
+    url = models.URLField()
