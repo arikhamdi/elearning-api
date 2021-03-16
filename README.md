@@ -26,7 +26,11 @@ API endpoints
 ***Courses***
 -
 -------------
-- /api/subjects
+- /api/subjects/ (GET)
+    - list all published subjects
+
+- /api/subject/'slug' (GET)
+    - display subject detail view
 
 ***Authentication***
 - 
@@ -39,6 +43,8 @@ API endpoints
     - password
 
     Returns Token key
+
+- /dj-rest-auth/user/ (GET)
 
 - /dj-rest-auth/logout/ (POST)
 

@@ -46,10 +46,10 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
 
     'dj_rest_auth',
-
     'allauth',
     'allauth.account',
     'dj_rest_auth.registration',
+
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.facebook',
