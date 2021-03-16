@@ -8,7 +8,7 @@ class SubjectModelTest(TestCase):
 
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            email='testuser@mail.com',
+            username='testuser',
             password='testpass123'
         )
         self.subject1 = Subject.objects.create(
@@ -22,6 +22,11 @@ class SubjectModelTest(TestCase):
 
     def test_subject_slug(self) -> None:
         self.assertEqual(self.subject1.slug, 'subject-one')
+
+    def test_subject_no_duplicate_slug(self) -> None:
+        with self.assertRaises(Exception):
+            self.subject2 = Subject.objects.create(
+                title="subject two", slug="subject-one")
 
 
 class CourseModelTest(SubjectModelTest):

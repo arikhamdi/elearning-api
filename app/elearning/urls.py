@@ -19,6 +19,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # Local
+    path('api/', include('courses.urls')),
+
     # User management
     path('api/dj-rest-auth/registration/',
          include('dj_rest_auth.registration.urls')),
