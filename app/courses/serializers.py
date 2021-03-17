@@ -13,9 +13,11 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 
 class ModuleSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Module
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'publish', 'status']
+        read_only_fields = ('id',)
 
 
 class CourseSerializer(serializers.ModelSerializer):

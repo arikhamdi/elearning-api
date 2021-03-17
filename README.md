@@ -57,6 +57,11 @@ API endpoints
 - /api/teacher/course/<course-slug>
     - view to update course
 
+- /api/teacher/course/<course-slug>/create
+    - Create new module for current course
+
+- /api/teacher/course/<course-slug>/<module-id>/edit-module
+    - Edit related module
 
 ***Authentication***
 - 

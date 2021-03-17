@@ -7,6 +7,11 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth import get_user_model
 from django.db.models.query import QuerySet
 
+STATUS_CHOICES = (
+    ('draft', 'Draft'),
+    ('published', 'Published'),
+)
+
 
 class PublishedManager(models.Manager):
     def get_queryset(self) -> QuerySet:
@@ -27,10 +32,6 @@ class Subject(models.Model):
 
 
 class Course(models.Model):
-    STATUS_CHOICES = (
-        ('draft', 'Draft'),
-        ('published', 'Published'),
-    )
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name='course_created')
     subject = models.ForeignKey(
@@ -70,6 +71,14 @@ class Module(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     order = models.PositiveIntegerField()
+    publish = models.DateTimeField(default=timezone.now)
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='draft')
+
+    objects = models.Manager()
+    published = PublishedManager()
 
     def __str__(self) -> str:
         return f'{self.title}'

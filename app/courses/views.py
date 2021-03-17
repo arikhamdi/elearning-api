@@ -9,8 +9,10 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
-from .serializers import SubjectSerializer, CourseSerializer
-from .models import Subject, Course
+from .serializers import SubjectSerializer, CourseSerializer, ModuleSerializer
+from .models import Subject, Course, Module
+
+# Public
 
 
 class SubjectListAPIView(generics.ListAPIView):
@@ -30,6 +32,23 @@ class CoursesListAPIView(generics.ListAPIView):
     queryset = Course.published.all()
     serializer_class = CourseSerializer
 
+
+class CourseListBySubjectAPIView(generics.ListAPIView):
+    serializer_class = CourseSerializer
+
+    def get_queryset(self):
+        subject = Subject.objects.get(slug=self.kwargs['slug'])
+        return Course.published.filter(subject=subject)
+
+
+class CourseDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Course.published.all()
+    serializer_class = CourseSerializer
+    permission_classes = (IsAuthorOrReadOnly,)
+    lookup_field = 'slug'
+
+
+# Teacher
 
 class ManageCoursesListAPIView(PermissionRequiredMixin, generics.ListAPIView):
     queryset = Course.objects.all()
@@ -63,16 +82,25 @@ class UpdateCourseAPIView(PermissionRequiredMixin, generics.RetrieveUpdateDestro
     lookup_field = 'slug'
 
 
-class CourseListBySubjectAPIView(generics.ListAPIView):
-    serializer_class = CourseSerializer
+class CreateModuleAPIView(PermissionRequiredMixin, generics.ListCreateAPIView):
+    serializer_class = ModuleSerializer
+    permission_classes = (IsAuthenticated,)
+    permission_required = 'courses.change_course'
 
     def get_queryset(self):
-        subject = Subject.objects.get(slug=self.kwargs['slug'])
-        return Course.published.filter(subject=subject)
+        course = Course.objects.get(slug=self.kwargs['slug'])
+        return course.modules.all()
+
+    def perform_create(self, serializer):
+        course = Course.objects.get(slug=self.kwargs['slug'])
+        serializer.save(course=course)
 
 
-class CourseDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Course.published.all()
-    serializer_class = CourseSerializer
-    permission_classes = (IsAuthorOrReadOnly,)
-    lookup_field = 'slug'
+class UpdateDeleteModuleAPIView(PermissionRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ModuleSerializer
+    permission_classes = (IsAuthenticated,)
+    permission_required = 'courses.change_course'
+
+    def get_queryset(self):
+        course = Course.objects.get(slug=self.kwargs['slug'])
+        return course.modules.all()
