@@ -1,7 +1,7 @@
 Run project
 =============
 
-make sure you have docker installed on your computer.
+Make sure you have docker installed on your computer.
 
 ````
 docker-compose up
@@ -26,20 +26,36 @@ API endpoints
 ***Courses***
 -
 -------------
+
+***Public***
+
+------------
 - /api/subjects/ (GET)
     - list all subjects
 
-- /api/subject/{subject-slug} (GET)  
+- /api/subject/<subject-slug> (GET)  
     - subject detail view
 
 - /api/courses/ (GET)
     - list all published courses
 
-- /api/courses/{subject-slug} (GET)
+- /api/courses/<subject-slug> (GET)
     - list all courses by subject passed as argument
 
-- /api/course/{course-slug} (GET)
+- /api/course/<course-slug> (GET)
     - course detail view
+
+***Teacher***
+
+-------------
+- /api/teacher/dashboard/
+    - teacher dashboard
+
+- /api/teacher/course/create
+    - create new course
+
+- /api/teacher/course/<course-slug>
+    - view to update course
 
 
 ***Authentication***

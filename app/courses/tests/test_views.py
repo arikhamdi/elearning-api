@@ -140,3 +140,11 @@ class CourseDetailAPIViewTest(CourseListAPIViewTest):
             reverse('courses:course-detail', kwargs={'slug': slug}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class PublicCourseViewTest(APITestCase):
+    pass
+
+
+class PrivateCourseViewTest(APITestCase):
+    pass

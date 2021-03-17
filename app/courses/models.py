@@ -1,5 +1,7 @@
 from django.db import models
+from django.http import request
 from django.utils import timezone
+from django.utils.text import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth import get_user_model
@@ -34,7 +36,7 @@ class Course(models.Model):
     subject = models.ForeignKey(
         'Subject', on_delete=models.CASCADE, related_name='courses')
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200)
+    slug = models.SlugField(max_length=200, blank=True, null=True)
     overview = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
@@ -46,6 +48,12 @@ class Course(models.Model):
 
     objects = models.Manager()
     published = PublishedManager()
+
+    def save(self, *args, **kwargs) -> None:
+        if not self.slug:
+            self.slug = slugify(self.title)
+
+        return super(Course, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.title
