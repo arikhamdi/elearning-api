@@ -27,10 +27,20 @@ API endpoints
 -
 -------------
 - /api/subjects/ (GET)
-    - list all published subjects
+    - list all subjects
 
-- /api/subject/'slug' (GET)
-    - display subject detail view
+- /api/subject/{subject-slug} (GET)  
+    - subject detail view
+
+- /api/courses/ (GET)
+    - list all published courses
+
+- /api/courses/{subject-slug} (GET)
+    - list all courses by subject passed as argument
+
+- /api/course/{course-slug} (GET)
+    - course detail view
+
 
 ***Authentication***
 - 
@@ -47,10 +57,6 @@ API endpoints
 - /dj-rest-auth/user/ (GET)
 
 - /dj-rest-auth/logout/ (POST)
-
-- /dj-rest-auth/password/reset/ (POST)
-
-    - email
 
 - /dj-rest-auth/registration/ (POST)
 

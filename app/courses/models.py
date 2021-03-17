@@ -1,7 +1,14 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth import get_user_model
+from django.db.models.query import QuerySet
+
+
+class PublishedManager(models.Manager):
+    def get_queryset(self) -> QuerySet:
+        return super(PublishedManager, self).get_queryset().filter(status='published')
 
 
 class Subject(models.Model):
@@ -18,6 +25,10 @@ class Subject(models.Model):
 
 
 class Course(models.Model):
+    STATUS_CHOICES = (
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    )
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name='course_created')
     subject = models.ForeignKey(
@@ -25,14 +36,22 @@ class Course(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200)
     overview = models.TextField()
+    publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='draft')
+
+    objects = models.Manager()
+    published = PublishedManager()
 
     def __str__(self) -> str:
         return self.title
 
     class Meta:
-        ordering = ['-created']
+        ordering = ('-publish',)
         verbose_name = 'cours'
         verbose_name_plural = 'cours'
 
@@ -48,7 +67,7 @@ class Module(models.Model):
         return f'{self.title}'
 
     class Meta:
-        ordering = ['order']
+        ordering = ('order',)
 
     def save(self, *args, **kwargs) -> None:
         # if it is the first module for the current course
@@ -74,7 +93,7 @@ class Content(models.Model):
     order = models.PositiveIntegerField()
 
     class Meta:
-        ordering = ['order']
+        ordering = ('order',)
 
     def save(self, *args, **kwargs) -> None:
         # if it is the first contenht for the current module
