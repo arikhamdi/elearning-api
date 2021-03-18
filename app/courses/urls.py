@@ -10,7 +10,10 @@ from .views import (
     CreateCourseAPIView,
     UpdateCourseAPIView,
     CreateModuleAPIView,
-    UpdateDeleteModuleAPIView
+    UpdateDeleteModuleAPIView,
+    ContentCreateApiView,
+    ContentListAPIView,
+    ContentUpdateAPIView
 )
 
 
@@ -25,9 +28,18 @@ urlpatterns = [
     path('teacher/course/<slug:slug>/create',
          CreateModuleAPIView.as_view(), name="module-create"),
     path('teacher/course/<slug:slug>/<int:pk>/edit-module/',
-         UpdateDeleteModuleAPIView.as_view(), name="module-create"),
+         UpdateDeleteModuleAPIView.as_view(), name="module-update"),
     path('teacher/course/<slug:slug>/',
          UpdateCourseAPIView.as_view(), name="courses-update"),
+
+    path('teacher/course/<slug:slug>/<int:pk>/content',
+         ContentListAPIView.as_view(), name="content-list"),
+    path('teacher/course/<slug:slug>/<int:pk>/content/<model_name>/create/',
+         ContentCreateApiView.as_view(),
+         name='module_content_create'),
+    path('teacher/content/<int:pk>',
+         ContentUpdateAPIView.as_view(),
+         name='module_content_update'),
 
 
     # public interface

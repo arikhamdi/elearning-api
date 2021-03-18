@@ -1,0 +1,17 @@
+12. Formation en ligne
+Site web de mise à disposition de cours en ligne pour les abonnés.
+Un cours contient :
+- un sommaire
+- plusieurs chapitres
+- plusieurs sous-chapitres
+- des vidéos (par chapitre)
+- en option des supports fichiers (dossier .zip) et une version texte des vidéos
+Le cours a été créé par un professeur, qui peut également le modifier.
+Lorsqu’un abonné suit un cours, toutes les parties consultées seront marquées comme « déjà
+vues ». En d’autres termes, il pourra revenir à ce cours plus tard en sachant ce qu’il a déjà
+visionné. Un « taux de complétude » est associé au suivi d’un cours par un abonné.
+Le gestionnaire du site doit pouvoir ajouter un professeur.
+Un visiteur peut s’inscrire et acheter un abonnement.
+L’abonné peut également ajouter dans ses favoris ses cours choisis.
+Le site retient quels cours ont été suivis (complètement ou non) par les abonnés.
+Pour le gestionnaire, il est possible de produire des statistiques de « fréquentation » de cours. 

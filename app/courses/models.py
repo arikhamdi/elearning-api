@@ -1,11 +1,13 @@
+import json
 from django.db import models
 from django.http import request
+from django.http.response import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.utils.text import slugify
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.auth import get_user_model
-from django.db.models.query import QuerySet
+from django.template.loader import render_to_string
 
 STATUS_CHOICES = (
     ('draft', 'Draft'),
@@ -14,7 +16,7 @@ STATUS_CHOICES = (
 
 
 class PublishedManager(models.Manager):
-    def get_queryset(self) -> QuerySet:
+    def get_queryset(self):
         return super(PublishedManager, self).get_queryset().filter(status='published')
 
 
@@ -90,6 +92,8 @@ class Module(models.Model):
         # if it is the first module for the current course
         if self.course.modules.all().count() == 0 and not self.order:
             self.order = 1
+        elif self.order:
+            pass
         # else: get the max value for the modules order field for the current course
         else:
             query = {
@@ -104,10 +108,21 @@ class Module(models.Model):
 class Content(models.Model):
     module = models.ForeignKey(
         Module, on_delete=models.CASCADE, related_name='contents')
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        limit_choices_to={'model__in': (
+            'text',
+            'file',
+            'image',
+            'video'
+        )})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
     order = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f'{self.id} {str(self.content_type.model)}'
 
     class Meta:
         ordering = ('order',)
@@ -116,6 +131,8 @@ class Content(models.Model):
         # if it is the first contenht for the current module
         if self.module.contents.all().count() == 0 and not self.order:
             self.order = 1
+        elif self.order:
+            pass
         # else: get the max value for the content order field for the current module
         else:
             query = [field.order for field in self.module.contents.all()]
@@ -125,21 +142,33 @@ class Content(models.Model):
         super(Content, self).save(*args, **kwargs)
 
 
-class Text(models.Model):
+class ItemBase(models.Model):
+    owner = models.ForeignKey(
+        get_user_model(), related_name='%(class)s_related', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    def render(self):
+        return render_to_string(
+            f'courses/content/{self._meta.model_name}.html', {'item': self}
+        )
+
+
+class Text(ItemBase):
     content = models.TextField()
 
 
-class Image(models.Model):
-    title = models.CharField(max_length=200)
+class Image(ItemBase):
     image = models.ImageField(max_length=250, upload_to='images')
 
 
-class File(models.Model):
-    title = models.CharField(max_length=200)
-    image = models.FileField(max_length=250, upload_to='files')
+class File(ItemBase):
+    file = models.FileField(max_length=250, upload_to='files')
 
 
-class Video(models.Model):
-    title = models.CharField(max_length=200)
+class Video(ItemBase):
     url = models.URLField()
