@@ -72,7 +72,7 @@ class Module(models.Model):
         Course, on_delete=models.CASCADE, related_name='modules')
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    order = models.PositiveIntegerField()
+    order = models.PositiveIntegerField(blank=True)
     publish = models.DateTimeField(default=timezone.now)
     status = models.CharField(
         max_length=10,
@@ -119,7 +119,7 @@ class Content(models.Model):
         )})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
-    order = models.PositiveIntegerField()
+    order = models.PositiveIntegerField(blank=True)
 
     def __str__(self):
         return f'{self.id} {str(self.content_type.model)}'

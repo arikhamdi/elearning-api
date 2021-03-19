@@ -67,7 +67,7 @@ class ModuleWithContentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Module
-        fields = ['order', 'title', 'description', 'contents']
+        fields = ['id', 'order', 'title', 'description', 'contents']
 
 
 class ModuleSerializer(serializers.ModelSerializer):
@@ -80,7 +80,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     owner = OwnerSerializer(read_only=True)
-    modules = ModuleWithContentsSerializer(many=True, read_only=True)
+    modules = ModuleSerializer(many=True, read_only=True)
 
     class Meta:
         model = Course

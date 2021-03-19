@@ -2,18 +2,16 @@ from django.urls import path
 
 from .views import (
     SubjectListAPIView,
-    SubjectDetailAPIView,
     CoursesListAPIView,
     CourseListBySubjectAPIView,
     CourseDetailAPIView,
-    ManageCoursesListAPIView,
-    CreateCourseAPIView,
-    UpdateCourseAPIView,
-    CreateModuleAPIView,
-    UpdateDeleteModuleAPIView,
-    ContentCreateApiView,
-    ContentListAPIView,
-    ContentUpdateAPIView
+    modules_list,
+    module_detail,
+    content_list_by_module,
+    content_detail,
+    courses_list,
+    course_detail
+
 )
 
 
@@ -21,30 +19,36 @@ app_name = 'courses'
 
 urlpatterns = [
     # teacher interface
-    path('teacher/dashboard/', ManageCoursesListAPIView.as_view(),
-         name='teacher-dashboard'),
-    path('teacher/course/create',
-         CreateCourseAPIView.as_view(), name="courses-create"),
-    path('teacher/course/<slug:slug>/create',
-         CreateModuleAPIView.as_view(), name="module-create"),
-    path('teacher/course/<slug:slug>/<int:pk>/edit-module/',
-         UpdateDeleteModuleAPIView.as_view(), name="module-update"),
-    path('teacher/course/<slug:slug>/',
-         UpdateCourseAPIView.as_view(), name="courses-update"),
 
-    path('teacher/course/<slug:slug>/<int:pk>/content',
-         ContentListAPIView.as_view(), name="content-list"),
-    path('teacher/course/<slug:slug>/<int:pk>/content/<model_name>/create/',
-         ContentCreateApiView.as_view(),
-         name='module_content_create'),
+    # Courses
+    path('teacher/', courses_list,
+         name='teacher-dashboard'),
+    path('teacher/dashboard/', courses_list,
+         name='teacher-dashboard'),
+
+    path('teacher/<slug:course_slug>/',
+         course_detail, name="courses-detail"),
+
+    # Modules
+    path('teacher/<slug:course_slug>/modules/',
+         modules_list, name='modules-list'),
+    path('teacher/module/<int:module_id>/',
+         module_detail, name="module-detail"),
+
+
+    # Contents
+    path('teacher/module/<int:module_id>/content/',
+         content_list_by_module,
+         name='module-content-list'),
+    path('teacher/<int:module_id>/<model_name>/',
+         content_list_by_module,
+         name='module-content-create'),
     path('teacher/content/<int:pk>',
-         ContentUpdateAPIView.as_view(),
+         content_detail,
          name='module_content_update'),
 
 
     # public interface
-    path('subject/<slug:slug>/',
-         SubjectDetailAPIView.as_view(), name="subject-detail"),
     path('subjects/', SubjectListAPIView.as_view(), name="subjects-list"),
 
     path('courses/<slug:slug>/', CourseListBySubjectAPIView.as_view(),

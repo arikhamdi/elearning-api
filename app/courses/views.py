@@ -1,9 +1,9 @@
 from django.contrib.contenttypes.models import ContentType
-from django.db.models.query import QuerySet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 
 from django.shortcuts import get_object_or_404
@@ -36,13 +36,6 @@ class SubjectListAPIView(generics.ListAPIView):
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class SubjectDetailAPIView(generics.RetrieveAPIView):
-    queryset = Subject.objects.all()
-    serializer_class = SubjectSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    lookup_field = 'slug'
-
-
 class CoursesListAPIView(generics.ListAPIView):
     queryset = Course.published.all()
     serializer_class = CourseSerializer
@@ -56,129 +49,142 @@ class CourseListBySubjectAPIView(generics.ListAPIView):
         return Course.published.filter(subject=subject)
 
 
-class CourseDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+class CourseDetailAPIView(generics.RetrieveAPIView):
     queryset = Course.published.all()
     serializer_class = CourseSerializer
     permission_classes = (IsAuthorOrReadOnly,)
     lookup_field = 'slug'
 
 
-# Teacher
+# Teachers DashBoard
+# Courses
 
-class ManageCoursesListAPIView(PermissionRequiredMixin, generics.ListAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated,)
-    permission_required = 'courses.view_course'
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated, IsAuthorOrReadOnly])
+def courses_list(request):
 
-    def list(self, request):
-        queryset = self.get_queryset().filter(owner=request.user)
-        serializer = CourseSerializer(queryset, many=True)
+    if request.method == 'GET':
+        courses = Course.objects.filter(owner=request.user)
+        serializer = CourseSerializer(courses, many=True)
         return Response(serializer.data)
 
-
-class CreateCourseAPIView(PermissionRequiredMixin, generics.CreateAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated,)
-    permission_required = 'courses.add_course'
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    elif request.method == 'POST':
+        serializer = CourseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UpdateCourseAPIView(PermissionRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated,)
-    permission_required = ('courses.change_course', 'courses.delete_course')
-    lookup_field = 'slug'
+@api_view(['GET', 'PUT', 'DELETE'])
+def course_detail(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+
+    if request.method == 'GET':
+        serializer = CourseSerializer(course)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = CourseSerializer(course, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        course.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CreateModuleAPIView(PermissionRequiredMixin, generics.ListCreateAPIView):
-    serializer_class = ModuleSerializer
-    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated,)
-    permission_required = 'courses.change_course'
+# Module
 
-    def get_queryset(self):
-        course = Course.objects.get(slug=self.kwargs['slug'])
-        return course.modules.all()
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated, IsAuthorOrReadOnly])
+def modules_list(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
 
-    def perform_create(self, serializer):
-        course = Course.objects.get(slug=self.kwargs['slug'])
-        serializer.save(course=course)
+    if request.method == 'GET':
+        modules = course.modules.all()
+        serializer = ModuleSerializer(modules, many=True)
+        return Response(serializer.data)
 
-
-class UpdateDeleteModuleAPIView(PermissionRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = ModuleWithContentsSerializer
-    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated,)
-    permission_required = 'courses.change_course'
-
-    def get_queryset(self):
-        course = Course.objects.get(slug=self.kwargs['slug'])
-        return course.modules.all()
+    elif request.method == 'POST':
+        serializer = ModuleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(course=course)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ContentListAPIView(PermissionRequiredMixin, generics.ListAPIView):
-    serializer_class = ContentSerializer
-    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated,)
-    permission_required = 'courses.change_course'
+@api_view(['GET', 'PUT', 'DELETE'])
+def module_detail(request, module_id):
+    module = get_object_or_404(Module, id=module_id)
 
-    def get_queryset(self):
-        module = Module.objects.get(id=self.kwargs['pk'])
-        return module.contents.all()
+    if request.method == 'GET':
+        serializer = ModuleSerializer(module)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = ModuleSerializer(module, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        module.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ContentCreateApiView(PermissionRequiredMixin, generics.CreateAPIView):
-    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated,)
-    permission_required = 'courses.change_course'
+# Content type
 
-    def get_model(self, model_name):
-        if model_name in ['text', 'video', 'image', 'file']:
-            return apps.get_model(app_label='courses', model_name=model_name)
+def get_model(model_name):
+    """
+    Return content models, based on the courses apps models
+    Return courses.models.Text as default value  
+    """
+    if model_name in ['video', 'image', 'file']:
+        return apps.get_model(app_label='courses', model_name=model_name)
 
-        return None
+    return apps.get_model(app_label='courses', model_name='text')
 
-    def dispatch(self, request, slug, pk, model_name):
-        self.module = get_object_or_404(
-            Module,
-            id=pk,
-            course__owner=request.user
-        )
-        self.model = self.get_model(model_name)
-        return super().dispatch(request, pk, model_name)
 
-    def get_queryset(self):
-        return self.model.objects.all()
+def get_serializer_class(model_name, *args, **kwargs):
+    """
+    Return content type model serializer for asked content type
+    Return TextSerializer as default value  
+    """
+    if 'file' == model_name:
+        return FileSerializer(*args, **kwargs)
+    if 'image' == model_name:
+        return ImageSerializer(*args, **kwargs)
+    if 'video' == model_name:
+        return VideoSerializer(*args, **kwargs)
 
-    def get_serializer_class(self):
-        if self.model == Text:
-            return TextSerializer
-        if self.model == File:
-            return FileSerializer
-        if self.model == Image:
-            return ImageSerializer
-        if self.model == Video:
-            return VideoSerializer
+    return TextSerializer(*args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        if self.model == Text:
-            model_name = 'text'
-            serializer = TextSerializer(data=request.data)
-        if self.model == File:
-            model_name = 'file'
-            serializer = FileSerializer(data=request.data)
-        if self.model == Image:
-            model_name = 'image'
-            serializer = ImageSerializer(data=request.data)
-        if self.model == Video:
-            model_name = 'video'
-            serializer = VideoSerializer(data=request.data)
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def content_list_by_module(request, module_id, model_name=""):
+    """
+    Get list of contents or post a new one for the current module
+    """
+    module = get_object_or_404(Module, id=module_id)
+
+    if request.method == 'GET':
+        content = module.contents.all()
+        serializer = ContentSerializer(content, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+
+        serializer = get_serializer_class(model_name, data=request.data)
 
         if serializer.is_valid():
             if serializer.save(owner=request.user):
                 content = Content(
-                    module=self.module,
+                    module=module,
                     content_type=ContentType.objects.get(model=model_name),
                     object_id=serializer.data['id']
                 )
@@ -187,8 +193,31 @@ class ContentCreateApiView(PermissionRequiredMixin, generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ContentUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Content.objects.all()
-    serializer_class = ContentSerializer
-    permission_classes = (IsAuthenticated,)
-    permission_required = 'courses.change_course'
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def content_detail(request, pk):
+    """
+    Get content detail,
+    """
+    content = get_object_or_404(Content, id=pk)
+    contenttype = get_model(content.content_type.name)
+    model = get_object_or_404(contenttype, id=content.object_id)
+
+    if request.method == 'GET':
+        serializer = get_serializer_class(content.content_type.name, model)
+
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+
+        serializer = get_serializer_class(
+            content.content_type.name, model, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        content.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
