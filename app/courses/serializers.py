@@ -7,7 +7,7 @@ from .models import File, Image, Subject, Course, Module, Text, Video, Content
 class OwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['id', 'username', 'email', 'date_joined', 'last_login']
+        fields = ['id', 'name', 'email', 'last_login', 'date_joined']
         read_only_fields = ('id',)
 
 
@@ -41,9 +41,6 @@ class ItemRelatedField(serializers.RelatedField):
     """
 
     def to_representation(self, value):
-        """
-        Serialize conte objects to a simple textual representation.
-        """
         if isinstance(value, Text):
             return TextSerializer(value).data
         if isinstance(value, File):

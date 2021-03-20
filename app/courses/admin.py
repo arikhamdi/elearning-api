@@ -18,5 +18,5 @@ class CourseAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 
-admin.site.register(Content)
-admin.site.register(Text)
+# admin.site.register(Content)
+# admin.site.register(Text)

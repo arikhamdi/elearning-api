@@ -1,13 +1,11 @@
 import json
 from django.db import models
-from django.http import request
-from django.http.response import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.utils.text import slugify
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth import get_user_model
-from django.template.loader import render_to_string
+
 
 STATUS_CHOICES = (
     ('draft', 'Draft'),
@@ -39,7 +37,7 @@ class Course(models.Model):
     subject = models.ForeignKey(
         'Subject', on_delete=models.CASCADE, related_name='courses')
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, blank=True, null=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     overview = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
@@ -151,11 +149,6 @@ class ItemBase(models.Model):
 
     class Meta:
         abstract = True
-
-    def render(self):
-        return render_to_string(
-            f'courses/content/{self._meta.model_name}.html', {'item': self}
-        )
 
 
 class Text(ItemBase):
