@@ -5,6 +5,7 @@ services:
     container_name: elearning_api
     build:
       context: ./app
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:

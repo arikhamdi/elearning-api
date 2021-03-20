@@ -7,6 +7,13 @@ Make sure you have docker installed on your computer.
 docker-compose up
 ````
 
+Populate database for manual test
+=================================
+
+````
+python manage.py loaddata */fixtures/*.json`
+````
+
 Run tests
 =========
 

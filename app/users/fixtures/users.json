@@ -1,0 +1,59 @@
+[
+{
+  "model": "users.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$PHILbVPZPYHk$10SlOyg63M6x8w80CVgv0hGkQDgnL8/5dUWFQcCDkXk=",
+    "last_login": "2021-03-20T22:44:03.338Z",
+    "is_superuser": true,
+    "email": "arik@elearning.be",
+    "name": "",
+    "first_name": "",
+    "last_name": "",
+    "is_active": true,
+    "is_staff": true,
+    "is_teacher": false,
+    "date_joined": "2021-03-20T22:24:21.022Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$0PZcB6BaYaTg$rxYkc9D8oOn329NcD6aYp57Juqdz+fwM4rqSenhEFPc=",
+    "last_login": null,
+    "is_superuser": false,
+    "email": "student1@mail.com",
+    "name": "",
+    "first_name": "",
+    "last_name": "",
+    "is_active": true,
+    "is_staff": false,
+    "is_teacher": false,
+    "date_joined": "2021-03-20T22:45:09.965Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$1hRNvnPpCmLV$HuiCZ6dQOI/iE8fzGrb0pVwvcFewTigHuZ/ZaE5tOkA=",
+    "last_login": "2021-03-20T22:51:00.207Z",
+    "is_superuser": false,
+    "email": "teacher1@mail.com",
+    "name": "Teacher One",
+    "first_name": "",
+    "last_name": "",
+    "is_active": true,
+    "is_staff": false,
+    "is_teacher": true,
+    "date_joined": "2021-03-20T22:45:38.269Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

@@ -38,7 +38,7 @@ DEFAULT_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.sites',
+    'django.contrib.sites',
 ]
 
 THIRD_PARTY_APPS = [
@@ -46,11 +46,12 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
 
     'dj_rest_auth',
-    # 'allauth',
-    # 'allauth.account',
-    # 'dj_rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
 
-    # 'allauth.socialaccount',
+
     # 'allauth.socialaccount.providers.github',
     # 'allauth.socialaccount.providers.facebook',
 
@@ -99,19 +100,23 @@ WSGI_APPLICATION = 'elearning.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'PORT': "5432"
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': os.environ.get('DB_HOST'),
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PASS'),
+#         'PORT': "5432"
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -152,14 +157,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# SITE_ID = 1
+SITE_ID = 1
 
 AUTH_USER_MODEL = 'users.User'
 
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
 # ACCOUNT_SESSION_REMEMBER = False
 # ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# ACCOUNT_EMAIL_REQUIRED = True
+
 # ACCOUNT_UNIQUE_EMAIL = True
 # ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 
