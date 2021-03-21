@@ -22,7 +22,7 @@ urlpatterns = [
     path('teacher/<int:id>/', teacher_detail),
 
     # Courses
-    path('teacher/dashboard/', courses_list,
+    path('teacher/', courses_list,
          name='teacher-dashboard'),
 
     path('teacher/<slug:course_slug>/',
@@ -39,10 +39,11 @@ urlpatterns = [
     path('teacher/module/<int:module_id>/content/',
          content_list_by_module,
          name='module-content-list'),
-    path('teacher/<int:module_id>/<model_name>/',
+
+    path('teacher/module/<int:module_id>/content/<model_name>/',
          content_list_by_module,
          name='module-content-create'),
-    path('teacher/content/<int:pk>',
+    path('teacher/content/<int:content_id>/',
          content_detail,
-         name='module_content_update'),
+         name='module-content-detail'),
 ]

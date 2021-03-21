@@ -37,43 +37,55 @@ API endpoints
 ***Public***
 
 ------------
+- /api/ (GET)
+    - list all published courses
+
 - /api/subjects/ (GET)
     - list all subjects
 
 - /api/subject/<subject-slug> (GET)  
     - subject detail view
 
-- /api/courses/ (GET)
-    - list all published courses
-
-- /api/courses/<subject-slug> (GET)
-    - list all courses by subject passed as argument
-
-- /api/course/<course-slug> (GET)
+- /api/<course-slug> (GET)
     - course detail view
+
+- /api/users/teachers/ (GET)
+    - list of teachers
 
 ***Teacher***
 
 -------------
-- /api/teacher/dashboard/
-    - teacher dashboard
 
-- /api/teacher/course/create
+- /api/users/teacher/ (GET, POST)
+    - teacher dashboard
     - create new course
 
-- /api/teacher/course/<course-slug>
-    - view to update course
+- /api/users/teacher/<course-slug>/ (GET, PUT, DELETE)
+    - course detail
+    - Edit related course
+    - delete related course
 
-- /api/teacher/course/<course-slug>/create
-    - Create new module for current course
+- /api/teacher/<course-slug>/modules/ (GET, POST)
+    - get all modules for current course
+    - create module
 
-- /api/teacher/course/<course-slug>/<module-id>/edit-module
+- /api/teacher/module/<module-id>/ (GET, PUT, DELETE)
+    - module detail
     - Edit related module
+    - delete related module
+
+- /api/teacher/module/<module-id>/content/<model-name='default:text'> (GET, POST)
+    - get all content for current module
+    - create new content
+
+- /api/teacher/content/<content-id>/ (GET, PUT, DELETE)
+    - content detail
+    - edit related content
+    - delete related content
 
 ***Authentication***
 - 
 --------------------
-
 
 - /dj-rest-auth/login/ (POST)
 

@@ -1,107 +1,242 @@
 [
-  {
-    "model": "courses.course",
-    "pk": 1,
-    "fields": {
-      "owner": 3,
-      "subject": 3,
-      "title": "beginning with scope",
-      "slug": "beginning-with-scope",
-      "overview": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in nibh nisl. Donec at fermentum eros. Curabitur in blandit nisl, ut pharetra mauris.",
-      "publish": "2021-03-20T22:53:32.027Z",
-      "created": "2021-03-20T22:53:32.028Z",
-      "updated": "2021-03-20T22:53:32.028Z",
-      "status": "published"
-    }
-  },
-  {
-    "model": "courses.course",
-    "pk": 2,
-    "fields": {
-      "owner": 3,
-      "subject": 3,
-      "title": "beginning with javascript",
-      "slug": "beginning-with-javascript",
-      "overview": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in nibh nisl. Donec at fermentum eros. Curabitur in blandit nisl, ut pharetra mauris.",
-      "publish": "2021-03-20T22:54:07.922Z",
-      "created": "2021-03-20T22:54:07.923Z",
-      "updated": "2021-03-20T22:54:07.923Z",
-      "status": "published"
-    }
-  },
-  {
-    "model": "courses.course",
-    "pk": 3,
-    "fields": {
-      "owner": 3,
-      "subject": 1,
-      "title": "beginning with Mathematics",
-      "slug": "beginning-with-aathematics",
-      "overview": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in nibh nisl. Donec at fermentum eros. Curabitur in blandit nisl, ut pharetra mauris.",
-      "publish": "2021-03-20T22:54:07.922Z",
-      "created": "2021-03-20T22:54:07.923Z",
-      "updated": "2021-03-20T22:54:07.923Z",
-      "status": "draft"
-    }
-  },
-  {
-    "model": "courses.module",
-    "pk": 1,
-    "fields": {
-      "course": 2,
-      "title": "modules with scope",
-      "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
-      "order": 1,
-      "publish": "2021-03-20T22:57:51.008Z",
-      "status": "published"
-    }
-  },
-  {
-    "model": "courses.module",
-    "pk": 2,
-    "fields": {
-      "course": 2,
-      "title": "variables",
-      "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
-      "order": 2,
-      "publish": "2021-03-20T22:58:31.312Z",
-      "status": "published"
-    }
-  },
-  {
-    "model": "courses.module",
-    "pk": 3,
-    "fields": {
-      "course": 2,
-      "title": "Operators",
-      "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
-      "order": 3,
-      "publish": "2021-03-20T22:59:14.147Z",
-      "status": "published"
-    }
-  },
-  {
-    "model": "courses.module",
-    "pk": 4,
-    "fields": {
-      "course": 2,
-      "title": "Conditionals",
-      "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
-      "order": 4,
-      "publish": "2021-03-20T22:59:28.625Z",
-      "status": "published"
-    }
-  },
-  {
-    "model": "courses.module",
-    "pk": 5,
-    "fields": {
-      "course": 2,
-      "title": "Arrays",
-      "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
-      "order": 5,
-      "publish": "2021-03-20T22:59:36.838Z",
-      "status": "published"
-    }
+{
+  "model": "courses.subject",
+  "pk": 1,
+  "fields": {
+    "title": "Mathematique",
+    "slug": "mathematique"
   }
+},
+{
+  "model": "courses.subject",
+  "pk": 2,
+  "fields": {
+    "title": "Django",
+    "slug": "django"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 3,
+  "fields": {
+    "title": "Javascript",
+    "slug": "javascript"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 4,
+  "fields": {
+    "title": "Management",
+    "slug": "management"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 5,
+  "fields": {
+    "title": "Angular",
+    "slug": "angular"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 6,
+  "fields": {
+    "title": "Reactjs",
+    "slug": "reactjs"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 7,
+  "fields": {
+    "title": "Python",
+    "slug": "python"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 8,
+  "fields": {
+    "title": "flask",
+    "slug": "flask"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 9,
+  "fields": {
+    "title": "nodeJS",
+    "slug": "nodejs"
+  }
+},
+{
+  "model": "courses.course",
+  "pk": 1,
+  "fields": {
+    "owner": 3,
+    "subject": 3,
+    "title": "beginning with scope",
+    "slug": "beginning-with-scope",
+    "overview": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in nibh nisl. Donec at fermentum eros. Curabitur in blandit nisl, ut pharetra mauris.",
+    "publish": "2021-03-20T22:53:32.027Z",
+    "created": "2021-03-20T22:53:32.028Z",
+    "updated": "2021-03-20T22:53:32.028Z",
+    "status": "published"
+  }
+},
+{
+  "model": "courses.course",
+  "pk": 2,
+  "fields": {
+    "owner": 3,
+    "subject": 3,
+    "title": "beginning with javascript",
+    "slug": "beginning-with-javascript",
+    "overview": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in nibh nisl. Donec at fermentum eros. Curabitur in blandit nisl, ut pharetra mauris.",
+    "publish": "2021-03-20T22:54:07.922Z",
+    "created": "2021-03-20T22:54:07.923Z",
+    "updated": "2021-03-20T22:54:07.923Z",
+    "status": "published"
+  }
+},
+{
+  "model": "courses.course",
+  "pk": 3,
+  "fields": {
+    "owner": 3,
+    "subject": 1,
+    "title": "beginning with Mathematics",
+    "slug": "beginning-with-aathematics",
+    "overview": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in nibh nisl. Donec at fermentum eros. Curabitur in blandit nisl, ut pharetra mauris.",
+    "publish": "2021-03-20T22:54:07.922Z",
+    "created": "2021-03-20T22:54:07.923Z",
+    "updated": "2021-03-20T22:54:07.923Z",
+    "status": "draft"
+  }
+},
+{
+  "model": "courses.module",
+  "pk": 1,
+  "fields": {
+    "course": 2,
+    "title": "modules with scope",
+    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "order": 1,
+    "publish": "2021-03-20T22:57:51.008Z",
+    "status": "published"
+  }
+},
+{
+  "model": "courses.module",
+  "pk": 2,
+  "fields": {
+    "course": 2,
+    "title": "variables",
+    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "order": 2,
+    "publish": "2021-03-20T22:58:31.312Z",
+    "status": "published"
+  }
+},
+{
+  "model": "courses.module",
+  "pk": 3,
+  "fields": {
+    "course": 2,
+    "title": "Operators",
+    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "order": 3,
+    "publish": "2021-03-20T22:59:14.147Z",
+    "status": "published"
+  }
+},
+{
+  "model": "courses.module",
+  "pk": 4,
+  "fields": {
+    "course": 2,
+    "title": "Conditionals",
+    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "order": 4,
+    "publish": "2021-03-20T22:59:28.625Z",
+    "status": "published"
+  }
+},
+{
+  "model": "courses.module",
+  "pk": 5,
+  "fields": {
+    "course": 2,
+    "title": "Arrays",
+    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "order": 5,
+    "publish": "2021-03-20T22:59:36.838Z",
+    "status": "published"
+  }
+},
+{
+  "model": "courses.content",
+  "pk": 6,
+  "fields": {
+    "module": 5,
+    "content_type": 16,
+    "object_id": 4,
+    "order": 1
+  }
+},
+{
+  "model": "courses.content",
+  "pk": 7,
+  "fields": {
+    "module": 5,
+    "content_type": 17,
+    "object_id": 5,
+    "order": 2
+  }
+},
+{
+  "model": "courses.content",
+  "pk": 8,
+  "fields": {
+    "module": 5,
+    "content_type": 17,
+    "object_id": 6,
+    "order": 3
+  }
+},
+{
+  "model": "courses.text",
+  "pk": 5,
+  "fields": {
+    "owner": 3,
+    "title": "Arrays",
+    "created": "2021-03-21T13:03:46.165Z",
+    "updated": "2021-03-21T13:03:46.165Z",
+    "content": "Duis lorem nibh, convallis quis cursus sed, gravida non dui. Morbi elit ante, egestas non odio sed, molestie tincidunt arcu. Fusce at auctor ante. Integer sed congue lectus. Proin congue molestie nisl, non dignissim nunc lacinia eget. Integer convallis dignissim ante blandit congue. Nam quis tur"
+  }
+},
+{
+  "model": "courses.text",
+  "pk": 6,
+  "fields": {
+    "owner": 3,
+    "title": "Arrays of string",
+    "created": "2021-03-21T13:03:50.241Z",
+    "updated": "2021-03-21T13:05:00.978Z",
+    "content": "egestas non odio sed, molestie tincidunt arcu. Fusce at auctor ante. Integer sed congue lectus. Proin congue molestie nisl, non dignissim nunc lacinia eget. Integer convallis dignissim ante blandit congue. Nam quis tur"
+  }
+},
+{
+  "model": "courses.video",
+  "pk": 4,
+  "fields": {
+    "owner": 3,
+    "title": "Arrays in video",
+    "created": "2021-03-21T13:02:36.818Z",
+    "updated": "2021-03-21T13:04:14.225Z",
+    "url": "https://www.youtube.com/watch?v=cRYgGm1slaA&ab_channel=ARTE"
+  }
+}
 ]

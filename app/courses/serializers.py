@@ -15,6 +15,7 @@ class TextSerializer(serializers.ModelSerializer):
     class Meta:
         model = Text
         fields = ['id', 'title', 'content']
+        # fields = '__all__'
 
 
 class FileSerializer(serializers.ModelSerializer):

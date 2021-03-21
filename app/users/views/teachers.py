@@ -154,7 +154,7 @@ def get_serializer_class(model_name, *args, **kwargs):
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-def content_list_by_module(request, module_id, model_name=""):
+def content_list_by_module(request, module_id, model_name="text"):
     """
     Get list of contents or post a new one for the current module
     """
@@ -183,11 +183,11 @@ def content_list_by_module(request, module_id, model_name=""):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-def content_detail(request, pk):
+def content_detail(request, content_id):
     """
     Get content detail,
     """
-    content = get_object_or_404(Content, id=pk)
+    content = get_object_or_404(Content, id=content_id)
     contenttype = get_model(content.content_type.name)
     model = get_object_or_404(contenttype, id=content.object_id)
 
@@ -208,4 +208,5 @@ def content_detail(request, pk):
 
     elif request.method == 'DELETE':
         content.delete()
+        model.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
