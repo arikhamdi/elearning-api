@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from .models import Course
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -8,10 +9,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        if request.user:
-            return request.user.is_superuser
-
-        return False
+        return bool(request.user and request.user.is_superuser)
 
 
 class IsAuthorOrReadOnly(permissions.BasePermission):

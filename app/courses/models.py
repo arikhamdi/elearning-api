@@ -47,6 +47,9 @@ class Course(models.Model):
         choices=STATUS_CHOICES,
         default='draft')
 
+    students = models.ManyToManyField(
+        get_user_model(), related_name='courses_joined', blank=True)
+
     objects = models.Manager()
     published = PublishedManager()
 

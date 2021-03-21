@@ -52,6 +52,13 @@ API endpoints
 - /api/users/teachers/ (GET)
     - list of teachers
 
+***Student***
+
+-------------
+
+- /api/users/student/ (GET)
+    - student dashboard
+
 ***Teacher***
 
 -------------

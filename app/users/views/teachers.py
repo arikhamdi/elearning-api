@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
@@ -11,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.apps import apps
 
 
-from courses.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly, IsTeacher
+from courses.permissions import IsAuthorOrReadOnly, IsTeacher
 from courses.serializers import (
     ImageSerializer,
     CourseSerializer,
@@ -48,7 +47,7 @@ def teacher_detail(request, id):
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-def courses_list(request):
+def teacher_dashboard(request):
 
     if request.method == 'GET':
         courses = Course.objects.filter(owner=request.user)
@@ -166,10 +165,13 @@ def content_list_by_module(request, module_id, model_name="text"):
         return Response(serializer.data)
 
     elif request.method == 'POST':
+        model_name = 'text' if model_name not in [
+            'video', 'file', 'image'] else model_name
 
         serializer = get_serializer_class(model_name, data=request.data)
 
         if serializer.is_valid():
+
             if serializer.save(owner=request.user):
                 content = Content(
                     module=module,

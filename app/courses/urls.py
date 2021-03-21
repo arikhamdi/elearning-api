@@ -5,12 +5,15 @@ from .views import (
     CoursesListAPIView,
     CourseListBySubjectAPIView,
     CourseDetailAPIView,
+    enroll_student
 )
 
 
 app_name = 'courses'
 
 urlpatterns = [
+    path('<slug:course_slug>/enroll/',
+         enroll_student, name="course-enroll"),
 
     # public interface
     path('subjects/', SubjectListAPIView.as_view(), name="subjects-list"),
