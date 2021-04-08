@@ -6,8 +6,7 @@ import { Consumer } from '../../context';
 
 
 const Header = props => {
-    const { branding, dropdown, signin, signup } = props;
-
+    const { branding, dropdown, login, signup } = props;
 
 
     return (
@@ -22,7 +21,7 @@ const Header = props => {
                     const {subjects} = value;
                     return(
                             subjects.map(subject => (
-                            <NavDropdown.Item href={subject.title}>{subject.title}</NavDropdown.Item>
+                            <NavDropdown.Item style={{textTransform: 'capitalize'}} key={subject.id} href={"/subject/"+subject.title.toLowerCase()}>{subject.title}</NavDropdown.Item>
                         ))
                     ) 
                 }}
@@ -43,8 +42,8 @@ const Header = props => {
             </Form>
         
             <Nav className="justify-content-end">
-            <Button className="mr-sm-2" variant="outline-light" href="/signin" >{signin}</Button>
-            <Button variant="dark" href="/signup" >{signup}</Button>
+            <Button className="mr-sm-2" variant="outline-light" href="/user/login" >{login}</Button>
+            <Button variant="dark" href="/user/signup" >{signup}</Button>
             </Nav>
         </Navbar.Collapse>
         </Navbar>
@@ -54,7 +53,7 @@ const Header = props => {
 Header.defaultProps = {
     branding: "E-learning",
     dropdown: "Categories",
-    signin : "Se connecter",
+    login: "Se connecter",
     signup : "S'inscrire",
     signout : "Déconnection" 
 }

@@ -5,9 +5,9 @@ import { Consumer } from '../../context';
 const SubNav = props => {
 
     return (
-        <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-                <a class="nav-link active" href="#">Active</a>
+        <ul className="nav nav-tabs mb-3">
+        <li className="nav-item">
+                <a className="nav-link active" href="#">Active</a>
         </li>
         <Consumer>
         {
@@ -15,7 +15,7 @@ const SubNav = props => {
                 const {subjects} = value;
                 return (
                     subjects.map( subject => (
-                        <li className="nav-item">
+                        <li className="nav-item" key={subject.id} >
                         <a className="nav-link" href="#">{subject.title}</a>
                     </li>
                 ))

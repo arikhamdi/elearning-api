@@ -5,7 +5,7 @@ import TextInputGroup from '../layout/TextInputGroup';
 
 import './Users.css';
 
-export default class SignIn extends Component {
+export default class logIn extends Component {
     state = {
         email : "",
         password : ""
@@ -14,22 +14,25 @@ export default class SignIn extends Component {
 
     componentDidMount = () => {
         this.waveAnimation();
-
-
     }
 
     logIn = async (e) => {
         e.preventDefault();
-        console.log('test moi');
 
-        const response = await axios.post("auth/login/", {
-            "email":"student2@mail.com",
-            "password": "testpass123"
-        })
+        const { email, password } = this.state;
+
+        const user = {
+            email,
+            password
+        }
+
+        const response = await axios.post("auth/login/", user)
 
         console.log(response);
 
     }
+
+    onChange = (e) => this.setState({[e.target.name]: e.target.value});
 
     waveAnimation = () => {
         const labels = document.querySelectorAll('.user-sign-form-control label')
@@ -41,6 +44,8 @@ export default class SignIn extends Component {
                 .join('')
         })
     }
+
+    
 
     
     render() {

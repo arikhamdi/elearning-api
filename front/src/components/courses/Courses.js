@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import { Container } from "react-bootstrap";
+
 import Slider from '../layout/Slider';
 import SubNav from '../layout/SubNav';
 
@@ -16,7 +18,7 @@ export default class Courses extends Component {
         let url = "/";
 
         if (this.props.match.params.subject) {
-            url = `subject/${this.props.match.params.subject}`;
+            url = `/subject/${this.props.match.params.subject}`;
         }
         const response = await axios.get(url.toLowerCase());
 
@@ -29,7 +31,7 @@ export default class Courses extends Component {
 
     render() {
         return (
-            <React.Fragment>
+            <Container>
                 <Slider />
                 <SubNav />
                 <div className="card-deck">
@@ -41,7 +43,7 @@ export default class Courses extends Component {
                     )
                 }   
                 </div>
-            </React.Fragment>
+            </Container>
         )
     }
 }

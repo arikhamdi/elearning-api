@@ -4,6 +4,7 @@ import axios from 'axios';
 import TextInputGroup from '../layout/TextInputGroup';
 
 import './Users.css';
+import { Link } from 'react-router-dom';
 
 class SignUp extends Component {
 
@@ -47,9 +48,7 @@ class SignUp extends Component {
 
     }
 
-    onChange = (e) => this.setState({[e.target.name]: e.target.value})
-
-    onNameChange = e => this.setState({email: e.target.value})
+    onChange = (e) => this.setState({[e.target.name]: e.target.value});
     
     render() {
 
@@ -85,6 +84,9 @@ class SignUp extends Component {
                         />
                         <button className="btn">S'inscrire</button>
                     </form>
+                    <p className="mt-2">
+                    Vous avez déjà un compte ? <Link to="/user/login">Se connecter</Link>
+                    </p>
                     
                 </div>
             </div>
