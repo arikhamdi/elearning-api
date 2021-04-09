@@ -2,21 +2,20 @@ import React from 'react';
 
 import { Consumer } from '../../context';
 
-const SubNav = props => {
+const SubNav = (props) => {
+    const { subject } = props.subject;
 
+    console.log(subject);
     return (
         <ul className="nav nav-tabs mb-3">
-        <li className="nav-item">
-                <a className="nav-link active" href="#">Active</a>
-        </li>
         <Consumer>
         {
             value => {
                 const {subjects} = value;
                 return (
-                    subjects.map( subject => (
-                        <li className="nav-item" key={subject.id} >
-                        <a className="nav-link" href="#">{subject.title}</a>
+                    subjects.map( cat => (
+                        <li className="nav-item " key={cat.id} >
+                        <a className={"nav-link " + (cat.title.toLowerCase() == subject ? "active" : "")} href={"/subject/"+ cat.title.toLowerCase()}>{cat.title}</a>
                     </li>
                 ))
 

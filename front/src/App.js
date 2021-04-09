@@ -4,6 +4,8 @@ import Login from './components/users/login/Login';
 import Signup from './components/users/signup/Signup';
 import Dashboard from './components/users/Dashboard';
 
+import requireAuth from "./utils/RequireAuth";
+
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 
@@ -19,24 +21,22 @@ import {Provider} from './context';
 function App() {
   return (
     <Provider>
-    
+    <Root>
     <div className="App">
     <Header />
     <Container>
-      <Root>
         <Switch>
             <Route exact path="/" component={Courses} />
             <Route path="/subject/:subject" component={Courses} />
-            <Route path='/user/dashboard' component={Dashboard} />
+            <Route path='/user/dashboard' component={requireAuth(Dashboard)} />
             <Route path='/user/login' component={Login} />
             <Route path='/user/signup' component={Signup} />
         </Switch>
-      </Root>
     </Container>
       <Footer />
     </div>
     
-
+</Root>
     </Provider>
   );
 }

@@ -66,9 +66,9 @@ export const unsetCurrentUser = () => dispatch => {
 
 export const logout = () => async dispatch => {
     try {
-        const response = await axios.post("/auth/logout");
+        const response = await axios.post("/auth/logout/");
         dispatch(unsetCurrentUser());
-        dispatch(push("/"));
+        // dispatch(push("/"));
         console.log('Logout successful.');
     } catch (error) {
         dispatch(unsetCurrentUser());
