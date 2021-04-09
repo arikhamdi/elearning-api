@@ -2,7 +2,7 @@ import Courses from './components/courses/Courses';
 
 import Login from './components/users/login/Login';
 import Signup from './components/users/signup/Signup';
-import Dashboard from './components/users/Dashboard';
+import Dashboard from './components/users/dashboard/Dashboard';
 
 import requireAuth from "./utils/RequireAuth";
 

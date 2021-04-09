@@ -8,29 +8,28 @@ from .views.teachers import (
     module_detail,
     content_list_by_module,
     content_detail,
-    teacher_dashboard,
     course_detail
 )
-from .views.students import (
-    student_dashboard,
-    student_course_detail
-)
+from .views.students import student_course_detail
+
+from .views.dashboard import dashboard
 
 app_name = 'users'
 
 urlpatterns = [
+
+    path('dashboard/', dashboard),
+
     # Students interfaces
-    path('student/', student_dashboard),
     path('student/<slug:course_slug>', student_course_detail),
+
+
     # teachers interfaces
 
     # teachers
     path('teachers/', teacher_list),
     path('teacher/<int:id>/', teacher_detail),
 
-    # Courses
-    path('teacher/', teacher_dashboard,
-         name='teacher-dashboard'),
 
     path('teacher/<slug:course_slug>/',
          course_detail, name="courses-detail"),

@@ -5,9 +5,10 @@ import axios from 'axios';
 class Dashboard extends Component {
 
     componentDidMount = async () => {
-        const response = await axios.get('/auth/user/');
 
+        const response = await axios.get('/users/dashboard/');
         console.log(response);
+        
     }
 
 

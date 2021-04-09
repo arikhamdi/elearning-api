@@ -6,24 +6,11 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404
 
-
 from courses.serializers import (
     CourseSerializer,
-    ModuleSerializer,
-    ContentSerializer,
-
 )
+
 from courses.models import (Course, Module, Content)
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def student_dashboard(request):
-    courses = Course.published.filter(students__in=[request.user])
-
-    if request.method == 'GET':
-        serializer = CourseSerializer(courses, many=True)
-        return Response(serializer.data)
 
 
 @api_view(['GET'])

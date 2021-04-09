@@ -45,21 +45,21 @@ def teacher_detail(request, id):
 # Teachers DashBoard
 # Courses
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-def teacher_dashboard(request):
+# @api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
+# def teacher_dashboard(request):
 
-    if request.method == 'GET':
-        courses = Course.objects.filter(owner=request.user)
-        serializer = CourseSerializer(courses, many=True)
-        return Response(serializer.data)
+#     if request.method == 'GET':
+#         courses = Course.objects.filter(owner=request.user)
+#         serializer = CourseSerializer(courses, many=True)
+#         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = CourseSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'POST':
+#         serializer = CourseSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(owner=request.user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
