@@ -6,7 +6,7 @@ import { Container } from "react-bootstrap";
 import Slider from '../layout/Slider';
 import SubNav from '../layout/SubNav';
 
-import Course  from './Course';
+import {Card} from 'react-bootstrap';
 
 export default class Courses extends Component {
 
@@ -30,6 +30,7 @@ export default class Courses extends Component {
     }
 
     render() {
+
         return (
             <Container>
                 <Slider />
@@ -38,7 +39,19 @@ export default class Courses extends Component {
                 {
                     this.state.courses.map(
                         course => (
-                            <Course key={course.id} course={course} />
+                            <Card key={course.id} onClick={() => this.props.history.push("/course/"+ course.slug + "/")} style={{cursor: 'pointer'}}>
+            
+                            <Card.Img variant="top" src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+                            <Card.Header className="text-right" style={{textTransform: 'capitalize'}}>{course.subject.title}</Card.Header>
+                            <Card.Body>
+                                <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title>
+                                <Card.Text>{course.overview}</Card.Text>
+                                <footer className="blockquote-footer">
+                                    <cite title="Source Title">{course.owner.name}</cite>
+                                </footer>
+                            </Card.Body>
+                            
+                            </Card>
                         )
                     )
                 }   

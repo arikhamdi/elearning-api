@@ -76,19 +76,20 @@ class ModuleSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = ['id', 'title', 'slug']
+        read_only_fields = ('id',)
+
+
 class CourseSerializer(serializers.ModelSerializer):
     owner = OwnerSerializer(read_only=True)
     modules = ModuleSerializer(many=True, read_only=True)
+    subject = SubjectSerializer(read_only=True)
 
     class Meta:
         model = Course
         fields = ['id', 'title', 'slug', 'subject', 'owner',
                   'overview', 'status', 'publish', 'updated', 'modules']
-        read_only_fields = ('id',)
-
-
-class SubjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subject
-        fields = ['id', 'title', 'slug']
         read_only_fields = ('id',)

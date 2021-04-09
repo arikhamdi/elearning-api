@@ -14,6 +14,7 @@ import {Route, Switch } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
 import {Provider} from './context';
+import Course from './components/courses/Course';
 
 
 
@@ -28,6 +29,7 @@ function App() {
         <Switch>
             <Route exact path="/" component={Courses} />
             <Route path="/subject/:subject" component={Courses} />
+            <Route path="/course/:slug" component={Course} />
             <Route path='/user/dashboard' component={requireAuth(Dashboard)} />
             <Route path='/user/login' component={Login} />
             <Route path='/user/signup' component={Signup} />
