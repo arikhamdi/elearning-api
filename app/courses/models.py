@@ -37,6 +37,7 @@ class Course(models.Model):
     subject = models.ForeignKey(
         'Subject', on_delete=models.CASCADE, related_name='courses')
     title = models.CharField(max_length=200)
+    image = models.URLField()
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     overview = models.TextField()
     publish = models.DateTimeField(default=timezone.now)

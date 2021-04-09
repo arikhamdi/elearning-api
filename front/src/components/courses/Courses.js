@@ -41,7 +41,7 @@ export default class Courses extends Component {
                         course => (
                             <Card key={course.id} onClick={() => this.props.history.push("/course/"+ course.slug + "/")} style={{cursor: 'pointer'}}>
             
-                            <Card.Img variant="top" src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+                            <Card.Img variant="top" src={course.image} />
                             <Card.Header className="text-right" style={{textTransform: 'capitalize'}}>{course.subject.title}</Card.Header>
                             <Card.Body>
                                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title>

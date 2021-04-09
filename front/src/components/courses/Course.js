@@ -14,6 +14,7 @@ class Course extends Component {
         slug: "",
         subject: "",
         publish: "",
+        image: "",
         modules : []
     };
 
@@ -31,6 +32,7 @@ class Course extends Component {
                 slug,
                 subject,
                 publish,
+                image,
                 modules } = response.data;
             
             this.setState({
@@ -41,7 +43,8 @@ class Course extends Component {
                 slug,
                 subject,
                 publish,
-                modules
+                modules,
+                image
             });
 
             console.log(response.data);
@@ -61,6 +64,7 @@ class Course extends Component {
             slug,
             publish,
             subject,
+            image,
         modules } = this.state;
         
     
@@ -68,7 +72,7 @@ class Course extends Component {
             <React.Fragment>
                 <Card className="mb-3">
                 
-                <Card.Img variant="top" src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+                <Card.Img variant="top" src={image} />
                 <Card.Header style={{textTransform: 'capitalize'}}>Créé par <cite title="Source Title">{owner.name}</cite></Card.Header>
                 <Card.Body>
                     <Card.Title style={{textTransform: 'capitalize'}} >{title}</Card.Title>
