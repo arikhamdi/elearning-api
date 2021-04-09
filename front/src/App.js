@@ -1,7 +1,8 @@
 import Courses from './components/courses/Courses';
 
-import LogIn from './components/users/LogIn';
-import SignUp from './components/users/SignUp';
+import Login from './components/users/login/Login';
+import Signup from './components/users/signup/Signup';
+import Dashboard from './components/users/Dashboard';
 
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -22,14 +23,15 @@ function App() {
     <div className="App">
     <Header />
     <Container>
-    <Root>
-      <Switch>
-          <Route exact path="/" component={Courses} />
-          <Route path="/subject/:subject" component={Courses} />
-          <Route path='/user/login' component={LogIn} />
-          <Route path='/user/signup' component={SignUp} />
-      </Switch>
-    </Root>
+      <Root>
+        <Switch>
+            <Route exact path="/" component={Courses} />
+            <Route path="/subject/:subject" component={Courses} />
+            <Route path='/user/dashboard' component={Dashboard} />
+            <Route path='/user/login' component={Login} />
+            <Route path='/user/signup' component={Signup} />
+        </Switch>
+      </Root>
     </Container>
       <Footer />
     </div>

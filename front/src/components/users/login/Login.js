@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import axios from 'axios';
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types"; 
 
-import TextInputGroup from '../layout/TextInputGroup';
+import TextInputGroup from '../../layout/TextInputGroup';
+import { waveAnimation } from "../../../utils/Utils";
+import { loginUser } from "./LoginActions.js";
 
-import './Users.css';
+import '../Users.css';
 
-export default class logIn extends Component {
+class Login extends Component {
     state = {
         email : "",
         password : ""
@@ -13,7 +17,7 @@ export default class logIn extends Component {
 
 
     componentDidMount = () => {
-        this.waveAnimation();
+        waveAnimation();
     }
 
     logIn = async (e) => {
@@ -21,29 +25,18 @@ export default class logIn extends Component {
 
         const { email, password } = this.state;
 
-        const user = {
+        const userData = {
             email,
             password
         }
+        console.log(userData);
 
-        const response = await axios.post("auth/login/", user)
-
-        console.log(response);
+        this.props.loginUser(userData, "/user/dashboard");
 
     }
 
     onChange = (e) => this.setState({[e.target.name]: e.target.value});
 
-    waveAnimation = () => {
-        const labels = document.querySelectorAll('.user-sign-form-control label')
-
-        labels.forEach(label => {
-            label.innerHTML = label.innerText
-                .split('')
-                .map((letter, idx) => `<span style="transition-delay:${idx * 50}ms">${letter}</span>`)
-                .join('')
-        })
-    }
 
     
 
@@ -83,3 +76,17 @@ export default class logIn extends Component {
         )
     }
 }
+
+
+Login.propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
+  };
+  
+  const mapStateToProps = state => ({
+    auth: state.auth
+  });
+  
+  export default connect(mapStateToProps, {
+    loginUser
+  })(withRouter(Login));

@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
-import axios from 'axios';
 
-import TextInputGroup from '../layout/TextInputGroup';
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-import './Users.css';
+import TextInputGroup from '../../layout/TextInputGroup';
+import { waveAnimation } from "../../../utils/Utils";
+
+import { signupNewUser } from "./SignupActions";
+
+import '../Users.css';
 import { Link } from 'react-router-dom';
 
-class SignUp extends Component {
+class Signup extends Component {
 
     state = {
         email : '',
@@ -16,35 +22,22 @@ class SignUp extends Component {
 
 
     componentDidMount = () => {
-        this.waveAnimation();
+        waveAnimation();
     }
 
-    waveAnimation = () => {
-        const labels = document.querySelectorAll('.user-sign-form-control label')
-
-        labels.forEach(label => {
-            label.innerHTML = label.innerText
-                .split('')
-                .map((letter, idx) => `<span style="transition-delay:${idx * 50}ms">${letter}</span>`)
-                .join('')
-        })
-    }
 
     SignUp = async (e) => {
         e.preventDefault();
 
         const { email, password1, password2 } = this.state;
 
-        const newUser = {
+        const userData  = {
             email,
             password1,
             password2
         }
 
-        const response = await axios.post("auth/registration/", newUser);
-
-        console.log(response)
-
+        this.props.signupNewUser(userData);
 
     }
 
@@ -66,21 +59,23 @@ class SignUp extends Component {
                         label="Email"
                         value={email}
                         onChange={this.onChange}
-                        required={false}
+                        required="required"
                         />
                         <TextInputGroup
                         type="password"
                         name="password1"
-                        label="Password"
+                        label="Mot de passe"
                         value={password1}
                         onChange={this.onChange}
+                        required="required"
                         />
                         <TextInputGroup
                         type="password"
                         name="password2"
-                        label="Password"
+                        label="Confirmez mot de passe"
                         value={password2}
                         onChange={this.onChange}
+                        required="required"
                         />
                         <button className="btn">S'inscrire</button>
                     </form>
@@ -90,8 +85,19 @@ class SignUp extends Component {
                     
                 </div>
             </div>
-        )
+        );
     }
 }
 
-export default SignUp ;
+Signup.propTypes = {
+    signupNewUser: PropTypes.func.isRequired,
+    createUser: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+    createUser: state.createUser
+});
+
+export default connect(mapStateToProps, {
+    signupNewUser
+  })(withRouter(Signup));
