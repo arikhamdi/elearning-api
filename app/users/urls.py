@@ -21,7 +21,7 @@ urlpatterns = [
     path('dashboard/', dashboard),
 
     # Students interfaces
-    path('student/<slug:course_slug>', student_course_detail),
+    path('student/<slug:course_slug>/', student_course_detail),
 
 
     # teachers interfaces

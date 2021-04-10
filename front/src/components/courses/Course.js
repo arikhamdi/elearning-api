@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
 
-import {Link } from 'react-router-dom';
 import {Card, Button, ListGroup} from 'react-bootstrap';
 import axios from 'axios';
 
@@ -15,12 +13,14 @@ class Course extends Component {
         subject: "",
         publish: "",
         image: "",
-        modules : []
+        modules : [],
+        students: [],
+        isStudent: false
     };
 
     componentDidMount = async () => {
-        console.log(this.props.match.params.slug);
-
+        const {email}  = JSON.parse(localStorage.getItem('user'));
+        
         try{
             const response = await axios.get(`${this.props.match.params.slug}`);
 
@@ -33,6 +33,7 @@ class Course extends Component {
                 subject,
                 publish,
                 image,
+                students,
                 modules } = response.data;
             
             this.setState({
@@ -44,15 +45,44 @@ class Course extends Component {
                 subject,
                 publish,
                 modules,
-                image
+                image,
+                students
             });
-
+            
+            if (students.filter((student) => student.email == email).length > 0) {
+                this.setState({isStudent: true})
+            }
             console.log(response.data);
+
         } catch (error) {
             console.log('Error: ', error);
         }
 
     }
+
+    enroll = async () => {
+        try{
+            const response = await axios.post(`${this.props.match.params.slug}/enroll/`);
+            console.log(response);
+        } catch (error) {
+            console.log("Error: " , error);
+        }
+
+        this.setState({isStudent: !this.state.isStudent});
+    }
+
+    followCourse = () => {
+        axios.get(`/users/student/${this.props.match.params.slug}`)
+            .then(response => {
+                console.log(response);
+                this.props.history.push(`/student/${this.props.match.params.slug}`);
+            })
+            .catch(error => {
+                
+                console.log('Error: ', error);
+            })
+    }
+
     
 
     render() {
@@ -64,7 +94,9 @@ class Course extends Component {
             slug,
             publish,
             subject,
+            students,
             image,
+            isStudent,
         modules } = this.state;
         
     
@@ -79,7 +111,13 @@ class Course extends Component {
                     <Card.Text>{overview}</Card.Text>
                     
                     <footer className="text-right">
-                    <Button variant="success" onClick={() => this.enroll()} >Suivre ce cours</Button>
+                    {isStudent ? (
+                        <Button variant="primary" onClick={() => this.followCourse()} >continuer ce cours</Button>
+                    ) : (
+                        <Button variant="success" onClick={() => this.enroll()} >Suivre ce cours</Button>
+                        
+                    )}
+                    
                     </footer>
                 </Card.Body>
                 
@@ -100,6 +138,5 @@ class Course extends Component {
         )
     }
 }
-
-
+  
 export default Course;

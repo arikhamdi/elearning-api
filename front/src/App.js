@@ -15,6 +15,7 @@ import { Container } from "react-bootstrap";
 
 import {Provider} from './context';
 import Course from './components/courses/Course';
+import FollowCourse from './components/users/student/FollowCourse';
 
 
 
@@ -30,6 +31,7 @@ function App() {
             <Route exact path="/" component={Courses} />
             <Route path="/subject/:subject" component={Courses} />
             <Route path="/course/:slug" component={Course} />
+            <Route path="/student/:slug" component={FollowCourse} />
             <Route path='/user/dashboard' component={requireAuth(Dashboard)} />
             <Route path='/user/login' component={Login} />
             <Route path='/user/signup' component={Signup} />

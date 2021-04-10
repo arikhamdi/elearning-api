@@ -83,13 +83,34 @@ class SubjectSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'name', 'email', 'last_login', 'date_joined']
+        read_only_fields = ('id',)
+
+
 class CourseSerializer(serializers.ModelSerializer):
     owner = OwnerSerializer(read_only=True)
     modules = ModuleSerializer(many=True, read_only=True)
     subject = SubjectSerializer(read_only=True)
+    students = StudentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Course
         fields = ['id', 'title', 'slug', 'image', 'subject', 'owner',
-                  'overview', 'status', 'publish', 'updated', 'modules']
+                  'overview', 'status', 'publish', 'updated', 'modules', 'students']
+        read_only_fields = ('id',)
+
+
+class EnrolledCourseSerializer(serializers.ModelSerializer):
+    owner = OwnerSerializer(read_only=True)
+    modules = ModuleWithContentsSerializer(many=True, read_only=True)
+    subject = SubjectSerializer(read_only=True)
+    students = StudentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Course
+        fields = ['id', 'title', 'slug', 'image', 'subject', 'owner',
+                  'overview', 'status', 'publish', 'updated', 'modules', 'students']
         read_only_fields = ('id',)
