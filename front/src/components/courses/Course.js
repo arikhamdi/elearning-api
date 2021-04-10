@@ -19,7 +19,8 @@ class Course extends Component {
     };
 
     componentDidMount = async () => {
-        const {email}  = JSON.parse(localStorage.getItem('user'));
+
+        
         
         try{
             const response = await axios.get(`${this.props.match.params.slug}`);
@@ -48,10 +49,16 @@ class Course extends Component {
                 image,
                 students
             });
-            
-            if (students.filter((student) => student.email == email).length > 0) {
-                this.setState({isStudent: true})
+
+            if (localStorage.getItem('user')) {
+                const {email}  = JSON.parse(localStorage.getItem('user'));
+
+                if (students.filter((student) => student.email == email).length > 0) {
+                    this.setState({isStudent: true})
+                }
             }
+            
+
             console.log(response.data);
 
         } catch (error) {
@@ -64,11 +71,12 @@ class Course extends Component {
         try{
             const response = await axios.post(`${this.props.match.params.slug}/enroll/`);
             console.log(response);
+            this.setState({isStudent: !this.state.isStudent});
         } catch (error) {
             console.log("Error: " , error);
         }
 
-        this.setState({isStudent: !this.state.isStudent});
+        
     }
 
     followCourse = () => {

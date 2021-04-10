@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react'
+import ReactPlayer from 'react-player'
 
 import {ListGroup, Row, Col} from 'react-bootstrap';
 
@@ -92,11 +93,17 @@ export default class FollowCourse extends Component {
                     </Col>
                     <Col xs={9}>{currentModule.map(content =>(
                         <div key={content.item.id}>
-                        
+                        {content.item.url ? (
+                            <ReactPlayer url={content.item.url} 
+                                        controls
+                                        playbackRate = {2}
+                                        width = "100%"
+                                        height = "504px"
+                            />
+                        ) : null }
                         <p>{content.item.content}</p>
                         <p>{content.item.image}</p>
                         <p>{content.item.file}</p>
-                        <p>{content.item.url}</p>
                         </div>
                     ))}</Col>
                 </Row>

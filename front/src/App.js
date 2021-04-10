@@ -16,6 +16,7 @@ import { Container } from "react-bootstrap";
 import {Provider} from './context';
 import Course from './components/courses/Course';
 import FollowCourse from './components/users/student/FollowCourse';
+import NotFound from './components/pages/NotFound';
 
 
 
@@ -35,6 +36,7 @@ function App() {
             <Route path='/user/dashboard' component={requireAuth(Dashboard)} />
             <Route path='/user/login' component={Login} />
             <Route path='/user/signup' component={Signup} />
+            <Route component={NotFound} />
         </Switch>
     </Container>
       <Footer />
