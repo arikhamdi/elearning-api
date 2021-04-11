@@ -16,9 +16,12 @@ import Course from './components/courses/Course';
 import FollowCourse from './components/users/student/FollowCourse';
 import NotFound from './components/pages/NotFound';
 
+import Root from "./Root";
+
 
 function App() {
   return (
+    <Root>
     <div className="App">
     <Header />
     <Container>
@@ -26,7 +29,7 @@ function App() {
             <Route exact path="/" component={Courses} />
             <Route path="/subject/:subject" component={Courses} />
             <Route path="/course/:slug" component={Course} />
-            <Route path="/student/:slug" component={FollowCourse} />
+            <Route path="/student/:slug" component={requireAuth(FollowCourse)} />
             <Route path='/user/dashboard' component={requireAuth(Dashboard)} />
             <Route path='/user/login' component={Login} />
             <Route path='/user/signup' component={Signup} />
@@ -35,6 +38,7 @@ function App() {
     </Container>
     <Footer />
     </div>
+    </Root>
   );
 }
 

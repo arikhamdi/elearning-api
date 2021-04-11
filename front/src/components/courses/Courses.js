@@ -1,48 +1,39 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-
+import { withRouter } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import { connect } from 'react-redux';
 
 import Slider from '../layout/Slider';
 import SubNav from '../layout/SubNav';
 
 import {Card} from 'react-bootstrap';
 
-export default class Courses extends Component {
+import { getCourses } from './CoursesAction';
+import PropTypes from 'prop-types'
 
-    state = {
-        courses: []
-    }
-    
-    componentDidMount = async () => {
-        let url = "/";
 
-        if (this.props.match.params.subject) {
-            url = `/subject/${this.props.match.params.subject}`;
-        }
-        const response = await axios.get(url.toLowerCase());
+class Courses extends Component {
 
-        console.log(response);
-
-        this.setState({
-            courses: response.data
-        });
+    componentDidMount() {
+        this.props.getCourses(this.props.router.location.pathname);
     }
 
     render() {
-
         return (
             <Container>
                 <Slider />
                 <SubNav />
                 <div className="card-deck">
                 {
-                    this.state.courses.map(
+                    this.props.courses.map(
                         course => (
-                            <Card key={course.id} onClick={() => this.props.history.push("/course/"+ course.slug + "/")} style={{cursor: 'pointer'}}>
-            
+                            <Card key={course.id} 
+                                  onClick={() => this.props.history.push("/course/"+ course.slug + "/")} 
+                                  style={{cursor: 'pointer'}}>
                             <Card.Img variant="top" src={course.image} />
-                            <Card.Header className="text-right" style={{textTransform: 'capitalize'}}>{course.subject.title}</Card.Header>
+                            <Card.Header className="text-right" style={{textTransform: 'capitalize'}}>
+                                {course.subject.title}
+                            </Card.Header>
                             <Card.Body>
                                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title>
                                 <Card.Text>{course.overview}</Card.Text>
@@ -50,7 +41,6 @@ export default class Courses extends Component {
                                     <cite title="Source Title">{course.owner.name}</cite>
                                 </footer>
                             </Card.Body>
-                            
                             </Card>
                         )
                     )
@@ -60,3 +50,18 @@ export default class Courses extends Component {
         )
     }
 }
+
+Courses.propTypes = {
+    courses : PropTypes.array.isRequired,
+    getCourses: PropTypes.func.isRequired,
+    router : PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+    courses : state.courses.courses,
+    router: state.router
+})
+
+export default connect(mapStateToProps,{
+    getCourses
+})(withRouter(Courses));

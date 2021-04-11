@@ -7,7 +7,8 @@ import PropTypes from "prop-types";
 export default function requireAuth(Component) {
     class AuthenticatedComponent extends React.Component {
 
-        componentDidMount = () => {
+        constructor(props) {
+            super(props);
             this.checkAuth();
         }
 

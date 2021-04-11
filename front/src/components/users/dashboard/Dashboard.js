@@ -77,25 +77,6 @@ class Dashboard extends Component {
             ))}
             </React.Fragment>
         );
-
-        return (
-            <div>
-                <h1>Dashboard</h1>
-                {courses.map( course => (
-                    <div className="card" style={{flexDirection: 'row'}}>
-                    <img src={course.image} className="card-img-top" style={{width:'30%'}} />
-                    <div className="card-body">
-                        <h5 className="card-title">{course.title}</h5>
-                        <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" className="btn btn-primary">Continuer le cours</a>
-                    </div>
-                    </div>
-
-                ))}
-                
-                
-            </div>
-        )
     }
 }
 

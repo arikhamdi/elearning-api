@@ -28,7 +28,7 @@ class Header extends Component {
                 <Nav className="mr-auto">
                 <NavDropdown title="Categories" id="basic-nav-dropdown">
 
-                {this.props.subject.map(subject => (
+                {this.props.subjects.map(subject => (
                 <NavDropdown.Item style={{textTransform: 'capitalize'}} key={subject.id} href={"/subject/"+subject.title.toLowerCase()}>{subject.title}</NavDropdown.Item>
                 ))}
  
@@ -72,12 +72,12 @@ Header.propTypes = {
     logout: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     getSubjects: PropTypes.func.isRequired,
-    subject : PropTypes.array.isRequired
+    subjects : PropTypes.array.isRequired
 }
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    subject: state.subject.subjects
+    subjects: state.subjects.subjects
   });
 
 export default connect(mapStateToProps, {
