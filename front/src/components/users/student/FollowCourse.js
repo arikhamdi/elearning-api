@@ -19,7 +19,7 @@ export default class FollowCourse extends Component {
         currentModule: []
     };
 
-    componentDidMount = () => {
+    componentWillMount = () => {
         console.log(this.props);
         axios.get(`/users/student/${this.props.match.params.slug}`)
         .then(response => {

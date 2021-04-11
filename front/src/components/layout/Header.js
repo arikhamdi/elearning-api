@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
 
 import { Navbar, Nav, NavDropdown, Form, Button, Row, Col } from 'react-bootstrap';
-import { Consumer } from '../../context';
 
 import { logout } from "../users/login/LoginActions";
+import { getSubjects } from '../subjects/SubjectsAction';
 
 class Header extends Component {
 
     componentDidMount = () => {
-        console.log(this.props.match);
+        this.props.getSubjects();
     }
     
     onLogout = () => {
         this.props.logout();
-        this.props.history.push('/');
+        // this.props.history.push('/');
       };
 
       
     render () {
-
         return (         
             <Navbar bg="info" expand="lg" className="mb-3">
             <Navbar.Brand href="/" >E-learning</Navbar.Brand>
@@ -29,16 +27,11 @@ class Header extends Component {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                 <NavDropdown title="Categories" id="basic-nav-dropdown">
-                    <Consumer>
-                    {value => {
-                        const {subjects} = value;
-                        return(
-                                subjects.map(subject => (
-                                <NavDropdown.Item style={{textTransform: 'capitalize'}} key={subject.id} href={"/subject/"+subject.title.toLowerCase()}>{subject.title}</NavDropdown.Item>
-                            ))
-                        ) 
-                    }}
-                    </Consumer>
+
+                {this.props.subject.map(subject => (
+                <NavDropdown.Item style={{textTransform: 'capitalize'}} key={subject.id} href={"/subject/"+subject.title.toLowerCase()}>{subject.title}</NavDropdown.Item>
+                ))}
+ 
                 </NavDropdown>
                 </Nav>
        
@@ -68,7 +61,6 @@ class Header extends Component {
                     </>
                 )}
                 
-    
                 </Nav>
             </Navbar.Collapse>
             </Navbar>
@@ -79,14 +71,16 @@ class Header extends Component {
 Header.propTypes = {
     logout: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    match: PropTypes.object
+    getSubjects: PropTypes.func.isRequired,
+    subject : PropTypes.array.isRequired
 }
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    match: state.match
+    subject: state.subject.subjects
   });
 
 export default connect(mapStateToProps, {
-logout
-})(withRouter(Header));
+logout,
+getSubjects
+})(Header);

@@ -61,7 +61,7 @@ class Dashboard extends Component {
                 <Card.Body>
                 <Card.Title>{course.title}</Card.Title>
                     <Card.Text>{course.overview}</Card.Text>
-                    <Button variant="primary" 
+                    <Button variant="info" 
                             onClick={() => this.followCourse(course.slug)}>
                             Continuer le cours
                     </Button>

@@ -29,7 +29,6 @@ class Login extends Component {
             email,
             password
         }
-        console.log(userData);
 
         this.props.loginUser(userData, "/user/dashboard");
 

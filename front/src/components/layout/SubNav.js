@@ -1,31 +1,27 @@
 import React from 'react';
-
-import { Consumer } from '../../context';
+import {connect} from 'react-redux';
 
 const SubNav = (props) => {
-    const { subject } = props.subject;
 
-    console.log(subject);
+    // check current pathname and split it to get subject parameter
+    // used to activate tab menu 
+    const str  = props.router.location.pathname;
+    const subject = str.split("/")[2];
+
     return (
         <ul className="nav nav-tabs mb-3">
-        <Consumer>
-        {
-            value => {
-                const {subjects} = value;
-                return (
-                    subjects.map( cat => (
-                        <li className="nav-item " key={cat.id} >
-                        <a className={"nav-link " + (cat.title.toLowerCase() == subject ? "active" : "")} href={"/subject/"+ cat.title.toLowerCase()}>{cat.title}</a>
-                    </li>
-                ))
-
-                )
-            }
-        }
-
-        </Consumer>
+            {props.subject.map( cat => (
+                <li className="nav-item " key={cat.id} >
+                    <a className={"nav-link " + (cat.title.toLowerCase() == subject ? "active" : "")} href={"/subject/"+ cat.title.toLowerCase()}>{cat.title}</a>
+                </li>
+            ))}
         </ul>
     )
 }
 
-export default SubNav;
+const mapStateToProps = state => ({
+    subject: state.subject.subjects,
+    router : state.router
+})
+
+export default connect(mapStateToProps, {})(SubNav);

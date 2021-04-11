@@ -9,22 +9,16 @@ import requireAuth from "./utils/RequireAuth";
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 
-import Root from "./Root";
 import {Route, Switch } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
-import {Provider} from './context';
 import Course from './components/courses/Course';
 import FollowCourse from './components/users/student/FollowCourse';
 import NotFound from './components/pages/NotFound';
 
 
-
-
 function App() {
   return (
-    <Provider>
-    <Root>
     <div className="App">
     <Header />
     <Container>
@@ -39,11 +33,8 @@ function App() {
             <Route component={NotFound} />
         </Switch>
     </Container>
-      <Footer />
+    <Footer />
     </div>
-    
-</Root>
-    </Provider>
   );
 }
 

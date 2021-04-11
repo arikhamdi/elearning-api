@@ -34,7 +34,7 @@ export default class Courses extends Component {
         return (
             <Container>
                 <Slider />
-                <SubNav subject={this.props.match.params} />
+                <SubNav />
                 <div className="card-deck">
                 {
                     this.state.courses.map(

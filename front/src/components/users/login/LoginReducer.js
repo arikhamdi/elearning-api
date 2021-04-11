@@ -11,7 +11,6 @@ const initialState = {
 export const loginReducer = (state = initialState, action) => {
     switch (action.type){
         case SET_TOKEN:
-            console.log(action.payload);
             return {
                 ...state,
                 isAuthenticated: true,
