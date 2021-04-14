@@ -19,6 +19,7 @@ export default class FollowCourse extends Component {
         currentModule: []
     };
 
+
     componentWillMount = () => {
         console.log(this.props);
         axios.get(`/users/student/${this.props.match.params.slug}`)
@@ -51,7 +52,10 @@ export default class FollowCourse extends Component {
             
         })
         .catch(error => {
-            this.props.history.push(`/course/${this.props.match.params.slug}`);
+            this.props.history.push(`/forbidden`);
+            setInterval(() => {
+                this.props.history.push(`/course/${this.props.match.params.slug}`);
+            }, 5000);
             console.log('Error: ', error);
         })
     }
@@ -85,7 +89,7 @@ export default class FollowCourse extends Component {
                     <ListGroup>
                         {modules.map( module => (
                             
-                            <ListGroup.Item key={module.id} onClick={() => this.showContent(module.contents)}  style={{cursor:"pointer",textTransform: 'capitalize'}}>{module.title}</ListGroup.Item>
+                            <a href={'#'+module.title}><ListGroup.Item  key={module.id} onClick={() => this.showContent(module.contents)}  style={{cursor:"pointer",textTransform: 'capitalize'}}>{module.title}</ListGroup.Item></a>
                             
                             
                         ))}

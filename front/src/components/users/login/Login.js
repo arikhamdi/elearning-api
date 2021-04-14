@@ -20,7 +20,7 @@ class Login extends Component {
         waveAnimation();
     }
 
-    logIn = async (e) => {
+    logIn = (e) => {
         e.preventDefault();
 
         const { email, password } = this.state;

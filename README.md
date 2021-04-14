@@ -1,112 +1,120 @@
-Run project
-=============
+# Run project
 
 Make sure you have docker installed on your computer.
 
-````
+```
 docker-compose up
-````
+```
 
-Populate database for manual test
-=================================
+# Populate database for manual test
 
-````
+```
 python manage.py loaddata */fixtures/*.json`
-````
+```
 
-Run tests
-=========
+# Run tests
 
 This command works in all cases, whether docker is up or down
-````
+
+```
 docker-compose run --rm app sh -c "python manage.py test"
-````
+```
 
-This command works only if  docker is running
-````
-docker-compose exec app python manage.py test 
-````
+This command works only if docker is running
 
+```
+docker-compose exec app python manage.py test
+```
 
-API endpoints
-=============
-***Courses***
--
--------------
+# API endpoints
 
-***Public***
+## **_Courses_**
 
-------------
+---
+
+**_Public_**
+
+---
+
 - /api/ (GET)
-    - list all published courses
+
+  - list all published courses
 
 - /api/subjects/ (GET)
-    - list all subjects
 
-- /api/subject/<subject-slug> (GET)  
-    - subject detail view
+  - list all subjects
 
-- /api/<course-slug> (GET)
-    - course detail view
+- /api/subject/(subject-slug) (GET)
+
+  - subject detail view
+
+- /api/(course-slug) (GET)
+
+  - course detail view
 
 - /api/users/teachers/ (GET)
-    - list of teachers
+  - list of teachers
 
-***Student***
+**_Student_**
 
--------------
+---
 
-- /api/users/student/ (GET)
-    - student dashboard
+- /api/users/dashboard/ (GET)
+  - student dashboard
 
-***Teacher***
+**_Teacher_**
 
--------------
+---
 
 - /api/users/teacher/ (GET, POST)
-    - teacher dashboard
-    - create new course
 
-- /api/users/teacher/<course-slug>/ (GET, PUT, DELETE)
-    - course detail
-    - Edit related course
-    - delete related course
+  - teacher dashboard
+  - create new course
 
-- /api/teacher/<course-slug>/modules/ (GET, POST)
-    - get all modules for current course
-    - create module
+- /api/users/teacher/(course-slug)/ (GET, PUT, DELETE)
 
-- /api/teacher/module/<module-id>/ (GET, PUT, DELETE)
-    - module detail
-    - Edit related module
-    - delete related module
+  - course detail
+  - Edit related course
+  - delete related course
 
-- /api/teacher/module/<module-id>/content/<model-name='default:text'> (GET, POST)
-    - get all content for current module
-    - create new content
+- /api/teacher/(course-slug)/modules/ (GET, POST)
 
-- /api/teacher/content/<content-id>/ (GET, PUT, DELETE)
-    - content detail
-    - edit related content
-    - delete related content
+  - get all modules for current course
+  - create module
 
-***Authentication***
-- 
---------------------
+- /api/teacher/module/(module-id)/ (GET, PUT, DELETE)
 
-- /dj-rest-auth/login/ (POST)
+  - module detail
+  - Edit related module
+  - delete related module
 
-    - email
-    - password
+- /api/teacher/module/(module-id)/content/(model-name='default:text') (GET, POST)
 
-    Returns Token key
+  - get all content for current module
+  - create new content
 
-- /dj-rest-auth/user/ (GET)
+- /api/teacher/content/(content-id)/ (GET, PUT, DELETE)
+  - content detail
+  - edit related content
+  - delete related content
 
-- /dj-rest-auth/logout/ (POST)
+**_Authentication_**
 
-- /dj-rest-auth/registration/ (POST)
+- ***
 
-    - email
-    - password1
-    - password2
+- /api/auth/login/ (POST)
+
+  - email
+  - password
+
+  Returns Token key
+
+- /api/auth//user/ (GET)
+
+- /api/auth//logout/ (POST)
+
+- /api/auth//registration/ (POST)
+
+  - email
+  - password1
+  - password2

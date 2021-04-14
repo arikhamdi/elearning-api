@@ -24,8 +24,14 @@ export const getCurrentUser =  redirectTo => async dispatch => {
         const response = await axios.get("/auth/user/");
 
         const user = {
-            email: response.data.email
+            email: response.data.email,
+            first_name: response.data.first_name,
+            last_name: response.data.last_name
         };
+        localStorage.setItem("user", JSON.stringify(user));
+        if (redirectTo !== "") {
+            dispatch(push(redirectTo));
+          }
 
         dispatch(setCurrentUser(user, redirectTo));
     } catch (error) {
@@ -34,7 +40,7 @@ export const getCurrentUser =  redirectTo => async dispatch => {
 }
 
 export const setCurrentUser = (user, redirectTo) => dispatch => {
-    localStorage.setItem("user", JSON.stringify(user));
+    
     dispatch({
         type: SET_CURRENT_USER,
         payload: user
@@ -67,7 +73,9 @@ export const logout = () => async dispatch => {
     try {
         const response = await axios.post("/auth/logout/");
         dispatch(unsetCurrentUser());
-        // dispatch(push("/"));
+        dispatch(push("/"));
+        window.location.reload();
+        
         console.log('Logout successful.');
     } catch (error) {
         dispatch(unsetCurrentUser());

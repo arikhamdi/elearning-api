@@ -2,7 +2,7 @@ import React from "react";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
-import { applyMiddleware, createStore, compose } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import { routerMiddleware, ConnectedRouter } from "connected-react-router";
 
 import rootReducer from "./Reducer";
@@ -13,13 +13,10 @@ const Root = ({ children, initialState = {} }) => {
     const history = createBrowserHistory();
     const middleware = [thunk, routerMiddleware(history)];
 
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     const store = createStore(
         rootReducer(history),
         initialState,
-        composeEnhancers(
         applyMiddleware(...middleware)
-        )
     );
 
     if (!isEmpty(localStorage.getItem("token"))) {

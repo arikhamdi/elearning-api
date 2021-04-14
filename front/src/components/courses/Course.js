@@ -1,146 +1,95 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux';
-import { withRouter } from "react-router-dom";
-import PropTypes from 'prop-types'
-
-import {Card, Button, ListGroup} from 'react-bootstrap';
-import { getCourseDetail} from './CoursesAction';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, ListGroup } from 'react-bootstrap';
+import {useHistory} from 'react-router-dom';
+import { enroll } from './CoursesAction';
 import axios from 'axios';
 
-class Course extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id:'',
-            title:'',
-            overview:'',
-            owner:'',
-            slug:'',
-            publish:'',
-            subject:'',
-            students:[],
-            image:'',
-            modules:[],
-            isStudent : false
-        };
-      }
 
-    componentWillReceiveProps(nextProps, nextState) {
-        const { 
-            id,
-            title,
-            overview,
-            owner,
-            slug,
-            publish,
-            subject,
-            students,
-            image,
-            modules 
-        } = nextProps.course;
+const Course = ({course, page, user}) => {
 
-        this.setState({
-            id,
-            title,
-            overview,
-            owner,
-            slug,
-            publish,
-            subject,
-            students,
-            image,
-            modules 
-        })
 
-        if (students.filter((student) => student.email == this.props.auth.user.email).length > 0) {
-            this.setState({isStudent: true})
+    const history = useHistory();
+    const [isStudent, setStudent] = useState(false);
+
+    console.log(course)
+    
+    
+    const loadShortDescription = () => {
+        return (
+            <Card onClick={() => history.push(`/course/${course.slug}`)} 
+                    style={{cursor: 'pointer'}}>
+            <Card.Img variant="top" src={course.image} />
+            <Card.Header className="text-right" style={{textTransform: 'capitalize'}}>
+                {course.subject.title}
+            </Card.Header>
+            <Card.Body>
+            <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title>
+            <Card.Text>{course.overview}</Card.Text>
+            <footer className="blockquote-footer">
+                <cite title="Source Title">{course.owner.name}</cite>
+            </footer>
+        </Card.Body>
+        </Card>
+        )
+    }
+
+    const loadDetailledDescription = () => {
+
+            return (
+                <React.Fragment>
+                <Card className="mb-3">
+                <Card.Img variant="top" src={course.image} />
+                <Card.Header style={{textTransform: 'capitalize'}}>Créé par <cite title="Source Title">{course.owner.name}</cite></Card.Header>
+                <Card.Body>
+                <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title> 
+                <Card.Text>{course.overview}</Card.Text>
+                <footer className="text-right">
+                {isStudent  ? (
+                    <>
+                    <Button variant="info" onClick={() => history.push(`/student/${course.slug}`)} style={{float:'left'}}>continuer ce cours</Button>
+                    <Button variant="danger" onClick={enroll} >Arreter ce cours</Button>
+                    </>
+                ) : (
+                    <Button variant="success" onClick={enroll}  >Suivre ce cours</Button>
+                    
+                )} 
+                </footer>
+            </Card.Body>
+            </Card>
+                    <h3 className="mb-3" style={{textTransform: 'capitalize'}} >Contenu du cours</h3>
+                    <ListGroup>
+                    {course.modules.map( module => (      
+                        <ListGroup.Item key={module.id} style={{textTransform: 'capitalize'}}>{module.title}</ListGroup.Item>    
+                    ))}
+                    </ListGroup> 
+                </React.Fragment>
+            )
+    }
+
+    const checkIfStudent = () => {
+        if (course.students.filter((student) => student.email == user.email).length > 0) {
+            setStudent(true);
+        }else {
+            setStudent(false)
         }
     }
 
-    componentDidMount(){
-        this.props.getCourseDetail(`${this.props.match.params.slug}`);
-    }
-    enroll =  async () => {
-        try {
-            await axios.post(`${this.props.match.params.slug}/enroll/`);
-            this.setState({isStudent: !this.state.isStudent});
-            if (this.state.isStudent)
-                this.props.history.push(`/student/${this.props.match.params.slug}`);
-        } catch (error) {
-            console.log("Error: " , error);
-        } 
-    }
-
-    followCourse =  async () => {
-        try {
-            axios.get(`/users/student/${this.props.match.params.slug}`);
-            this.props.history.push(`/student/${this.props.match.params.slug}`);
-        } catch (error) {
-            console.log("Error: " , error);
-        } 
-    }
-
-
-    
-
-    render() {
-
-        const { id,
-                title,
-                overview,
-                owner,
-                slug,
-                publish,
-                subject,
-                students,
-                image,
-                modules } = this.state;
+    useEffect(() => {
+        if (page !== 'home'){
+            checkIfStudent();
+        }
         
-    
-        return (
-            <React.Fragment>
-                <Card className="mb-3">
-                <Card.Img variant="top" src={image} />
-                <Card.Header style={{textTransform: 'capitalize'}}>Créé par <cite title="Source Title">{owner.name}</cite></Card.Header>
-                <Card.Body>
-                    <Card.Title style={{textTransform: 'capitalize'}} >{title}</Card.Title> 
-                    <Card.Text>{overview}</Card.Text>
-                    <footer className="text-right">
-                    {this.state.isStudent  ? (
-                        <>
-                        <Button variant="info" onClick={() => this.followCourse()} >continuer ce cours</Button>
-                        <Button variant="danger" onClick={() => this.enroll()} >Arreter ce cours</Button>
-                        </>
-                    ) : (
-                        <Button variant="success" onClick={() => this.enroll()} >Suivre ce cours</Button>
-                        
-                    )}
-                    </footer>
-                </Card.Body>
-                </Card>
-                <h3 className="mb-3" style={{textTransform: 'capitalize'}} >Contenu du cours</h3>
-                <ListGroup>
-                {modules.map( module => (      
-                    <ListGroup.Item key={module.id} style={{textTransform: 'capitalize'}}>{module.title}</ListGroup.Item>    
-                ))}
-                </ListGroup> 
-            </React.Fragment>
-        )
-    }
+    }, [course, user]);
+
+
+
+   
+    return (
+     <React.Fragment>
+            {(page === "home") ? loadShortDescription() : loadDetailledDescription()}   
+     </React.Fragment>              
+    )
 }
 
-Course.propType = {
-    getCourseDetail : PropTypes.func.isRequired,
-    course : PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
-    
-};
-
-const mapStateToProps = state => ({
-    course: state.courses.course,
-    auth: state.auth 
-});
   
-export default connect(mapStateToProps,{
-    getCourseDetail
-})(withRouter(Course));
+export default Course;

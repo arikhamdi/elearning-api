@@ -1,27 +1,48 @@
 import axios from 'axios';
-import {GET_COURSES, GET_COURSE_DETAIL} from './CoursesTypes';
+import {
+    GET_COURSES,
+    COURSE_DETAIL_REQUEST,
+    COURSE_DETAIL_SUCCESS,
+    COURSE_DETAIL_FAIL,
+    ENROLL_COURSE
+} from './CoursesTypes';
 
-export const getCourses = (param = "/") => async dispatch => {
-    try {
-        const response = await axios.get(param);
-        dispatch({
-            type: GET_COURSES,
-            payload : response.data
-        });
-    } catch (error) {
-        console.log("Error: ", error);
-    }
+export const getCourses = (param = "/") => dispatch => {
+        axios.get(param)
+        .then(response => {
+            dispatch({
+                type: GET_COURSES,
+                payload : response.data
+            })
+        })
+        .catch(error => console.log("Error: ", error))
 }
 
 
-export const getCourseDetail = param => async dispatch => {
+export const getCourseDetails = param => async dispatch => {
         try {
-            const response = await axios.get(param);
+            dispatch({type: COURSE_DETAIL_REQUEST});
+
+            const { data } = await axios.get(param);
+            // console.log(data)
+
             dispatch({
-                type: GET_COURSE_DETAIL,
-                payload : response.data
+                type: COURSE_DETAIL_SUCCESS,
+                payload : data
             });
         } catch (error) {
-            console.log("Error: ", error);
+            dispatch({
+                type: COURSE_DETAIL_FAIL,
+                payload : error.response.data
+            });
         }
     }
+
+
+export const enroll = (isStudent) => dispatch => {
+    axios.post(`/enroll/`);
+    dispatch({
+        type : ENROLL_COURSE,
+        payload : !isStudent
+    });
+} 
