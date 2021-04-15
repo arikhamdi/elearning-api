@@ -29,23 +29,13 @@ export const PasswordChange = () => {
                 email: user.email
             })
         }
-        if (isUpdated) {
-            console.log('in update', isUpdated)
-            setValues({
-                ...values,
-                new_password1: '',
-                new_password2: ''
-            })
-        }
-        console.log('update', isUpdated)
-
+  
         if(error) {
             setValues({
                 ...values,                
                 errors: error
             })
         }
-        console.log(error)
     },[user, error, isUpdated])
 
     const {email, new_password1, new_password2, errors } = values;
@@ -61,7 +51,7 @@ export const PasswordChange = () => {
         })
     }
 
-    const submitPasswordAndEmailForm = e => {
+    const submitNewPassword = e => {
         e.preventDefault();
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
@@ -89,7 +79,7 @@ export const PasswordChange = () => {
                     
             </h3>
             <Container>
-            <Form noValidate onSubmit={submitPasswordAndEmailForm}>
+            <Form noValidate onSubmit={submitNewPassword}>
             <Form.Group>
             <InputGroup>
                     <FormControl

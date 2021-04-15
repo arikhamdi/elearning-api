@@ -26,7 +26,8 @@ import {
     CLEAR_ERROR
 } from './UserTypes';
 
-import { isEmpty, setAxiosAuthToken } from '../../utils/Utils';
+import { setAxiosAuthToken } from '../../utils/Utils';
+import { Redirect } from 'react-router';
 
 
 export const login = (userData, redirectTo) => dispatch => {
@@ -239,7 +240,7 @@ export const updatePassword = (userData) => dispatch => {
 export const resetPassword = (email) => dispatch => {
     dispatch({type : RESET_PASSWORD_REQUEST});
 
-    axios.post("/auth/password/reset/", email)
+    axios.post("/auth/password-reset/", email)
     .then(response => {
         dispatch({
             type : RESET_PASSWORD_SUCCESS,
@@ -248,6 +249,33 @@ export const resetPassword = (email) => dispatch => {
         dispatch(clearErrors());
     })
     .catch(error => {
+        if (error.response) {
+            console.log('error', error.response.data)
+            dispatch({
+                type : RESET_PASSWORD_FAIL,
+                payload: error.response.data
+            });
+        } else if ('error.message', error.message) {
+            console.log(JSON.stringify(error.message));
+        } else {
+            console.log('error', JSON.stringify(error));
+        }
+    })
+}
+
+export const resetPasswordConfirm = (userData) => dispatch => {
+    dispatch({type : RESET_PASSWORD_REQUEST});
+
+    axios.post("/auth/password-reset/confirm/", userData)
+    .then(response => {
+        dispatch({
+            type : RESET_PASSWORD_SUCCESS,
+            payload: response.data
+        });
+        dispatch(clearErrors());
+    })
+    .catch(error => {
+        
         if (error.response) {
             console.log('error', error.response.data)
             dispatch({

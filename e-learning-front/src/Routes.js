@@ -6,7 +6,6 @@ import Dashboard from './components/user/Dashboard';
 import CourseDetails from './components/course/CourseDetails';
 import Login from './components/user/Login';
 import Signup from './components/user/Signup';
-import Profile from './components/user/Profile';
 import store from './store';
 import { isEmpty } from './utils/Utils';
 import { setCurrentUser, setToken } from './reducers/user/UserActions';
@@ -16,8 +15,10 @@ import ProtectedRoute from './components/route/ProtectedRoute';
 import Forbidden from './components/pages/Forbidden';
 import NotFound from './components/pages/NotFound';
 import PasswordReset from './components/user/PasswordReset';
+import PasswordResetConfirm from './components/user/PasswordResetConfirm';
 import UserPersonalInfos from './components/user/UserPersonalInfos';
 import PasswordChange from './components/user/PasswordChange';
+import PasswordResetSuccess from './components/user/PasswordResetSuccess';
 
 
 const Routes = () => {
@@ -30,7 +31,6 @@ const Routes = () => {
         store.dispatch(setCurrentUser(user, ""));
     }
 
-
     return (
         <Router>
         <Menu />
@@ -40,8 +40,9 @@ const Routes = () => {
                 <Route path="/course/:slug" component={CourseDetails} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <Route exact path="/reset-password" component={PasswordReset} />
-                {/* <ProtectedRoute exact path="/profile" component={Profile} /> */}
+                <Route exact path="/password-reset" component={PasswordReset} />
+                <Route path="/password-reset/confirm/:token" component={PasswordResetConfirm} />
+                <Route exact path="/password-reset/success" component={PasswordResetSuccess} />
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />
                 <ProtectedRoute path="/profile/auth" component={PasswordChange} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />

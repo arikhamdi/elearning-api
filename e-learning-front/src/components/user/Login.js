@@ -84,7 +84,7 @@ const Login = ({history}) => {
                     Vous n'avez pas encore de compte ? <Link to="/signup"> S'inscrire</Link>
                     </p>
                     <p className="mt-2">
-                    Mot de passe oublié ?<Link to="/reset-password">Reinitialiser.</Link>
+                    Mot de passe oublié ?<Link to="/password-reset">Reinitialiser.</Link>
                     </p>
                 
                 

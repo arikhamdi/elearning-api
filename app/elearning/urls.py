@@ -28,4 +28,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/password-reset/',
+         include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
