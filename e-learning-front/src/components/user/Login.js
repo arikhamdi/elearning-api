@@ -20,18 +20,24 @@ const Login = ({history}) => {
 
     const { isAuthenticated, error, loading } = useSelector(state => state.auth);
 
-    useEffect(() => {
 
- 
+    useEffect(() => {
         if (error) {
             setValues( {
                 ...values,
                 errors: Object.entries(error)
             })
-            console.log(errors)
         }
 
     }, [dispatch, isAuthenticated, error])
+
+    const handleChange = name => e => {
+        setValues({
+            ...values,
+            errors:false,
+            [name]: e.target.value
+        });
+    }
 
 
     const signinForm = () => (
@@ -78,7 +84,7 @@ const Login = ({history}) => {
                     Vous n'avez pas encore de compte ? <Link to="/signup"> S'inscrire</Link>
                     </p>
                     <p className="mt-2">
-                    <Link to="/password/forgot">Mot de passe oublié ? </Link>
+                    Mot de passe oublié ?<Link to="/reset-password">Reinitialiser.</Link>
                     </p>
                 
                 
@@ -86,13 +92,7 @@ const Login = ({history}) => {
         </div>
     );
 
-    const handleChange = name => e => {
-        setValues({
-            ...values,
-            errors:false,
-            [name]: e.target.value
-        });
-    }
+    
 
     const submitHandler = (e) => {
         e.preventDefault();

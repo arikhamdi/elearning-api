@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../reducers/user/UserActions';
-import { getSubjects } from '../../reducers/course/CourseActions';
+import { getCourses, getSubjects } from '../../reducers/course/CourseActions';
 
-import { Navbar, Nav, NavDropdown, Form, Button, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
+import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
 
 import '../../Styles.css';
 
@@ -28,27 +28,46 @@ const Menu = ({ history }) => {
             e.target.style.color = '';
     }
 
+    const filterCourse = (subject) => {
+        dispatch(getCourses(`/subject/${subject}`))
+
+    }
+
     return (
         <Navbar bg="info" variant="dark" expand="lg" className="mb-3"  >
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
-            href="/"onMouseEnter={isActive.bind(this,true)} 
+            href="/"
+            onMouseEnter={isActive.bind(this,true)} 
             onMouseLeave={isActive.bind(this,false)} >
             E-learning
         </Nav.Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-2">
-                <NavDropdown 
-                    title="Categories" 
-                    id="basic-nav-dropdown" 
-                    onMouseEnter={isActive.bind(this,true)} 
-                    onMouseLeave={isActive.bind(this,false)}
-                >
-                    {subjects && subjects.map(subject => (
-                        <NavDropdown.Item style={{textTransform: 'capitalize'}} key={subject.id} href={"/subject/"+subject.title.toLowerCase()}>{subject.title}</NavDropdown.Item>
-                    ))}
-                </NavDropdown>
+                <Dropdown>
+                <Dropdown.Toggle 
+                        as={Nav.Link} 
+                        onMouseEnter={isActive.bind(this,true)} 
+                        onMouseLeave={isActive.bind(this,false)}
+                    >
+                    Categories
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu  className="text-center">
+                        {subjects && subjects.map(subject => (
+                            <NavLink 
+                            
+                            className="nav-link text-dark" 
+                            style={{textTransform: 'capitalize'}} 
+                            key={subject.id} 
+                            onClick={() => filterCourse(subject.slug)}
+                            to={"/subject/"+subject.title.toLowerCase()}
+                            >
+                            {subject.title}
+                            </NavLink>        
+                        ))}
+                    </Dropdown.Menu>
+                </Dropdown>
                 </Nav>
                 <Nav className="mr-auto" style={{width: '100%'}}>
                 <Form inline style={{width: '100%'}} >

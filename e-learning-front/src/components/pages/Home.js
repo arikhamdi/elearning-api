@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import Layout from '../components/Layout/Layout';
+import Layout from '../Layout/Layout';
 import { CardDeck} from 'react-bootstrap';
 
-import Course from '../components/course/Course';
-import SubNav from '../components/Layout/SubNav';
+import Course from '../course/Course';
+import SubNav from '../Layout/SubNav';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getCourses,getSubjects } from '../reducers/course/CourseActions';
-import {Loader} from '../components/Layout/Loader';
+import { getCourses,getSubjects } from '../../reducers/course/CourseActions';
+import {Loader} from '../Layout/Loader';
 
 const  Home = ({match}) => {
 

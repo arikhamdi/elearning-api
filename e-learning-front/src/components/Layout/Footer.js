@@ -4,7 +4,7 @@ import React from 'react';
 const Footer = props => {
 
     return (
-        <footer className="bg-info text-center text-lg-start mt-3">
+        <footer id="main-footer" className="bg-info text-center text-lg-start mt-3">
 
          <div className="container p-4">
             <section className="mb-4">

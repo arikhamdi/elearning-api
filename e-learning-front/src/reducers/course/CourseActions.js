@@ -10,7 +10,8 @@ import {
     GET_SUBJECTS_REQUEST,
     GET_SUBJECTS_SUCCESS,
     GET_SUBJECTS_FAIL,
-    ENROLL_COURSE
+    ENROLL_COURSE,
+    CLEAR_ERROR
 } from './CourseTypes';
 
 export const getCourses = (param = "/") => dispatch => {
@@ -65,5 +66,12 @@ export const getSubjects = () => dispatch => {
             type: GET_SUBJECTS_FAIL,
             payload : error
         })
+    })
+}
+
+export const clearErrors = () => dispatch => {
+    dispatch({
+        type: CLEAR_ERROR,
+        payload : null
     })
 }

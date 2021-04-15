@@ -8,7 +8,8 @@ import {
     GET_SUBJECTS_REQUEST,
     GET_SUBJECTS_SUCCESS,
     GET_SUBJECTS_FAIL,
-    ENROLL_COURSE
+    ENROLL_COURSE,
+    CLEAR_ERROR
 } from './CourseTypes';
 
 
@@ -62,6 +63,11 @@ export const courseDetailsReducer = (state = { course : {} }, action) => {
                 ...state,
                 isStudent: action.payload
             };
+        case CLEAR_ERROR:
+            return {
+                ...state,
+                error: action.payload
+            }
         default:
             return state;
     }
