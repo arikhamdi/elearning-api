@@ -69,7 +69,6 @@ export const getStudentCourse = param => dispatch => {
 
     axios.get(`/users/student/${param}/`)
     .then(response => {
-        console.log(response.data.modules)
         dispatch({
             type: GET_STUDENT_COURSES_SUCCESS,
             payload : response.data
@@ -89,7 +88,6 @@ export const getContentById = (param, id) => dispatch => {
 
     axios.get(`/users/student/${param}/${id}/`)
     .then(response => {
-        console.log(response.data)
         dispatch({
             type: GET_CONTENT_SUCCESS,
             payload : response.data

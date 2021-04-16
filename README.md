@@ -1,9 +1,29 @@
+# Projet d'intégration
+
+**_Backend_**
+
+![django version](https://img.shields.io/badge/django-3.1.8-brightgreen)
+![djangorestframework version](https://img.shields.io/badge/djangorestframework-3.11.0-brightgreen)
+![django-allauth version](https://img.shields.io/badge/django--allauth-0.42.0-brightgreen)
+![django-cors-headers version](https://img.shields.io/badge/django--cors--headers-3.7.0-brightgreen)
+![django-rest-passwordreset version](https://img.shields.io/badge/django--rest--passwordreset-1.1.0-brightgreen)
+
+**_Frontend_**
+
+![npm version](https://img.shields.io/badge/npm-6.14.10-red)
+![react version](https://img.shields.io/badge/react-17.0.2-red)
+[![axios version](https://img.shields.io/badge/axios-0.21.1-red)](https://github.com/axios/axios)
+[![redux version](https://img.shields.io/badge/redux-4.0.5-red)](https://redux.js.org/)
+[![react-redux version](https://img.shields.io/badge/react--redux-7.2.3-red)](https://react-redux.js.org/)
+[![react-bootstrap version](https://img.shields.io/badge/react--bootstrap-1.5.2-red)](https://react-bootstrap.netlify.app/)
+[![react-player version](https://img.shields.io/badge/react--player-2.9.0-red)](https://github.com/cookpete/react-player)
+
 # Run project
 
 Make sure you have docker installed on your computer.
 
 ```
-docker-compose up
+docker-compose ue
 ```
 
 # Populate database for manual test
@@ -12,8 +32,9 @@ docker-compose up
 python manage.py loaddata */fixtures/*.json`
 ```
 
-# Run tests
+# <p style="color: red">Run tests<p>
 
+<p style="color: red">Tests don't work now - need to be fixed<p> 
 This command works in all cases, whether docker is up or down
 
 ```

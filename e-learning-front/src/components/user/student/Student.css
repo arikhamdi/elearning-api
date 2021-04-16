@@ -1,0 +1,16 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+
+.wrap {
+  position: sticky;
+  top: 0;
+  right: 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  height: 100vh;
+  overflow: auto;
+}

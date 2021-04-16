@@ -15,7 +15,7 @@ const StudentMenu = ({title}) => {
     }
 
     return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar  expand="lg" bg="dark" variant="dark">
         <NavLink 
         className="navbar-brand"
         style={{borderRight: "1px solid #ffffff", paddingRight: "2rem", color: "red"}} 

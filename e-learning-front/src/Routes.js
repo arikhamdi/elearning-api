@@ -47,6 +47,7 @@ const Routes = () => {
                 <Route path="/password-reset/confirm/:token" component={PasswordResetConfirm} />
                 <Route exact path="/password-reset/success" component={PasswordResetSuccess} />
                 <ProtectedStudentRoute exact path="/student/:slug" component={StudentCourse} />
+                <ProtectedStudentRoute exact path="/student/:slug/:module/:content" component={StudentCourse} />
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />
                 <ProtectedRoute path="/profile/auth" component={PasswordChange} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
