@@ -14,11 +14,13 @@ import Footer from './components/Layout/Footer';
 import ProtectedRoute from './components/route/ProtectedRoute';
 import Forbidden from './components/pages/Forbidden';
 import NotFound from './components/pages/NotFound';
-import PasswordReset from './components/user/PasswordReset';
-import PasswordResetConfirm from './components/user/PasswordResetConfirm';
+import PasswordReset from './components/user/password/PasswordReset';
+import PasswordResetConfirm from './components/user/password/PasswordResetConfirm';
 import UserPersonalInfos from './components/user/UserPersonalInfos';
-import PasswordChange from './components/user/PasswordChange';
-import PasswordResetSuccess from './components/user/PasswordResetSuccess';
+import PasswordChange from './components/user/password/PasswordChange';
+import PasswordResetSuccess from './components/user/password/PasswordResetSuccess';
+import StudentCourse from './components/user/student/StudentCourse';
+import ProtectedStudentRoute from './components/route/ProtectedStudentRoute';
 
 
 const Routes = () => {
@@ -30,6 +32,7 @@ const Routes = () => {
         const user = JSON.parse(localStorage.getItem("user"));
         store.dispatch(setCurrentUser(user, ""));
     }
+
 
     return (
         <Router>
@@ -43,6 +46,7 @@ const Routes = () => {
                 <Route exact path="/password-reset" component={PasswordReset} />
                 <Route path="/password-reset/confirm/:token" component={PasswordResetConfirm} />
                 <Route exact path="/password-reset/success" component={PasswordResetSuccess} />
+                <ProtectedStudentRoute exact path="/student/:slug" component={StudentCourse} />
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />
                 <ProtectedRoute path="/profile/auth" component={PasswordChange} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />

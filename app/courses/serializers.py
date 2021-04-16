@@ -61,11 +61,12 @@ class ContentSerializer(serializers.ModelSerializer):
 
 
 class ModuleWithContentsSerializer(serializers.ModelSerializer):
-    contents = ContentSerializer(many=True)
+    contents = ContentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Module
-        fields = ['id', 'order', 'title', 'description', 'contents']
+        fields = ['id', 'title', 'description', 'order',  'contents']
+        read_only_fields = ('id',)
 
 
 class ModuleSerializer(serializers.ModelSerializer):

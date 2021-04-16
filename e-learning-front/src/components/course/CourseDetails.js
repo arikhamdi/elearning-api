@@ -1,43 +1,55 @@
-import React, { useEffect } from 'react'
-import { getCourseDetails } from '../../reducers/course/CourseActions';
+import React, { Fragment, useEffect } from 'react'
+import { enrollStudent, getCourseDetails } from '../../reducers/course/CourseActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, ListGroup } from 'react-bootstrap';
+import { Button, Card, ListGroup} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { isEmpty } from '../../utils/Utils';
 import { Loader } from '../Layout/Loader';
 
 const CourseDetails = ({match}) => {
 
     const dispatch = useDispatch();
-    const {course,loading, isStudent, error} = useSelector(state => state.courseDetails);
+    const {course, loading, isStudent, error} = useSelector(state => state.courseDetails);
+    const { user, isAuthenticated } = useSelector(state => state.auth);
 
-    console.log(course)
+
 
     useEffect(() => {
         dispatch(getCourseDetails(match.params.slug))
-    }, [dispatch, match.params.slug])
+    }, [dispatch, match.params.slug, user, isStudent])
+
+
+    const followThisCourse = () => {
+        console.log('isStudent', isStudent)
+        dispatch(enrollStudent(match.params.slug));
+    }
 
     return (
         <div>
             <React.Fragment>
-                {course == 'undefined' || isEmpty(course) ? 
+                {isEmpty(course) ? 
                     <Loader />
                 : (
                     <React.Fragment>
                 <Card className="mb-3">
                 <Card.Img variant="top" src={course.image} />
-                <Card.Header style={{textTransform: 'capitalize'}}>Créé par <cite title="Source Title">{course.owner.name}</cite></Card.Header>
+                <Card.Header style={{textTransform: 'capitalize'}}>Créé par <cite title="Source Title">{course.owner.name}</cite>
+                {!isStudent  && (
+                    isAuthenticated ? 
+                    <Button variant="success" onClick={followThisCourse} style={{float: 'right'}}>Suivre ce cours</Button>
+                    : 
+                    <Link className="btn btn-info" to="/login" style={{float: 'right'}}> Login</Link>
+                )}
+                </Card.Header>
                 <Card.Body>
                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title> 
                 <Card.Text>{course.overview}</Card.Text>
                 <footer className="text-right">
-                {isStudent  ? (
-                    <>
-                    <Button variant="info" style={{float:'left'}}>continuer ce cours</Button>
-                    <Button variant="danger"  >Arreter ce cours</Button>
-                    </>
-                ) : (
-                    <Button variant="success" >Suivre ce cours</Button>
-                    
+                {isStudent  && (
+                    <Fragment>
+                        <Link className="btn btn-info" style={{float:'left'}} to={`/student/${course.slug}`}>continuer ce cours</Link>
+                        <Button variant="danger" onClick={followThisCourse}  >Arreter ce cours</Button>
+                    </Fragment>
                 )} 
                 </footer>
             </Card.Body>

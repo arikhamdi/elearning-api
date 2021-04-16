@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPasswordConfirm } from '../../reducers/user/UserActions';
+import { resetPasswordConfirm } from '../../../reducers/user/UserActions';
 
-import '../pages/Page.css';
+import '../../pages/Page.css';
 
 const PasswordResetConfirm = ({match, history}) => {
 

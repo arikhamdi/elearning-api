@@ -10,7 +10,7 @@ from .views.teachers import (
     content_detail,
     course_detail
 )
-from .views.students import student_course_detail
+from .views.students import student_course_detail, student_get_modules_list, get_content_by_id
 
 from .views.dashboard import dashboard
 
@@ -22,6 +22,8 @@ urlpatterns = [
 
     # Students interfaces
     path('student/<slug:course_slug>/', student_course_detail),
+    path('student/<slug:course_slug>/<int:id>/', get_content_by_id),
+    #     path('student/<slug:course_slug>/', student_get_modules_list),
 
 
     # teachers interfaces

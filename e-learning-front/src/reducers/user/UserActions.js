@@ -6,9 +6,6 @@ import {
     SIGNUP_REQUEST,
     SIGNUP_SUCCESS,
     SIGNUP_FAIL,
-    LOAD_USER_REQUEST,
-    LOAD_USER_SUCCESS,
-    LOAD_USER_FAIL,
     DASHBOARD_REQUEST,
     DASHBOARD_SUCCESS,
     DASHBOARD_FAIL,
@@ -27,7 +24,6 @@ import {
 } from './UserTypes';
 
 import { setAxiosAuthToken } from '../../utils/Utils';
-import { Redirect } from 'react-router';
 
 
 export const login = (userData, redirectTo) => dispatch => {
@@ -66,9 +62,7 @@ export const setToken = token => dispatch => {
 
 export const getCurrentUser =  redirectTo => async dispatch => {
     try {
-        console.log('ok current axios')
         const response = await axios.get("/auth/user/");
-        console.log('ok current after axios')
         const user = {
             email: response.data.email,
             first_name: response.data.first_name,
@@ -78,10 +72,8 @@ export const getCurrentUser =  redirectTo => async dispatch => {
         if (redirectTo !== "") {
             redirectTo();
           }
-          console.log('ok current')
         dispatch(setCurrentUser(user, redirectTo));
     } catch (error) {
-        console.log('error current')
         dispatch(unsetCurrentUser());
     }
 }
@@ -103,6 +95,7 @@ export const unsetCurrentUser = () => dispatch => {
     setAxiosAuthToken("");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("subscribed");
     dispatch({
         type: UNSET_CURRENT_USER
     });
@@ -124,16 +117,6 @@ export const logout = (redirectTo) => dispatch => {
     })
 }
 
-// export const loadUser = () => dispatch => {
-//     if (!isEmpty(localStorage.getItem("token"))) {
-//         dispatch(setToken(localStorage.getItem("token")));
-//     }
-
-//     if (!isEmpty(localStorage.getItem("user"))) {
-//         const user = JSON.parse(localStorage.getItem("user"));
-//         dispatch(setCurrentUser(user, ""));
-//     }
-// }
 
 export const signup = (userData) => dispatch => {
     dispatch({type : SIGNUP_REQUEST});
@@ -159,12 +142,26 @@ export const signup = (userData) => dispatch => {
     })
 }
 
+export const getSubscribedCourse =  () =>  dispatch => {
+    axios.get("/users/dashboard/")
+    .then(response => {
+        const subscribed = [];
+        response.data.map(data => 
+            subscribed.push(data.slug)
+        )
+        localStorage.setItem("subscribed", JSON.stringify(subscribed));
+    })
+    .catch(error => {
+            console.log('error', JSON.stringify(error));  
+    })
+}
 
 export const getDashboard = () => dispatch => {
     dispatch({type : DASHBOARD_REQUEST});
 
     axios.get("/users/dashboard/")
     .then(response => {
+        dispatch(getSubscribedCourse());
         dispatch({
             type : DASHBOARD_SUCCESS,
             payload: response.data

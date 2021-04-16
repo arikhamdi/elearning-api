@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-import '../pages/Page.css';
+import '../../pages/Page.css';
 
  const PasswordResetSuccess = () => {
         return (

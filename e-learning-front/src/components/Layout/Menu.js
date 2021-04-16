@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../reducers/user/UserActions';
@@ -33,8 +33,8 @@ const Menu = ({ history }) => {
 
     }
 
-    return (
-        <Navbar bg="info" variant="dark" expand="lg" className="mb-3"  >
+    const mainMenu = () => (
+                <Navbar id="main-menu" bg="info" variant="dark" expand="lg" className="mb-3"  >
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
             href="/"
@@ -42,7 +42,7 @@ const Menu = ({ history }) => {
             onMouseLeave={isActive.bind(this,false)} >
             E-learning
         </Nav.Link>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-2">
                 <Dropdown>
@@ -131,7 +131,14 @@ const Menu = ({ history }) => {
             )}
             </Nav>
         </Navbar.Collapse>
-    </Navbar>
+        </Navbar>
+    )
+
+
+    return (
+        <Fragment>
+            {history.location.pathname.split("/")[1] !== 'student' && mainMenu() }
+        </Fragment>
     )
             
 

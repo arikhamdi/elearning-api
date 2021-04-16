@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { Tab, Tabs,Form, Button, Container, InputGroup, FormControl, Navbar, Nav  } from 'react-bootstrap';
-import Layout from '../Layout/Layout';
-import { updatePassword } from '../../reducers/user/UserActions';
-import { showSuccess } from '../../utils/Utils';
-import { Link, NavLink, Redirect } from 'react-router-dom';
-import ProfilMenu from '../Layout/ProfilMenu';
+import { Form, Button, Container, InputGroup, FormControl } from 'react-bootstrap';
+import Layout from '../../Layout/Layout';
+import { updatePassword } from '../../../reducers/user/UserActions';
+import { showSuccess } from '../../../utils/Utils';
+import ProfilMenu from '../../Layout/ProfilMenu';
 
 export const PasswordChange = () => {
 

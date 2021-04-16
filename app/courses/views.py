@@ -17,6 +17,7 @@ from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from .serializers import (
     SubjectSerializer,
     CourseSerializer,
+    ContentSerializer
 
 )
 from .models import (File, Image, Subject, Course,

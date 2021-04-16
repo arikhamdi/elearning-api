@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPassword } from '../../reducers/user/UserActions';
+import { resetPassword } from '../../../reducers/user/UserActions';
 
-import '../pages/Page.css';
+import '../../pages/Page.css';
 
 const PasswordReset = () => {
 
