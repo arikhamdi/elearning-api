@@ -23,7 +23,7 @@ const Menu = ({ history }) => {
 
     const isActive = (active, e) => { 
         if (active)
-            e.target.style.color = 'yellow';   
+            e.target.style.color = 'red';   
         else
             e.target.style.color = '';
     }
@@ -34,13 +34,13 @@ const Menu = ({ history }) => {
     }
 
     const mainMenu = () => (
-                <Navbar id="main-menu" bg="info" variant="dark" expand="lg" className="mb-3"  >
+                <Navbar id="main-menu"  variant="light" expand="lg"   >
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
             href="/"
             onMouseEnter={isActive.bind(this,true)} 
             onMouseLeave={isActive.bind(this,false)} >
-            E-learning
+            <span style={{color:'red'}}>E</span>learning
         </Nav.Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -72,18 +72,19 @@ const Menu = ({ history }) => {
                 <Nav className="mr-auto" style={{width: '100%'}}>
                 <Form inline style={{width: '100%'}} >
  
-                <InputGroup style={{width: '100%', borderRadius : "50px"}}>
+                <InputGroup style={{width: '100%'}}>
+                <InputGroup.Append>
+                    <Button 
+                    variant="outline-dark"
+                    style={{borderRadius : "50px 0 0 50px" , borderRightColor: 'white'}}><i className="fas fa-search"></i></Button>
+                    </InputGroup.Append>
                     <FormControl
                     placeholder="Chercher un cours"
                     aria-label="Chercher un cours"
                     aria-describedby="Chercher un cours"
-                    style={{borderRadius : "50px 0 0 50px"}}
+                    style={{borderRadius : "0 50px 50px 0" ,borderColor:"#000"}}
                     />
-                    <InputGroup.Append>
-                    <Button 
-                    variant="outline-light"
-                    style={{borderRadius : "0 50px 50px 0"}}><i className="fas fa-search"></i></Button>
-                    </InputGroup.Append>
+                    
                 </InputGroup>
 
                 </Form>
@@ -125,7 +126,7 @@ const Menu = ({ history }) => {
                 </React.Fragment>
             ) : (
                 <React.Fragment>
-                    <NavLink className="btn btn-outline-light mr-sm-2 text-nowrap" to="/login"><i className="fas fa-sign-in-alt"></i> Se connecter</NavLink>
+                    <NavLink className="btn btn-outline-dark mr-sm-2 text-nowrap" to="/login"><i className="fas fa-sign-in-alt"></i> Se connecter</NavLink>
                     <NavLink className="btn btn-dark mr-sm-2 text-nowrap"  to="/signup"><i className="fas fa-user-plus"></i> S'inscrire</NavLink>
                 </React.Fragment>
             )}

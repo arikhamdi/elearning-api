@@ -1,44 +1,20 @@
-import {
-    GET_COURSES_REQUEST,
-    GET_COURSES_SUCCESS,
-    GET_COURSES_FAIL,
-    COURSE_DETAIL_REQUEST,
-    COURSE_DETAIL_SUCCESS,
-    COURSE_DETAIL_FAIL,
-    GET_STUDENT_COURSES_REQUEST,
-    GET_STUDENT_COURSES_SUCCESS,
-    GET_STUDENT_COURSES_FAIL,
-    GET_MODULES_REQUEST,
-    GET_MODULES_SUCCESS,
-    GET_MODULES_FAIL,
-    GET_CONTENT_REQUEST,
-    GET_CONTENT_SUCCESS,
-    GET_CONTENT_FAIL,
-    GET_SUBJECTS_REQUEST,
-    GET_SUBJECTS_SUCCESS,
-    GET_SUBJECTS_FAIL,
-    ENROLL_COURSE_REQUEST,
-    ENROLL_COURSE_SUCCESS,
-    ENROLL_COURSE_FAIL,
-    CLEAR_ERROR
-} from './CourseTypes';
-
+import * as actions from './CourseTypes';
 
 export const coursesReducer = (state = { courses : [] }, action) => {
     switch(action.type) {
-        case GET_COURSES_REQUEST:
+        case actions.GET_COURSES_REQUEST:
             return {
                 ...state,
                 loading: true,
                 courses : []
             };
-        case GET_COURSES_SUCCESS:
+        case actions.GET_COURSES_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 courses : action.payload
             };
-        case GET_COURSES_FAIL:
+        case actions.GET_COURSES_FAIL:
             return {
                 loading: false,
                 error : action.payload
@@ -50,15 +26,15 @@ export const coursesReducer = (state = { courses : [] }, action) => {
 
 export const courseDetailsReducer = (state = { course : {} }, action) => {
     switch(action.type) {
-        case COURSE_DETAIL_REQUEST:
-        case ENROLL_COURSE_REQUEST:
-        case GET_STUDENT_COURSES_REQUEST:
+        case actions.COURSE_DETAIL_REQUEST:
+        case actions.ENROLL_COURSE_REQUEST:
+        case actions.GET_STUDENT_COURSES_REQUEST:
             return {
                 ...state,
                 loading: true
             };
-        case COURSE_DETAIL_SUCCESS:
-        case GET_STUDENT_COURSES_SUCCESS:
+        case actions.COURSE_DETAIL_SUCCESS:
+        case actions.GET_STUDENT_COURSES_SUCCESS:
             let user = "";
             if(localStorage.getItem('user')){
                 user = JSON.parse(localStorage.getItem('user'))                
@@ -69,20 +45,20 @@ export const courseDetailsReducer = (state = { course : {} }, action) => {
                 isStudent : (action.payload.students.filter((student) => student.email == user.email).length > 0),
                 loading: false
             };
-        case COURSE_DETAIL_FAIL:
-        case ENROLL_COURSE_FAIL:
-        case GET_STUDENT_COURSES_FAIL:
+        case actions.COURSE_DETAIL_FAIL:
+        case actions.ENROLL_COURSE_FAIL:
+        case actions.GET_STUDENT_COURSES_FAIL:
             return {
                 ...state,
                 loading: false,
                 error : action.payload
             };
-        case ENROLL_COURSE_SUCCESS:
+        case actions.ENROLL_COURSE_SUCCESS:
             return {
                 ...state,
                 isStudent: action.payload
             };
-        case CLEAR_ERROR:
+        case actions.CLEAR_ERROR:
             return {
                 ...state,
                 error: action.payload
@@ -94,24 +70,24 @@ export const courseDetailsReducer = (state = { course : {} }, action) => {
 
 export const modulesReducer = (state = { modules : {} }, action) => {
     switch(action.type) {
-        case GET_MODULES_REQUEST:
+        case actions.GET_MODULES_REQUEST:
             return {
                 ...state,
                 loading: true
             };
-        case GET_MODULES_SUCCESS:
+        case actions.GET_MODULES_SUCCESS:
             return {
                 ...state,
                 modules : action.payload,
                 loading: false
             };
-        case GET_MODULES_FAIL:
+        case actions.GET_MODULES_FAIL:
             return {
                 ...state,
                 loading: false,
                 error : action.payload
             };
-        case CLEAR_ERROR:
+        case actions.CLEAR_ERROR:
             return {
                 ...state,
                 error: action.payload
@@ -123,24 +99,24 @@ export const modulesReducer = (state = { modules : {} }, action) => {
 
 export const contentReducer = (state = { content : {} }, action) => {
     switch(action.type) {
-        case GET_CONTENT_REQUEST:
+        case actions.GET_CONTENT_REQUEST:
             return {
                 ...state,
                 loading: true
             };
-        case GET_CONTENT_SUCCESS:
+        case actions.GET_CONTENT_SUCCESS:
             return {
                 ...state,
                 content : action.payload,
                 loading: false
             };
-        case GET_CONTENT_FAIL:
+        case actions.GET_CONTENT_FAIL:
             return {
                 ...state,
                 loading: false,
                 error : action.payload
             };
-        case CLEAR_ERROR:
+        case actions.CLEAR_ERROR:
             return {
                 ...state,
                 error: action.payload
@@ -151,17 +127,17 @@ export const contentReducer = (state = { content : {} }, action) => {
 }
 export const subjectsReducer = (state = { subjects : [] }, action) => {
     switch(action.type) {
-        case GET_SUBJECTS_REQUEST:
+        case actions.GET_SUBJECTS_REQUEST:
             return {
                 ...state,
                 subjects : []
             };
-        case GET_SUBJECTS_SUCCESS:
+        case actions.GET_SUBJECTS_SUCCESS:
             return {
                 ...state,
                 subjects : action.payload
             };
-        case GET_SUBJECTS_FAIL:
+        case actions.GET_SUBJECTS_FAIL:
             return {
                 error : action.payload
             };

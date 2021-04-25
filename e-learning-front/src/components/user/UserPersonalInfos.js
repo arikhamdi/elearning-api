@@ -129,6 +129,7 @@ const UserPersonalInfos = () => {
             <Layout
             title="Profil"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque pulvinar auctor dui at consequat."
+            image="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.flaticon.com%2Ficons%2Fpng%2F512%2F16%2F16363.png&f=1&nofb=1"
             className="container">
 
             <ProfilMenu active="infos" />

@@ -1,33 +1,12 @@
 import axios from 'axios';
-import {
-    LOGIN_REQUEST,
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    SIGNUP_REQUEST,
-    SIGNUP_SUCCESS,
-    SIGNUP_FAIL,
-    DASHBOARD_REQUEST,
-    DASHBOARD_SUCCESS,
-    DASHBOARD_FAIL,
-    SET_TOKEN,
-    UNSET_CURRENT_USER,
-    UPDATE_PROFILE_REQUEST,
-    UPDATE_PROFILE_SUCCESS,
-    UPDATE_PROFILE_FAIL,
-    UPDATE_PASSWORD_REQUEST,
-    UPDATE_PASSWORD_SUCCESS,
-    UPDATE_PASSWORD_FAIL,
-    RESET_PASSWORD_REQUEST,
-    RESET_PASSWORD_SUCCESS,
-    RESET_PASSWORD_FAIL,
-    CLEAR_ERROR
-} from './UserTypes';
+
+import * as actions from './UserTypes';
 
 import { setAxiosAuthToken } from '../../utils/Utils';
 
 
 export const login = (userData, redirectTo) => dispatch => {
-    dispatch({type : LOGIN_REQUEST});
+    dispatch({type : actions.LOGIN_REQUEST});
 
     axios.post("/auth/login/", userData)
     .then(response => {
@@ -40,7 +19,7 @@ export const login = (userData, redirectTo) => dispatch => {
         if (error.response) {
             console.log('error.response', JSON.stringify(error.response.data));
             dispatch({
-                type : LOGIN_FAIL,
+                type : actions.LOGIN_FAIL,
                 payload: error.response.data
             });
         } else if ('error.message', error.message) {
@@ -55,7 +34,7 @@ export const setToken = token => dispatch => {
     setAxiosAuthToken(token);
     localStorage.setItem("token", token);
     dispatch({
-        type: SET_TOKEN,
+        type: actions.SET_TOKEN,
         payload: token
     });
 };
@@ -80,7 +59,7 @@ export const getCurrentUser =  redirectTo => async dispatch => {
 
 export const setCurrentUser = (user, redirectTo) => dispatch => {
     dispatch({
-        type : LOGIN_SUCCESS,
+        type : actions.LOGIN_SUCCESS,
         payload: user
     });
     
@@ -97,7 +76,7 @@ export const unsetCurrentUser = () => dispatch => {
     localStorage.removeItem("user");
     localStorage.removeItem("subscribed");
     dispatch({
-        type: UNSET_CURRENT_USER
+        type: actions.UNSET_CURRENT_USER
     });
 };
 
@@ -119,19 +98,19 @@ export const logout = (redirectTo) => dispatch => {
 
 
 export const signup = (userData) => dispatch => {
-    dispatch({type : SIGNUP_REQUEST});
+    dispatch({type : actions.SIGNUP_REQUEST});
 
     axios.post("/auth/registration/", userData)
     .then(response => {
         dispatch({
-            type : SIGNUP_SUCCESS,
+            type : actions.SIGNUP_SUCCESS,
             payload: response.data
         });
     })
     .catch(error => {
         if (error.response) {
             dispatch({
-                type : SIGNUP_FAIL,
+                type : actions.SIGNUP_FAIL,
                 payload: error.response.data
             });
         } else if ('error.message', error.message) {
@@ -157,20 +136,20 @@ export const getSubscribedCourse =  () =>  dispatch => {
 }
 
 export const getDashboard = () => dispatch => {
-    dispatch({type : DASHBOARD_REQUEST});
+    dispatch({type : actions.DASHBOARD_REQUEST});
 
     axios.get("/users/dashboard/")
     .then(response => {
         dispatch(getSubscribedCourse());
         dispatch({
-            type : DASHBOARD_SUCCESS,
+            type : actions.DASHBOARD_SUCCESS,
             payload: response.data
         });
     })
     .catch(error => {
         if (error.response) {
             dispatch({
-                type : DASHBOARD_FAIL,
+                type : actions.DASHBOARD_FAIL,
                 payload: error.response.data
             });
         } else if ('error.message', error.message) {
@@ -183,14 +162,14 @@ export const getDashboard = () => dispatch => {
 
 
 export const updateProfile = (userData) => dispatch => {
-    dispatch({type : UPDATE_PROFILE_REQUEST});
+    dispatch({type : actions.UPDATE_PROFILE_REQUEST});
     console.log('profile')
 
     axios.put("/auth/user/", userData)
     .then(response => {
         dispatch(getCurrentUser(""));
         dispatch({
-            type : UPDATE_PROFILE_SUCCESS,
+            type : actions.UPDATE_PROFILE_SUCCESS,
             payload: response.data
         });
         dispatch(clearErrors());
@@ -198,7 +177,7 @@ export const updateProfile = (userData) => dispatch => {
     .catch(error => {
         if (error.response) {
             dispatch({
-                type : UPDATE_PROFILE_FAIL,
+                type : actions.UPDATE_PROFILE_FAIL,
                 payload: error.response.data
             });
         } else if ('error.message', error.message) {
@@ -210,12 +189,12 @@ export const updateProfile = (userData) => dispatch => {
 }
 
 export const updatePassword = (userData) => dispatch => {
-    dispatch({type : UPDATE_PASSWORD_REQUEST});
+    dispatch({type : actions.UPDATE_PASSWORD_REQUEST});
 
     axios.post("/auth/password/change/", userData)
     .then(response => {
         dispatch({
-            type : UPDATE_PASSWORD_SUCCESS,
+            type : actions.UPDATE_PASSWORD_SUCCESS,
             payload: response.data
         });
         dispatch(clearErrors());
@@ -223,7 +202,7 @@ export const updatePassword = (userData) => dispatch => {
     .catch(error => {
         if (error.response) {
             dispatch({
-                type : UPDATE_PASSWORD_FAIL,
+                type : actions.UPDATE_PASSWORD_FAIL,
                 payload: error.response.data
             });
         } else if ('error.message', error.message) {
@@ -235,12 +214,12 @@ export const updatePassword = (userData) => dispatch => {
 }
 
 export const resetPassword = (email) => dispatch => {
-    dispatch({type : RESET_PASSWORD_REQUEST});
+    dispatch({type : actions.RESET_PASSWORD_REQUEST});
 
     axios.post("/auth/password-reset/", email)
     .then(response => {
         dispatch({
-            type : RESET_PASSWORD_SUCCESS,
+            type : actions.RESET_PASSWORD_SUCCESS,
             payload: response.data
         });
         dispatch(clearErrors());
@@ -249,7 +228,7 @@ export const resetPassword = (email) => dispatch => {
         if (error.response) {
             console.log('error', error.response.data)
             dispatch({
-                type : RESET_PASSWORD_FAIL,
+                type : actions.RESET_PASSWORD_FAIL,
                 payload: error.response.data
             });
         } else if ('error.message', error.message) {
@@ -261,12 +240,12 @@ export const resetPassword = (email) => dispatch => {
 }
 
 export const resetPasswordConfirm = (userData) => dispatch => {
-    dispatch({type : RESET_PASSWORD_REQUEST});
+    dispatch({type : actions.RESET_PASSWORD_REQUEST});
 
     axios.post("/auth/password-reset/confirm/", userData)
     .then(response => {
         dispatch({
-            type : RESET_PASSWORD_SUCCESS,
+            type : actions.RESET_PASSWORD_SUCCESS,
             payload: response.data
         });
         dispatch(clearErrors());
@@ -276,7 +255,7 @@ export const resetPasswordConfirm = (userData) => dispatch => {
         if (error.response) {
             console.log('error', error.response.data)
             dispatch({
-                type : RESET_PASSWORD_FAIL,
+                type : actions.RESET_PASSWORD_FAIL,
                 payload: error.response.data
             });
         } else if ('error.message', error.message) {
@@ -289,7 +268,7 @@ export const resetPasswordConfirm = (userData) => dispatch => {
 
 export const clearErrors = () => dispatch => {
     dispatch({
-        type: CLEAR_ERROR,
+        type: actions.CLEAR_ERROR,
         payload : {}
     })
 }
