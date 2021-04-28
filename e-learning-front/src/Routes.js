@@ -7,7 +7,6 @@ import CourseDetails from './components/course/CourseDetails';
 import Login from './components/user/Login';
 import Signup from './components/user/Signup';
 import { isEmpty } from './utils/Utils';
-import { setCurrentUser, setToken } from './reducers/user/UserActions';
 
 import Footer from './components/Layout/Footer';
 import ProtectedRoute from './components/route/ProtectedRoute';
@@ -31,13 +30,10 @@ const Routes = () => {
 
     const dispatch = useDispatch();
 
-    if (!isEmpty(localStorage.getItem("token"))) {
-        dispatch(setToken(localStorage.getItem("token")));
-    }
-    if (!isEmpty(localStorage.getItem("user"))) {
-        const user = JSON.parse(localStorage.getItem("user"));
-        dispatch(setCurrentUser(user, ""));
-    }
+    // if (!isEmpty(localStorage.getItem("token"))) {
+    //     dispatch(setToken(localStorage.getItem("token")));
+    // }
+
 
     // Load subjects to feed all menus
 

@@ -23,3 +23,8 @@ export const showSuccess = (message) => {
         </div>
     )
 }
+
+// export const setToken = token => {
+//     setAxiosAuthToken(token);
+//     localStorage.setItem("token", token);
+// };

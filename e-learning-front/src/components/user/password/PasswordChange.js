@@ -109,9 +109,7 @@ export const PasswordChange = () => {
                      onChange={handleChange('new_password1')} 
                      isInvalid={error && error.new_password1}
                  />
-                 <Form.Control.Feedback type="invalid">
-                    {error && error.new_password1}
-                </Form.Control.Feedback>
+                 
              </Form.Group>
              <Form.Group>
                  <Form.Control 

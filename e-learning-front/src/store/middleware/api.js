@@ -19,14 +19,22 @@ const api = ({dispatch}) => next => async action => {
             data
         });
         // General
-        dispatch(actions.apiRequestSuccess(response.data))
+        dispatch(actions.apiRequestSuccess(response.data));
         // Specific
         if (onSuccess) dispatch({type: onSuccess, payload: response.data});
     } catch(error) {
-        // General
-        dispatch(actions.apiRequestFailed(error.message))
-        // Specific
-        if (onError) dispatch({type: onError, payload: error.message});
+        if (error.response) {
+            console.log('error.response', JSON.stringify(error.response.data));
+            // General
+            dispatch(actions.apiRequestFailed(error.response.data));
+            // Specific
+            if (onError) dispatch({type: onError, payload: error.response.data});
+        } else if ('error.message', error.message) {
+            console.log(JSON.stringify(error.message));
+        } else {
+            console.log('error', JSON.stringify(error));
+        }
+        
     }
 
 }

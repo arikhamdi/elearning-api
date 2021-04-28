@@ -15,7 +15,7 @@ const CourseDetails = ({match}) => {
 
     const [favoris, setFavoris] = useState(false);
 
-    const {course, loading, button_loading, isStudent} = useSelector(state => state.entities.courseDetails);
+    const {course, loading, isStudent} = useSelector(state => state.entities.courseDetails);
 
 
     useEffect(() => {
@@ -23,9 +23,6 @@ const CourseDetails = ({match}) => {
         setFavoris(isStudent);
     }, [dispatch, isStudent])
 
-    console.log('button_loading', button_loading)
-            console.log('isStudent',isStudent)
-            console.log('favoris', favoris)
 
     const addCourseToFavoris = () => {
         dispatch(enrollStudent(`${match.params.slug}/enroll/`));

@@ -10,7 +10,7 @@ import '../../Styles.css';
 const Menu = ({ history }) => {
     const dispatch = useDispatch();
 
-    const { user, isAuthenticated } = useSelector(state => state.auth);
+    const { user, isAuthenticated } = useSelector(state => state.auth.auth);
     const { subjects}  = useSelector(state => state.entities);
 
 

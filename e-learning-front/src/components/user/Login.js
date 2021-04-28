@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Form, Button, Container, Spinner} from 'react-bootstrap';
-import { login } from '../../reducers/user/UserActions';
+import { Form, Button, Container, Spinner, FormControl} from 'react-bootstrap';
+import { login } from '../../store/user/auth';
 import { Link } from 'react-router-dom';
 
 
@@ -10,26 +10,23 @@ import './User.css';
 const Login = ({history}) => {
     const [values, setValues] = useState({
         email : 'student1@mail.com',
-        password : 'testpass123',
-        errors: []
+        password : 'testpass123'
     });
-
-    const { email, password, errors} = values;
 
     const dispatch = useDispatch();
 
-    const { isAuthenticated, error, loading } = useSelector(state => state.auth);
+    const { isAuthenticated, error, loading } = useSelector(state => state.auth.auth);
 
 
     useEffect(() => {
-        if (error) {
-            setValues( {
-                ...values,
-                errors: Object.entries(error)
-            })
+
+        if (isAuthenticated) {
+            history.push('/');
         }
 
     }, [dispatch, isAuthenticated, error])
+
+    const { email, password, errors} = values;
 
     const handleChange = name => e => {
         setValues({
@@ -39,28 +36,39 @@ const Login = ({history}) => {
         });
     }
 
-
     const signinForm = () => (
         <div className="user-container">
         <h4>Connectez-vous à votre compte E-learning !</h4>
             <div className="user-sign">
-                <Form className="user-sign-form" onSubmit={submitHandler}>
+                <Form noValidate className="user-sign-form" onSubmit={submitHandler}>
                 <div className="user-sign-form-control">
-                <Form.Control
-                        type="email"
-                        value={email} 
-                        placeholder="Entrez un email"
-                        onChange={handleChange('email')} 
-                    />
+                <Form.Group>
+                    <Form.Control
+                            type="email"
+                            value={email} 
+                            placeholder="Entrez un email"
+                            onChange={handleChange('email')} 
+                            isInvalid={error && error.non_field_errors}
+                        />
+                    <Form.Control.Feedback type="invalid">
+                        {error && error.non_field_errors}
+                    </Form.Control.Feedback>
+                    </Form.Group>
                 </div>
                 
                 <div className="user-sign-form-control">
-                <Form.Control
-                        type="password"
-                        value={password}
-                        placeholder="Mot de passe"
-                        onChange={handleChange('password')} 
-                    />
+                <Form.Group>
+                    <Form.Control
+                            type="password"
+                            value={password}
+                            placeholder="Mot de passe"
+                            onChange={handleChange('password')} 
+                            isInvalid={error && error.password}
+                        />
+                    <Form.Control.Feedback type="invalid">
+                        {error && error.password}
+                    </Form.Control.Feedback>
+                </Form.Group>
                 </div>
                 
                 {loading ? (
@@ -100,30 +108,15 @@ const Login = ({history}) => {
             email,
             password
         }
-        dispatch(login(userData, () => history.push("/dashboard")));
+        dispatch(login(userData));
     }
 
-    const showError = () => {
-        if(errors.length > 0) {
-            return (
-                errors.map(err =>
-                <div className="alert alert-danger" key={err[0]} >
-                    {err[0] === 'email' && 'Email: ' + err[1] }
-                    {err[0] === 'password' && 'Mot de passe: ' + err[1] }
-                    {err[0] !== ('email' && 'password') && err[1] }         
-                </div>
-                )
-            )
-        }
-    }
 
     return (
         <div>
             <Container>
-            {showError()}
-            {signinForm()}
-            {JSON.stringify(values)}
-        </Container>
+                {signinForm()}
+            </Container>
         </div>
     )
 }

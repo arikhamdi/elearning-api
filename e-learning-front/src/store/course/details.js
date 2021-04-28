@@ -7,7 +7,6 @@ const slice = createSlice({
     initialState: {
         course: {},
         loading: false,
-        button_loading: false,
         isStudent: false,
         lastFetch: null,
         error : ""
@@ -29,9 +28,6 @@ const slice = createSlice({
             }
             courseDetails.loading = false;
            
-        },
-        enrollStudentRequest : (courseDetails, action) => {
-            courseDetails.button_loading = true;
         },
         enrollStudentSuccess : (courseDetails, action) => {
             courseDetails.isStudent = action.payload.enrolled;
