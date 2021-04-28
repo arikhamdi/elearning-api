@@ -7,6 +7,7 @@ const slice = createSlice({
         user : {},
         loading : false,
         isAuthenticated: false,
+        isRegistered: false,
         error: [],
     },
     reducers: {
@@ -14,21 +15,23 @@ const slice = createSlice({
             auth.loading = true;
         },
         authRequestFail : (auth, action) => {
-            auth.loading = false;
-            
+            auth.loading = false;            
             auth.error = action.payload;
             console.log(auth.error)
         },
-        authSuccess : (auth, action) => {
+        LoginSuccess : (auth, action) => {
             auth.loading = false;
             auth.isAuthenticated = true;
             localStorage.setItem("token", action.payload.key);
+        },
+        registrationSuccess : (auth, action) => {
+            auth.loading = false;
+            auth.isRegistered = true;
         },
         getCurrentUserSuccess: (auth, action) => {
             auth.user = action.payload;
             auth.isAuthenticated = true;
             localStorage.setItem("user", JSON.stringify(auth.user));
-            setCurrentUser(auth.user);
         },
         setCurrentUserSuccess: (auth, action) => {
             auth.user = action.payload;
@@ -40,7 +43,8 @@ const slice = createSlice({
 const {
     authRequest,
     authRequestFail,
-    authSuccess,
+    LoginSuccess,
+    registrationSuccess,
     getCurrentUserSuccess,
     setCurrentUserSuccess
 } = slice.actions;
@@ -57,7 +61,7 @@ export const login = userData => apiRequest({
     method: "Post",
     data: userData,
     onStart : authRequest.type,
-    onSuccess : authSuccess.type,
+    onSuccess : LoginSuccess.type,
     onError : authRequestFail.type
 });
 
@@ -72,3 +76,12 @@ export const getCurrentUser = () => apiRequest({
 export const setCurrentUser = user => dispatch => {
     dispatch({type: setCurrentUserSuccess.type, payload: user});
 }
+
+export const registration = userData => apiRequest({
+    url: "/auth/registration/",
+    method: "Post",
+    data: userData,
+    onStart : authRequest.type,
+    onSuccess : registrationSuccess.type,
+    onError : authRequestFail.type 
+})

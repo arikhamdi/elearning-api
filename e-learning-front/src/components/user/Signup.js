@@ -1,44 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { signup } from '../../reducers/user/UserActions';
 
 import './User.css';
+import { registration } from '../../store/user/auth';
 
-const Signup = () => {
+const Signup = ({history}) => {
     const [values, setValues] = useState({
-        email : '',
-        password1 : '',
-        password2 : '',
-        errors: []
+        email : 'student211@mail.com',
+        password1 : 'testpass123',
+        password2 : 'testpass123'
     });
+    const [errors, setErrors] = useState({});
 
-    const { email, password1, password2, errors} = values;
+    const { email, password1, password2 } = values;
 
     const dispatch = useDispatch();
 
-    const { isAuthenticated, error, loading } = useSelector(state => state.auth);
+    const { isRegistered, error, loading } = useSelector(state => state.auth.auth);
 
     useEffect(() => {
-
- 
         if (error) {
-            setValues( {
-                ...values,
-                errors: Object.entries(error)
-            })
-            console.log(errors)
+            setErrors({...error});
         }
-
-    }, [dispatch, isAuthenticated, error])
+        if (isRegistered) {
+            history.push('/registration-success')
+        }
+    }, [dispatch, isRegistered, error])
 
     const handleChange = name => e => {
         setValues({
             ...values,
-            errors: false,
             [name]: e.target.value
         });
+        setErrors({});
     }
 
 
@@ -49,42 +45,82 @@ const Signup = () => {
             password1,
             password2
         }
-        dispatch(signup(userData));
+        dispatch(registration(userData));
     }
 
     const signUpForm = () => (
         <div className="user-container">
         <h4>Inscrivez-vous et commencez à apprendre !</h4>
             <div className="user-sign">
-                <Form className="user-sign-form" onSubmit={submitHandler}>
+                <Form noValidate className="user-sign-form" onSubmit={submitHandler}>
+                <Form.Group>
+                    <Form.Control
+                            type="hidden"
+                            isInvalid={error && error.non_field_errors} 
+                        />
+                    <Form.Control.Feedback type="invalid">
+                        {errors && errors.non_field_errors}
+                    </Form.Control.Feedback>
+                </Form.Group>
                 <div className="user-sign-form-control">
-                <Form.Control
-                        type="email"
-                        value={email} 
-                        placeholder="Entrez un email"
-                        onChange={handleChange('email')} 
-                    />
+                <Form.Group>
+                    <Form.Control
+                            type="email"
+                            value={email} 
+                            placeholder="Entrez un email"
+                            onChange={handleChange('email')} 
+                            isInvalid={errors && errors.email}
+                        />
+                    <Form.Control.Feedback type="invalid">
+                        {errors && errors.email}
+                    </Form.Control.Feedback>
+                </Form.Group>
                 </div>
                 
                 <div className="user-sign-form-control">
-                <Form.Control
-                        type="password"
-                        value={password1}
-                        placeholder="Mot de passe"
-                        onChange={handleChange('password1')} 
-
-                    />
+                <Form.Group>
+                    <Form.Control
+                            type="password"
+                            value={password1}
+                            placeholder="Mot de passe"
+                            onChange={handleChange('password1')} 
+                            isInvalid={errors && errors.password1}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                        {errors && errors.password1}
+                    </Form.Control.Feedback>
+                </Form.Group>
                 </div>
                 
                 <div className="user-sign-form-control">
-                <Form.Control
-                        type="password"
-                        value={password2}
-                        placeholder="Confirmez mot de passe" 
-                        onChange={handleChange('password2')} 
-                    />
+                <Form.Group>
+                    <Form.Control
+                            type="password"
+                            value={password2}
+                            placeholder="Confirmez mot de passe" 
+                            onChange={handleChange('password2')}
+                            isInvalid={errors && errors.password2} 
+                        />
+                    <Form.Control.Feedback type="invalid">
+                        {errors && errors.password2}
+                    </Form.Control.Feedback>
+                </Form.Group>
                 </div>
+                {loading ? (
+                    <Button variant="info" disabled>
+                        <Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        />
+                        Loading...
+                    </Button>
+                    ) 
+                    : 
                 <Button variant="info" type="submit">S'inscrire</Button>
+                }
                 </Form>
 
                 <p className="mt-2">
@@ -95,24 +131,24 @@ const Signup = () => {
         </div>
     );
 
-    const showError = () => {
-        if(errors.length > 0) {
-            return (
-                errors.map(err =>
-                <div className="alert alert-danger" key={err[0]} >
-                    {err[0] === 'email' && 'Email: ' + err[1]}
-                    {err[0] === 'password1' && 'Mot de passe: ' + err[1]}
-                    {err[0] === 'password2' && 'Confrmer mot de passe: ' + err[1]}
-                    {err[0] !== ('email' && 'password1' && 'password2') && err[1] }           
-                </div>
-                )
-            )
-        }
-    }
+    // const showError = () => {
+    //     if(errors.length > 0) {
+    //         return (
+    //             errors.map(err =>
+    //             <div className="alert alert-danger" key={err[0]} >
+    //                 {err[0] === 'email' && 'Email: ' + err[1]}
+    //                 {err[0] === 'password1' && 'Mot de passe: ' + err[1]}
+    //                 {err[0] === 'password2' && 'Confrmer mot de passe: ' + err[1]}
+    //                 {err[0] !== ('email' && 'password1' && 'password2') && err[1] }           
+    //             </div>
+    //             )
+    //         )
+    //     }
+    // }
     return (
         <div>
             <Container>
-            {showError()}
+            {/* {showError()} */}
             {signUpForm()}
         </Container>
         </div>

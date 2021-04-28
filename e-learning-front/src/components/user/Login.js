@@ -13,12 +13,17 @@ const Login = ({history}) => {
         password : 'testpass123'
     });
 
+    const [errors, setErrors] = useState({});
+
     const dispatch = useDispatch();
 
     const { isAuthenticated, error, loading } = useSelector(state => state.auth.auth);
 
 
     useEffect(() => {
+        if (error) {
+            setErrors({...error});
+        }
 
         if (isAuthenticated) {
             history.push('/');
@@ -26,7 +31,7 @@ const Login = ({history}) => {
 
     }, [dispatch, isAuthenticated, error])
 
-    const { email, password, errors} = values;
+    const { email, password} = values;
 
     const handleChange = name => e => {
         setValues({
@@ -34,6 +39,7 @@ const Login = ({history}) => {
             errors:false,
             [name]: e.target.value
         });
+        setErrors({});
     }
 
     const signinForm = () => (
@@ -48,10 +54,10 @@ const Login = ({history}) => {
                             value={email} 
                             placeholder="Entrez un email"
                             onChange={handleChange('email')} 
-                            isInvalid={error && error.non_field_errors}
+                            isInvalid={errors && errors.non_field_errors}
                         />
                     <Form.Control.Feedback type="invalid">
-                        {error && error.non_field_errors}
+                        {errors && errors.non_field_errors}
                     </Form.Control.Feedback>
                     </Form.Group>
                 </div>
@@ -63,10 +69,10 @@ const Login = ({history}) => {
                             value={password}
                             placeholder="Mot de passe"
                             onChange={handleChange('password')} 
-                            isInvalid={error && error.password}
+                            isInvalid={errors && errors.password}
                         />
                     <Form.Control.Feedback type="invalid">
-                        {error && error.password}
+                        {errors && errors.password}
                     </Form.Control.Feedback>
                 </Form.Group>
                 </div>

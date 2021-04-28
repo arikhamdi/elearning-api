@@ -22,6 +22,7 @@ import ProtectedStudentRoute from './components/route/ProtectedStudentRoute';
 
 import { useDispatch } from 'react-redux';
 import { loadSubjects } from './store/subject/list';
+import registrationSuccess from './components/pages/registrationSuccess';
 
 
 const Routes = () => {
@@ -60,6 +61,7 @@ const Routes = () => {
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />
                 <ProtectedRoute path="/profile/auth" component={PasswordChange} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+                <Route exact path='/registration-success' component={registrationSuccess}/>
                 <Route path='/forbidden' component={Forbidden} />
                 <Route path='*' exact component={NotFound} />
             </Switch>

@@ -27,10 +27,9 @@ const store = configureStore({
     reducer,
     middleware : [
         ...getDefaultMiddleware(),
-        routerMiddleware(history),
         authentication,
+        routerMiddleware(history),
         api,
-        
     ]
 });
 

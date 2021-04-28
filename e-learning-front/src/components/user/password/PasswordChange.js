@@ -8,7 +8,7 @@ import ProfilMenu from '../../Layout/ProfilMenu';
 
 export const PasswordChange = () => {
 
-    const { user } = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth.auth);
     const { error, isUpdated } = useSelector(state => state.profile);
     const [validated, setValidated] = useState(false);
 

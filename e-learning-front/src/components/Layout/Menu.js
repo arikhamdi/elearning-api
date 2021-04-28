@@ -115,8 +115,8 @@ const Menu = ({ history }) => {
                 </React.Fragment>
             ) : (
                 <React.Fragment>
-                    <Nav.Link className="btn btn-outline-dark mr-sm-2 text-nowrap" href="/login"><i className="fas fa-sign-in-alt"></i> Se connecter</Nav.Link>
-                    <Nav.Link className="btn btn-dark mr-sm-2 text-nowrap"  href="/signup"><i className="fas fa-user-plus"></i> S'inscrire</Nav.Link>
+                    <Button variant="outline-dark" className=" mr-sm-2 text-nowrap" href="/login"><i className="fas fa-sign-in-alt"></i> Se connecter</Button>
+                    <Button variant="dark" className="mr-sm-2 text-nowrap" href="/signup"><i className="fas fa-user-plus"></i> S'inscrire</Button>
                 </React.Fragment>
             )}
             </Nav>
