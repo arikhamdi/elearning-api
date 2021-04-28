@@ -114,7 +114,7 @@ export const contentReducer = (state = { content : {} }, action) => {
             return {
                 ...state,
                 loading: false,
-                error : action.payload
+                error_content : action.payload
             };
         case actions.CLEAR_ERROR:
             return {

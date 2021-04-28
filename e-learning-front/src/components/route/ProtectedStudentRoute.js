@@ -8,6 +8,7 @@ import { isEmpty } from '../../utils/Utils';
 const ProtectedStudentRoute = ({component:Component, ...rest}) => {
 
     const slug = rest.computedMatch.params.slug;
+    console.log(rest)
 
     const access = JSON.parse(localStorage.getItem("subscribed")).includes(slug);
 

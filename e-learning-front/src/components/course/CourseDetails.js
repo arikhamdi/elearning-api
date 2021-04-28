@@ -1,70 +1,128 @@
-import React, { Fragment, useEffect } from 'react'
-import { enrollStudent, getCourseDetails } from '../../reducers/course/CourseActions';
+import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, ListGroup} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { isEmpty } from '../../utils/Utils';
+import { Button, Card,  Container, Jumbotron, ListGroup} from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 import { Loader } from '../Layout/Loader';
+import { enrollStudent, LoadCourseDetails } from '../../store/course/details';
+import { isEmpty } from '../../utils/Utils';
+import NotFound from '../pages/NotFound';
+
+import '../../Styles.css';
 
 const CourseDetails = ({match}) => {
 
     const dispatch = useDispatch();
-    const {course, loading, isStudent, error} = useSelector(state => state.courseDetails);
-    const { user, isAuthenticated } = useSelector(state => state.auth);
 
+    const [favoris, setFavoris] = useState(false);
+
+    const {course, loading, button_loading, isStudent} = useSelector(state => state.entities.courseDetails);
 
 
     useEffect(() => {
-        dispatch(getCourseDetails(match.params.slug))
-    }, [dispatch, match.params.slug, user, isStudent])
+        dispatch(LoadCourseDetails(match.params.slug));
+        setFavoris(isStudent);
+    }, [dispatch, isStudent])
 
+    console.log('button_loading', button_loading)
+            console.log('isStudent',isStudent)
+            console.log('favoris', favoris)
 
-    const followThisCourse = () => {
-        console.log('isStudent', isStudent)
-        dispatch(enrollStudent(match.params.slug));
+    const addCourseToFavoris = () => {
+        dispatch(enrollStudent(`${match.params.slug}/enroll/`));
     }
 
-    return (
-        <div>
-            <React.Fragment>
-                {isEmpty(course) ? 
-                    <Loader />
-                : (
-                    <React.Fragment>
+    const displayCourseInfos = () => (
+        <Fragment>
+            <h5>{course.subject.title}</h5>
+            <h1>{course.title}</h1>
+            <p>{course.overview}</p>
+            <p>Crée par {course.owner.name}</p>
+            <Button variant="outline-light" size="lg" onClick={addCourseToFavoris} >Favoris  <i className="far fa-heart"></i></Button>
+        </Fragment>
+    )
+
+    const displayCourseSideSticky = () => (
+        <React.Fragment>
                 <Card className="mb-3">
                 <Card.Img variant="top" src={course.image} />
                 <Card.Header style={{textTransform: 'capitalize'}}>Créé par <cite title="Source Title">{course.owner.name}</cite>
-                {!isStudent  && (
-                    isAuthenticated ? 
-                    <Button variant="success" onClick={followThisCourse} style={{float: 'right'}}>Suivre ce cours</Button>
-                    : 
-                    <Link className="btn btn-info" to="/login" style={{float: 'right'}}> Login</Link>
-                )}
                 </Card.Header>
                 <Card.Body>
                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title> 
                 <Card.Text>{course.overview}</Card.Text>
                 <footer className="text-right">
-                {isStudent  && (
-                    <Fragment>
-                        <Link className="btn btn-info" style={{float:'left'}} to={`/student/${course.slug}`}>continuer ce cours</Link>
-                        <Button variant="danger" onClick={followThisCourse}  >Arreter ce cours</Button>
-                    </Fragment>
-                )} 
+                {favoris  ?
+                    ( 
+                        <Button className="btn btn-info mb-2 form-control"  href={`/student/${course.slug}`}>Accéder au cours</Button>    
+                    ): (
+                        <Fragment>
+                        <Button className="btn btn-info mb-2 form-control" variant="danger">Ajouter au panier</Button>
+                        <Button className="btn mb-2 form-control" variant="outline-danger">Acheter ce cours</Button>
+                        </Fragment>
+                    )
+                }
+                
                 </footer>
             </Card.Body>
-            </Card>
+            </Card> 
+                
+                </React.Fragment>
+    );
+
+    const displayCourseContents = () => (
+        <React.Fragment>
                     <h3 className="mb-3" style={{textTransform: 'capitalize'}} >Contenu du cours</h3>
                     <ListGroup>
                     {course.modules.map( module => (      
                         <ListGroup.Item key={module.id} style={{textTransform: 'capitalize'}}>{module.title}</ListGroup.Item>    
                     ))}
                     </ListGroup> 
+                
                 </React.Fragment>
-                )}
-            </React.Fragment>
-        </div>
     )
+
+
+    if (loading) {
+        return <Loader />;
+    }
+    else if (isEmpty(course)) {
+        return <NotFound />;
+    }
+    else {
+        
+        return (
+            
+            <div className="course-details-fragment">
+            <Jumbotron fluid style={{minHeight: '300px', backgroundColor:"#333"}}>
+            <Container>
+            <div className="course-description">
+                    {displayCourseInfos()}
+                </div>
+            </Container>
+
+            </Jumbotron>
+
+           
+            <Container className="course-details" >
+                <div  className="course-content">
+                    {displayCourseContents()}  
+                    {displayCourseContents()}  
+                    {displayCourseContents()}  
+                    {displayCourseContents()}  
+                </div>
+                <div className="course-side">
+                        {displayCourseSideSticky()}
+                </div>
+            </Container>
+           
+
+        </div>
+            
+            );
+    }
+    
+            
+
 }
 
-export default CourseDetails
+export default withRouter(CourseDetails);

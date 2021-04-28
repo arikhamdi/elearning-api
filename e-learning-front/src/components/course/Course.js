@@ -1,15 +1,17 @@
+import { push } from 'connected-react-router';
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import {Link, useHistory} from 'react-router-dom';
+import store, { history } from '../../store';
 
 
 
 const Course = ({course}) => {
 
-    const history = useHistory();
 
     return (
-        <Card onClick={() => history.push(`/course/${course.slug}`)} 
+        <Card>
+        <Card.Link href={`/course/${course.slug}`}  
                     style={{cursor: 'pointer'}}>
             <Card.Img variant="top" src={course.image} />
             <Card.Header className="text-right" style={{textTransform: 'capitalize'}}>
@@ -23,6 +25,7 @@ const Course = ({course}) => {
                 </footer>
             </Card.Body>
                             
+        </Card.Link>
         </Card>
     )
 }

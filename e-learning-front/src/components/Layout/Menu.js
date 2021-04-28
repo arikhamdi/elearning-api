@@ -1,8 +1,7 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../reducers/user/UserActions';
-import { getCourses, getSubjects } from '../../reducers/course/CourseActions';
 
 import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
 
@@ -12,13 +11,8 @@ const Menu = ({ history }) => {
     const dispatch = useDispatch();
 
     const { user, isAuthenticated } = useSelector(state => state.auth);
-    const { subjects}  = useSelector(state => state.subjects);
+    const { subjects}  = useSelector(state => state.entities);
 
-
-
-    useEffect(() => {
-        dispatch(getSubjects());
-    }, [dispatch])
 
 
     const isActive = (active, e) => { 
@@ -28,10 +22,6 @@ const Menu = ({ history }) => {
             e.target.style.color = '';
     }
 
-    const filterCourse = (subject) => {
-        dispatch(getCourses(`/subject/${subject}`))
-
-    }
 
     const mainMenu = () => (
                 <Navbar id="main-menu"  variant="light" expand="lg"   >
@@ -54,13 +44,12 @@ const Menu = ({ history }) => {
                     Categories
                     </Dropdown.Toggle>
                     <Dropdown.Menu  className="text-center">
-                        {subjects && subjects.map(subject => (
+                        {subjects.list.map(subject => (
                             <NavLink 
                             
                             className="nav-link text-dark" 
                             style={{textTransform: 'capitalize'}} 
-                            key={subject.id} 
-                            onClick={() => filterCourse(subject.slug)}
+                            key={subject.id}
                             to={"/subject/"+subject.title.toLowerCase()}
                             >
                             {subject.title}
@@ -93,13 +82,13 @@ const Menu = ({ history }) => {
             <Nav className="ml-2 justify-content-end">
             {isAuthenticated ? (
                 <React.Fragment>
-                <NavLink 
+                <Nav.Link 
                     className="nav-link text-nowrap" 
-                    to="/dashboard" 
+                    href="/dashboard" 
                     onMouseEnter={isActive.bind(this,true)} 
                     onMouseLeave={isActive.bind(this,false)}>
                     Tableau de bord
-                </NavLink>
+                </Nav.Link>
                 <Dropdown alignRight>
                     <Dropdown.Toggle 
                         as={Nav.Link} 
@@ -112,7 +101,7 @@ const Menu = ({ history }) => {
                         {(user && user.first_name) && <Dropdown.Header>{`${user.first_name} ${user.last_name}`}</Dropdown.Header>}
                         <Dropdown.Header>{user && user.email}</Dropdown.Header>
                         <Dropdown.Divider />
-                        <NavLink className="nav-link text-dark" to="/profile">Profile</NavLink>
+                        <Nav.Link className="nav-link text-dark" href="/profile">Profile</Nav.Link>
                         <NavLink className="nav-link text-dark" to="/profile">link 1</NavLink>
                         <NavLink className="nav-link text-dark" to="/profile">link 2</NavLink>
                         <Dropdown.Divider />
@@ -126,8 +115,8 @@ const Menu = ({ history }) => {
                 </React.Fragment>
             ) : (
                 <React.Fragment>
-                    <NavLink className="btn btn-outline-dark mr-sm-2 text-nowrap" to="/login"><i className="fas fa-sign-in-alt"></i> Se connecter</NavLink>
-                    <NavLink className="btn btn-dark mr-sm-2 text-nowrap"  to="/signup"><i className="fas fa-user-plus"></i> S'inscrire</NavLink>
+                    <Nav.Link className="btn btn-outline-dark mr-sm-2 text-nowrap" href="/login"><i className="fas fa-sign-in-alt"></i> Se connecter</Nav.Link>
+                    <Nav.Link className="btn btn-dark mr-sm-2 text-nowrap"  href="/signup"><i className="fas fa-user-plus"></i> S'inscrire</Nav.Link>
                 </React.Fragment>
             )}
             </Nav>

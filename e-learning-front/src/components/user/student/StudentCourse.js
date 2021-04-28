@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect } from 'react'
 import { Accordion, Card, Col, Container, Nav, Row, Tab, Tabs } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContentById, getStudentCourse } from '../../../reducers/course/CourseActions';
 import { isEmpty } from '../../../utils/Utils';
 import StudentMenu from './StudentMenu';
 import ReactPlayer from 'react-player'
@@ -9,21 +8,31 @@ import { Link } from 'react-router-dom';
 
 
 import './Student.css';
+import { LoadCourseDetails } from '../../../store/course/details';
+import { history } from '../../../store';
+import { Loadcontents } from '../../../store/course/content';
+import { Loader } from '../../Layout/Loader';
 
 const StudentCourse = ({match}) => {
 
-    const {course} = useSelector(state => state.courseDetails);
-    const {content} = useSelector(state => state.content);
+    const {course, loading, error} = useSelector(state => state.entities.courseDetails);
+    const {content, content_errors} = useSelector(state => state.entities.content);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getStudentCourse(match.params.slug));
-        dispatch(getContentById(match.params.slug, match.params.content));
-    },[dispatch])
+        if (error || content_errors) {
+            history.push(`/student/${match.params.slug}/6/`);
+            dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/6/`));
+            getContent(6);
+        }else {
+            dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/${match.params.content}/`));
+            getContent(match.params.content);
+        }
 
+    },[dispatch, error, content_errors])
 
-    const loadContent = (contentId) => {
-        dispatch(getContentById(match.params.slug, contentId));
+    const getContent = (contentId) => {
+        dispatch(Loadcontents(`/users/student/${match.params.slug}/content/${contentId}/`));
     } 
 
 
@@ -38,18 +47,17 @@ const StudentCourse = ({match}) => {
                             </Accordion.Toggle>
                             {module.contents && module.contents.map(item => (
                                 <Accordion.Collapse 
-                                    // className={match.params.module == module.id && 'show'} 
                                     key={item.item.id}  
                                     eventKey={module.id}
                                     style={{ margin:'0px'}}
                                     >
                                     <Card.Body  
-                                    onClick={() => loadContent(item.id)}
+                                    onClick={() => getContent(item.id)}
                                     style={{padding:'0px'}}
                                     >
                                         <Link 
                                         className="nav-link" 
-                                        to={`/student/${match.params.slug}/${module.id}/${item.id}`}
+                                        to={`/student/${match.params.slug}/${item.id}/`}
                                         style={{backgroundColor: match.params.content == item.id && '#eaeaea', padding:'20px'}}
                                         >
                                         {item.item.title}
@@ -66,7 +74,10 @@ const StudentCourse = ({match}) => {
 
 
     const mainContent = () => {
-        if(typeof content !== "undefined" && !isEmpty(content)) {
+        if(loading || isEmpty(content)) {
+            <Loader />
+        }
+            else{
             if (content.item.url)
                 return (
                     <Fragment>
@@ -145,7 +156,7 @@ const StudentCourse = ({match}) => {
             {courseSubNavigation()}
             </Col>
             <Col xs={12} md={4} style={{padding: '0'}}>
-            <div class="wrap" id="wrap">        
+            <div className="wrap" id="wrap">        
                 {modulesSidebar()}
             </div>     
 

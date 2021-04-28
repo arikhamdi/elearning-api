@@ -1,52 +1,15 @@
-/**
-* jumbotron animation
-**/
-
-/* .jumbotron {
-  color: #fff;
-  background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  height: 50vh;
-  -webkit-animation: Gradient 15s ease infinite;
-  -moz-animation: Gradient 15s ease infinite;
-  animation: Gradient 15s ease infinite;
-  font-weight: 900;
-} */
-
-@-webkit-keyframes Gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
 }
 
-@-moz-keyframes Gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@keyframes Gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+/****************
+**
+** GENERIC LAYOUT -> Layout.js
+**
+*****************/
 
 .jumbotron-post {
   position: relative;
@@ -67,18 +30,27 @@
   background-position: right 10% top 5%;
 }
 
-/**
-*   Loader
-**/
+/****************
+**
+** LOADER -> Loader.js
+**
+*****************/
+
 .loader {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100vw;
-  height: 50vh;
+  width: 95vw;
+  height: 100vh;
   font-size: 5rem;
 }
+
+/****************
+**
+** MAIN MENU -> Menu.js
+**
+*****************/
 
 #main-menu {
   background-color: #fff;
@@ -87,8 +59,47 @@
   -moz-box-shadow: 0px 1px 1px 0px rgb(210, 210, 210);
 }
 
+/****************
+**
+** MAIN FOOTER -> Footer.js
+**
+*****************/
+
 #main-footer {
   box-shadow: 0px -1px 1px 0px rgba(210, 210, 210, 0.75);
   -webkit-box-shadow: 0px -1px 1px 0px rgba(210, 210, 210, 0.75);
   -moz-box-shadow: 0px -1px 1px 0px rgba(210, 210, 210, 0.75);
+}
+
+/****************
+**
+** COURSE DETAILS -> courseDetails.js
+**
+*****************/
+
+.course-details-fragment .jumbotron,
+.course-details-fragment h1 {
+  color: rgb(255, 255, 255);
+  text-transform: capitalize;
+}
+
+.course-description {
+  padding-left: 30px;
+  width: 70%;
+}
+.course-details {
+  display: flex;
+  align-items: flex-start;
+}
+
+.course-content {
+  padding: 30px;
+  width: 70%;
+}
+
+.course-side {
+  position: sticky;
+  margin-top: -270px;
+  width: 30%;
+  top: 10px;
 }

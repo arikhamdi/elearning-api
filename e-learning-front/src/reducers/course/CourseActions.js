@@ -59,11 +59,11 @@ export const getStudentCourse = param => dispatch => {
     })
 }
 
-export const getContentById = (param, id) => dispatch => {
+export const getContentById = (param) => dispatch => {
 
     dispatch({type: actions.GET_CONTENT_REQUEST});
 
-    axios.get(`/users/student/${param}/${id}/`)
+    axios.get(`${param}`)
     .then(response => {
         dispatch({
             type: actions.GET_CONTENT_SUCCESS,
@@ -73,7 +73,7 @@ export const getContentById = (param, id) => dispatch => {
     .catch(error => {
         dispatch({
             type: actions.GET_CONTENT_FAIL,
-            payload : error
+            payload : error.message
         });
     })
 }
@@ -93,7 +93,7 @@ export const enrollStudent = param => dispatch => {
     .catch(error => {
         dispatch({
             type: actions.ENROLL_COURSE_FAIL,
-            payload : error
+            payload : error.message
         });
     })
 }
@@ -123,3 +123,4 @@ export const clearErrors = () => dispatch => {
         payload : null
     })
 }
+

@@ -6,19 +6,19 @@ import Course from '../course/Course';
 import SubNav from '../Layout/SubNav';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getCourses,getSubjects } from '../../reducers/course/CourseActions';
 import {Loader} from '../Layout/Loader';
+import { LoadCourses } from '../../store/course/list';
 
 const  Home = ({match}) => {
 
     const dispatch = useDispatch();
 
-    const { loading, courses, error } = useSelector(state => state.courses);
+    const { loading, courses, error } = useSelector(state => state.entities);
 
 
     useEffect(() => {
-        dispatch(getCourses(match.url));
-    }, [dispatch])
+        dispatch(LoadCourses(match.url));
+    }, [dispatch, match.url])
 
     return (
         <Layout title="Soyez ambitieux" 
@@ -28,7 +28,7 @@ const  Home = ({match}) => {
         <SubNav active={match.params.subject}/>
         <CardDeck>
         {loading ? <Loader /> : 
-            (courses && courses.map(
+            (courses.list && courses.list.map(
                 (course) => (
                     <Course key={course.id} course={course} />
                 )

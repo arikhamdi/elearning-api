@@ -18,7 +18,7 @@ from courses.models import (Course, Module, Content)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def student_course_detail(request, course_slug):
+def student_course_detail(request, course_slug, content_item):
     course = get_object_or_404(Course, slug=course_slug)
     is_enrolled = course.students.filter(id=request.user.id).exists()
 
@@ -47,11 +47,10 @@ def student_get_modules_list(request, course_slug):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_content_by_id(request, course_slug, id):
+def get_content_by_id(request, course_slug, content_item):
     course = get_object_or_404(Course, slug=course_slug)
-    print('course')
-    content = get_object_or_404(Content, id=id)
-    print('content')
+    content = get_object_or_404(
+        Content, id=content_item, module__course__slug=course_slug)
     is_enrolled = course.students.filter(id=request.user.id).exists()
 
     if is_enrolled:

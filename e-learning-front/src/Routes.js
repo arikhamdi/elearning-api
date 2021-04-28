@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect }  from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './components/pages/Home';
 import Menu from './components/Layout/Menu';
@@ -6,7 +6,6 @@ import Dashboard from './components/user/Dashboard';
 import CourseDetails from './components/course/CourseDetails';
 import Login from './components/user/Login';
 import Signup from './components/user/Signup';
-import store from './store';
 import { isEmpty } from './utils/Utils';
 import { setCurrentUser, setToken } from './reducers/user/UserActions';
 
@@ -22,37 +21,51 @@ import PasswordResetSuccess from './components/user/password/PasswordResetSucces
 import StudentCourse from './components/user/student/StudentCourse';
 import ProtectedStudentRoute from './components/route/ProtectedStudentRoute';
 
+import { useDispatch } from 'react-redux';
+import { loadSubjects } from './store/subject/list';
+
 
 const Routes = () => {
 
+    
+
+    const dispatch = useDispatch();
+
     if (!isEmpty(localStorage.getItem("token"))) {
-        store.dispatch(setToken(localStorage.getItem("token")));
+        dispatch(setToken(localStorage.getItem("token")));
     }
     if (!isEmpty(localStorage.getItem("user"))) {
         const user = JSON.parse(localStorage.getItem("user"));
-        store.dispatch(setCurrentUser(user, ""));
+        dispatch(setCurrentUser(user, ""));
     }
+
+    // Load subjects to feed all menus
+
+    useEffect(() => {
+        dispatch(loadSubjects());
+    }, [dispatch])
+
 
 
     return (
-        <Router>
+        <Router >
         <Menu />
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/subject/:subject" component={Home} />
-                <Route path="/course/:slug" component={CourseDetails} />
+                <Route exact path="/course/:slug" component={CourseDetails} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/password-reset" component={PasswordReset} />
                 <Route path="/password-reset/confirm/:token" component={PasswordResetConfirm} />
                 <Route exact path="/password-reset/success" component={PasswordResetSuccess} />
                 <ProtectedStudentRoute exact path="/student/:slug" component={StudentCourse} />
-                <ProtectedStudentRoute exact path="/student/:slug/:module/:content" component={StudentCourse} />
+                <ProtectedStudentRoute path="/student/:slug/:content" component={StudentCourse} />
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />
                 <ProtectedRoute path="/profile/auth" component={PasswordChange} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
                 <Route path='/forbidden' component={Forbidden} />
-                <Route component={NotFound} />
+                <Route path='*' exact component={NotFound} />
             </Switch>
             <Footer />
         </Router>
