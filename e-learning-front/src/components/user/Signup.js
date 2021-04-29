@@ -131,26 +131,11 @@ const Signup = ({history}) => {
         </div>
     );
 
-    // const showError = () => {
-    //     if(errors.length > 0) {
-    //         return (
-    //             errors.map(err =>
-    //             <div className="alert alert-danger" key={err[0]} >
-    //                 {err[0] === 'email' && 'Email: ' + err[1]}
-    //                 {err[0] === 'password1' && 'Mot de passe: ' + err[1]}
-    //                 {err[0] === 'password2' && 'Confrmer mot de passe: ' + err[1]}
-    //                 {err[0] !== ('email' && 'password1' && 'password2') && err[1] }           
-    //             </div>
-    //             )
-    //         )
-    //     }
-    // }
     return (
         <div>
             <Container>
-            {/* {showError()} */}
-            {signUpForm()}
-        </Container>
+                {signUpForm()}
+            </Container>
         </div>
     )
 }

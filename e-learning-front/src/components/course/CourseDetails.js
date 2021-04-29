@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card,  Container, Jumbotron, ListGroup} from 'react-bootstrap';
+import { Button, Card,  Container, Jumbotron, ListGroup, Spinner} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import { Loader } from '../Layout/Loader';
-import { enrollStudent, LoadCourseDetails } from '../../store/course/details';
+import { enrollStudent, LoadCourseDetails, setCurrentStudent } from '../../store/course/details';
 import { isEmpty } from '../../utils/Utils';
 import NotFound from '../pages/NotFound';
 
@@ -13,20 +13,25 @@ const CourseDetails = ({match}) => {
 
     const dispatch = useDispatch();
 
-    const [favoris, setFavoris] = useState(false);
+    const [favoris, setFavoris] = useState();
 
-    const {course, loading, isStudent} = useSelector(state => state.entities.courseDetails);
+    const { course, loading, button_loading, isStudent } = useSelector(state => state.entities.courseDetails);
 
 
     useEffect(() => {
+        setFavoris({favoris : isStudent})
+    }, [button_loading, isStudent])
+
+    useEffect(() => {
         dispatch(LoadCourseDetails(match.params.slug));
-        setFavoris(isStudent);
     }, [dispatch, isStudent])
+
 
 
     const addCourseToFavoris = () => {
         dispatch(enrollStudent(`${match.params.slug}/enroll/`));
     }
+
 
     const displayCourseInfos = () => (
         <Fragment>
@@ -34,7 +39,20 @@ const CourseDetails = ({match}) => {
             <h1>{course.title}</h1>
             <p>{course.overview}</p>
             <p>Crée par {course.owner.name}</p>
-            <Button variant="outline-light" size="lg" onClick={addCourseToFavoris} >Favoris  <i className="far fa-heart"></i></Button>
+            {button_loading ? 
+                <Button variant="outline-light" size="lg" disabled>
+                        <Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        />
+                        Loading...
+                    </Button>
+                    :
+            <Button variant="outline-light" size="lg" onClick={addCourseToFavoris} >{isStudent ? "Favoris" : "Ajouter aux favoris"}  <i className={isStudent ? "fa fa-heart" : "far fa-heart"}></i></Button>
+            }
         </Fragment>
     )
 
@@ -48,7 +66,7 @@ const CourseDetails = ({match}) => {
                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title> 
                 <Card.Text>{course.overview}</Card.Text>
                 <footer className="text-right">
-                {favoris  ?
+                {isStudent  ?
                     ( 
                         <Button className="btn btn-info mb-2 form-control"  href={`/student/${course.slug}`}>Accéder au cours</Button>    
                     ): (
@@ -108,7 +126,7 @@ const CourseDetails = ({match}) => {
                     {displayCourseContents()}  
                 </div>
                 <div className="course-side">
-                        {displayCourseSideSticky()}
+                    {displayCourseSideSticky()}
                 </div>
             </Container>
            

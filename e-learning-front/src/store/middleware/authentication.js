@@ -7,7 +7,6 @@ import { getCurrentUser, setCurrentUser } from "../user/auth";
   */
 export const authentication = store => next => action => {
     if (action.type === "@@router/LOCATION_CHANGE"){
-        console.log(store.getState())
         if (!isEmpty(localStorage.getItem("token"))) {
             setAxiosAuthToken(localStorage.getItem("token"));
 

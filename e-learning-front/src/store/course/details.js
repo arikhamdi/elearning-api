@@ -7,9 +7,9 @@ const slice = createSlice({
     initialState: {
         course: {},
         loading: false,
+        button_loading: false,
         isStudent: false,
-        lastFetch: null,
-        error : ""
+        lastFetch: null
     },
     reducers: {
         courseDetailsRequest : (courseDetails, action) => {
@@ -26,8 +26,14 @@ const slice = createSlice({
                 const user = JSON.parse(localStorage.getItem('user')) ;
                 courseDetails.isStudent = courseDetails.course.students.filter((student) => student.email == user.email).length > 0;
             }
+            
             courseDetails.loading = false;
-           
+        },
+        enrollStudentRequest : (courseDetails, action) => {
+            courseDetails.button_loading = true;
+        },
+        enrollStudentRequestFail : (courseDetails, action) => {
+            courseDetails.button_loading = false;
         },
         enrollStudentSuccess : (courseDetails, action) => {
             courseDetails.isStudent = action.payload.enrolled;
@@ -40,6 +46,8 @@ const {
     courseDetailsRequest,
     courseDetailsRequestFailed,
     courseDetailsReceived,
+    enrollStudentRequest,
+    enrollStudentRequestFail,
     enrollStudentSuccess
 } = slice.actions;
 
@@ -58,8 +66,10 @@ export const LoadCourseDetails = url => apiRequest({
 export const enrollStudent = url => apiRequest({
     url,
     method: "POST",
+    onStart : enrollStudentRequest.type,
     onSuccess : enrollStudentSuccess.type,
-    onError : courseDetailsRequestFailed.type
+    onError : enrollStudentRequestFail.type
 
 })
+
 
