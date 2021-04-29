@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { Form, Button, Container, InputGroup, FormControl } from 'react-bootstrap';
-import Layout from '../../Layout/Layout';
+import {Layout} from '../../Layout/Layout';
 import { updatePassword } from '../../../reducers/user/UserActions';
 import { showSuccess } from '../../../utils/Utils';
 import ProfilMenu from '../../Layout/ProfilMenu';

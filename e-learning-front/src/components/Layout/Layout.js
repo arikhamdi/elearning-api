@@ -2,7 +2,7 @@ import React from 'react';
 
 import '../../Styles.css';
 
-const Layout = ({
+export const Layout = ({
     title = "Title",
     description = "Description",
     image = "http://arulselvan.net/wp-content/uploads/2014/03/work.png",
@@ -26,4 +26,20 @@ const Layout = ({
     </div>
     )
 
-export default Layout;
+
+export const LayoutFluid = ({
+    title = "Title",
+    className,
+    children
+}) => (
+    <div>
+        <div className="jumbotron jumbotron-fluid">
+            <div className="container ">
+                <h2 style={{textTransform: 'capitalize'}}>{title}</h2>
+
+            </div>
+        </div>
+        <div className={className}>{children}</div>
+    </div>
+    )
+

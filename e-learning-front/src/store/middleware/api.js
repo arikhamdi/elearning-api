@@ -3,15 +3,17 @@ import { API } from '../../config';
 import * as actions from '../types/api';
 
 const api = ({dispatch}) => next => async action => {
-    if (action.type !== actions.apiRequest.type ) return next(action);
 
+    if (action.type !== actions.apiRequest.type ) return next(action);
+    
     const {url, method, data, onStart, onSuccess, onError } = action.payload;
     
     if (onStart) dispatch({type: onStart});
-
+ 
     next(action);
 
     try {
+        
         const response = await axios.request({
             baseURL : API,
             url,
@@ -24,7 +26,6 @@ const api = ({dispatch}) => next => async action => {
         if (onSuccess) dispatch({type: onSuccess, payload: response.data});
     } catch(error) {
         if (error.response) {
-            console.log('error.response', JSON.stringify(error.response.data));
             // General
             dispatch(actions.apiRequestFailed(error.response.data));
             // Specific

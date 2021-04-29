@@ -14,10 +14,13 @@ export default class NotFound extends Component {
     }
 }
 
-export const NotFoundHome = () => {
+export const NotFoundSmall = () => {
 
         return (
-            <div className="notfound text-center w-100">
+            <div 
+                className="notfound text-center w-100"
+                style={{margin: "125px 0"}}
+                >
             <h1 className="display-4"><span className="text-danger">404</span> Page Not Found</h1>
             <p className="lead">Sorry, that page does not exist</p>
                 

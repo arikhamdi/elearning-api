@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import Layout from '../Layout/Layout';
+import {Layout} from '../Layout/Layout';
 import { CardDeck} from 'react-bootstrap';
 
 import Course from '../course/Course';
@@ -7,8 +7,9 @@ import SubNav from '../Layout/SubNav';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {Loader} from '../Layout/Loader';
-import {NotFoundHome} from '../pages/NotFound';
+import {NotFoundSmall} from '../pages/NotFound';
 import { LoadCourses } from '../../store/course/list';
+import PageLayout from '../Layout/PageLayout';
 
 const  Home = ({match}) => {
 
@@ -17,7 +18,6 @@ const  Home = ({match}) => {
     const coursesList = useSelector(state => state.entities.courses);
     const { loading, list, errors } = coursesList;
 
-    console.log(errors);
     useEffect(() => {
         dispatch(LoadCourses(match.url));
     }, [dispatch, match.url])
@@ -29,12 +29,12 @@ const  Home = ({match}) => {
                 className="container">
         <SubNav active={match.params.subject}/>
         <CardDeck>
-        {loading ? <Loader/> : errors ? <NotFoundHome /> :
-            (list && list.map(
+        {loading ? <Loader/> : errors ? <NotFoundSmall /> :
+            (list.length ? list.map(
                 (course) => (
                     <Course key={course.id} course={course} />
                 )
-            ))}
+            ) : <PageLayout title="Aucun contenu" />)}
         </CardDeck>
             
 

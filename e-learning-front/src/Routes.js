@@ -23,19 +23,12 @@ import ProtectedStudentRoute from './components/route/ProtectedStudentRoute';
 import { useDispatch } from 'react-redux';
 import { loadSubjects } from './store/subject/list';
 import registrationSuccess from './components/pages/registrationSuccess';
+import Cart from './components/user/cart';
 
 
 const Routes = () => {
 
-    
-
     const dispatch = useDispatch();
-
-    // if (!isEmpty(localStorage.getItem("token"))) {
-    //     dispatch(setToken(localStorage.getItem("token")));
-    // }
-
-
     // Load subjects to feed all menus
 
     useEffect(() => {
@@ -56,6 +49,7 @@ const Routes = () => {
                 <Route exact path="/password-reset" component={PasswordReset} />
                 <Route path="/password-reset/confirm/:token" component={PasswordResetConfirm} />
                 <Route exact path="/password-reset/success" component={PasswordResetSuccess} />
+                <Route exact path='/cart' component={Cart} />
                 <ProtectedStudentRoute exact path="/student/:slug" component={StudentCourse} />
                 <ProtectedStudentRoute path="/student/:slug/:content" component={StudentCourse} />
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />

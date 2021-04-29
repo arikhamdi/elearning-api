@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Tab, Tabs, Card, Button  } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Layout from '../Layout/Layout';
+import {Layout} from '../Layout/Layout';
 import { getDashboard } from '../../reducers/user/UserActions';
 
 const Dashboard = () => {

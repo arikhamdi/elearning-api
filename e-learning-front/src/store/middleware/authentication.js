@@ -1,5 +1,6 @@
 import { isEmpty, setAxiosAuthToken } from "../../utils/Utils";
 import { getCurrentUser, setCurrentUser } from "../user/auth";
+import { setItemtoCart } from "../user/cart";
 
  /**
   * Authentication middleware, get token and user information from local storage
@@ -15,6 +16,9 @@ export const authentication = store => next => action => {
             }else {
                 store.dispatch(getCurrentUser());
             }
+        }
+        if (!isEmpty(localStorage.getItem("cart"))){
+            store.dispatch(setItemtoCart(JSON.parse(localStorage.getItem('cart'))));
         }
     }
     return next(action);

@@ -12,6 +12,7 @@ import { createBrowserHistory } from 'history';
 import { authentication } from './middleware/authentication';
 
 
+
 export const history = createBrowserHistory();
 
 const reducer = combineReducers({
