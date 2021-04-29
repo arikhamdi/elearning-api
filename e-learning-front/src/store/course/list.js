@@ -16,6 +16,7 @@ const slice = createSlice({
         },
         coursesRequestFailed : (courses, action) => {
             courses.loading = false;
+            courses.errors = action.payload;
         },
         coursesReceived : (courses, action) => {
             courses.list = action.payload;

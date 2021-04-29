@@ -100,7 +100,7 @@ const CourseDetails = ({match}) => {
     if (loading) {
         return <Loader />;
     }
-    else if (isEmpty(course)) {
+    else if (isEmpty(course))  {
         return <NotFound />;
     }
     else {
