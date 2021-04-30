@@ -35,16 +35,12 @@ axios.defaults.baseURL = API;
 
 const Routes = () => {
 
-    
-    const { error }  = store.getState().entities.subjects;
 
     useEffect(() => {
         // Load subjects to feed all menus
         store.dispatch(loadSubjects()); 
-        console.log('error', error) 
-    }, [error])
+    }, [])
 
-    
 
     return (
         <Provider store={store}>

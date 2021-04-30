@@ -1,37 +1,48 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card,  Container, Jumbotron, ListGroup, Spinner} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import { Loader } from '../Layout/Loader';
-import { enrollStudent, LoadCourseDetails, setCurrentStudent } from '../../store/course/details';
-import {addItemToFavoris, removeItemFromFavoris} from '../../store/user/favoris'
-import { isEmpty } from '../../utils/Utils';
+import { LoadCourseDetails} from '../../store/course/details';
+import {
+    addItemToFavoris,
+    removeItemFromFavoris,
+    addItemToFavorisLoggedInUser,
+    removeItemToFavorisLoggedInUser
+} from '../../store/user/favoris'
 import NotFound from '../pages/NotFound';
 
 import '../../Styles.css';
 
-const CourseDetails = ({match, history}) => {
+const CourseDetails = ({match}) => {
 
     const dispatch = useDispatch();
 
-    const { course, loading, button_loading, isStudent } = useSelector(state => state.entities.courseDetails);
-    
+    const { course, loading, error } = useSelector(state => state.entities.courseDetails);
+    const { isAuthenticated, isSubscribed } = useSelector(state => state.auth.auth)
     const { favorisItems } = useSelector(state => state.auth.favoris);
 
     const favoris = favorisItems.find((item) => item.id == course.id);
 
     useEffect(() => {
         dispatch(LoadCourseDetails(match.params.slug));
-    }, [dispatch, isStudent])
+    }, [dispatch, isSubscribed])
 
+
+console.log('isSubscribed', isSubscribed)
+console.log('isAuthenticated', isAuthenticated)
 
 
     const addToFavorisHandler = () => {
-        // dispatch(enrollStudent(`${match.params.slug}/enroll/`));
+        if(isAuthenticated) {
+           return  dispatch(addItemToFavorisLoggedInUser(course));
+        }
         dispatch(addItemToFavoris(course));
     }
     const removefromFavorisHandler = () => {
-        // dispatch(enrollStudent(`${match.params.slug}/enroll/`));
+        if(isAuthenticated) {
+            return  dispatch(removeItemToFavorisLoggedInUser(course));
+         }
         dispatch(removeItemFromFavoris(course));
     }
 
@@ -43,7 +54,7 @@ const CourseDetails = ({match, history}) => {
             <h1>{course.title}</h1>
             <p>{course.overview}</p>
             <p>Crée par {course.owner?.name}</p>
-            {button_loading ? 
+            {loading ? 
                 <Button variant="outline-light" size="lg" disabled>
                         <Spinner
                         as="span"
@@ -70,7 +81,7 @@ const CourseDetails = ({match, history}) => {
             </Button>
             }
         </Fragment>
-    )
+    );
 
     const displayCourseSideSticky = () => (
         <React.Fragment>
@@ -82,18 +93,20 @@ const CourseDetails = ({match, history}) => {
                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title> 
                 <Card.Text>{course.overview}</Card.Text>
                 <footer className="text-right">
-                {favoris && isStudent ?
+                {favoris && isSubscribed && isAuthenticated ?
                     ( 
                         <Button className="btn btn-info mb-2 form-control"  href={`/student/${course.slug}`}>Accéder au cours</Button>    
                     ): (
                         <Fragment>
-                        {!isStudent &&
+                        {isAuthenticated  == false || isSubscribed == false ? 
                             <Button 
                             className="btn btn-info mb-2 form-control" 
                             variant="danger"
                             >
                                 Abonnez-vous
                             </Button>
+                            :
+                            null
                         }
 
                         {!favoris &&
@@ -127,15 +140,14 @@ const CourseDetails = ({match, history}) => {
                     </ListGroup> 
                 
                 </React.Fragment>
-    )
-
+    );
 
 
         return (
             <Fragment>
                 {loading ? 
                     <Loader /> 
-                :
+                : error ? <NotFound /> : 
                     (
                         <div className="course-details-fragment">
                             <Jumbotron fluid style={{minHeight: '300px', backgroundColor:"#333"}}>

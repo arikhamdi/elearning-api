@@ -53,15 +53,4 @@ class CourseDetailAPIView(generics.RetrieveAPIView):
     lookup_url_kwarg = 'course_slug'
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def enroll_student(request, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
 
-    if request.method == 'POST':
-        if course.students.filter(id=request.user.id).exists():
-            course.students.remove(request.user)
-            return Response({'enrolled': 'False'})
-        course.students.add(request.user)
-        return Response({'enrolled': 'True'})
-    return Response({'enrolled': 'False'})

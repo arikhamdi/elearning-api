@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { setAxiosAuthToken } from '../../utils/Utils';
-import { Button, Modal } from "react-bootstrap";
 import { apiRequest } from '../types/api';
+import { mergeAllFavorisToLocalStorage } from './favoris';
 
 const slice = createSlice({
     name : "auth",
@@ -9,6 +9,7 @@ const slice = createSlice({
         user : {},
         loading : false,
         isAuthenticated: false,
+        isSubscribed: true,
         isRegistered: false,
         error: [],
     },
@@ -75,14 +76,13 @@ export const login = userData => async dispatch => {
     await dispatch(loginToServer(userData));
     await dispatch(getCurrentUser());
     await dispatch(setCurrentUser(JSON.parse(localStorage.getItem("user"))));
+    await dispatch(mergeAllFavorisToLocalStorage());
 };
 
 export const logout = session => async dispatch => {
     if (session === 'local'){
-        console.log("local")
         await dispatch(unsetCurrentUser());
     } else {
-        console.log("global")
         await dispatch(logoutFromServer());
         await dispatch(unsetCurrentUser());
     }
@@ -97,7 +97,7 @@ const loginToServer = userData => apiRequest({
     onError : logoutSuccess.type
 });
 
-export const getCurrentUser = () => apiRequest({
+const getCurrentUser = () => apiRequest({
     url : "/auth/user/",
     onStart : authRequest.type,
     onSuccess : getCurrentUserSuccess.type,

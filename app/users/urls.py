@@ -10,7 +10,13 @@ from .views.teachers import (
     content_detail,
     course_detail
 )
-from .views.students import student_course_detail, student_get_modules_list, get_content_by_id
+from .views.students import (
+    student_course_detail,
+    student_get_modules_list,
+    get_content_by_id,
+    add_course_to_user_favoris,
+    remove_course_to_user_favoris
+)
 
 from .views.dashboard import dashboard
 
@@ -19,6 +25,9 @@ app_name = 'users'
 urlpatterns = [
 
     path('dashboard/', dashboard),
+
+    path('<slug:course_slug>/favoris-add/', add_course_to_user_favoris),
+    path('<slug:course_slug>/favoris-remove/', remove_course_to_user_favoris),
 
     # Students interfaces
     path('student/<slug:course_slug>/<int:content_item>/',

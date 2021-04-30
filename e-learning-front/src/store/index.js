@@ -1,15 +1,13 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import api from './middleware/api';
-import {catchTokenError} from './middleware/errors';
 import { dashboardReducer, profileReducer } from '../reducers/user/UserReducers';
-
 import { connectRouter, routerMiddleware} from "connected-react-router";
-
 import entitiesReducer from './reducers/entities';
 import authReducer from './reducers/auth';
 import { createBrowserHistory } from 'history';
+
 import authentication from './middleware/authentication';
+import api from './middleware/api';
 
 
 

@@ -7,8 +7,6 @@ const slice = createSlice({
     initialState: {
         course: {},
         loading: false,
-        button_loading: false,
-        isStudent: false,
         lastFetch: null
     },
     reducers: {
@@ -21,23 +19,7 @@ const slice = createSlice({
         },
         courseDetailsReceived : (courseDetails, action) => {
             courseDetails.course  = action.payload;
-            
-            if(localStorage.getItem('user')){
-                const user = JSON.parse(localStorage.getItem('user')) ;
-                courseDetails.isStudent = courseDetails.course.students.filter((student) => student.email == user.email).length > 0;
-            }
-            
             courseDetails.loading = false;
-        },
-        enrollStudentRequest : (courseDetails, action) => {
-            courseDetails.button_loading = true;
-        },
-        enrollStudentRequestFail : (courseDetails, action) => {
-            courseDetails.button_loading = false;
-        },
-        enrollStudentSuccess : (courseDetails, action) => {
-            courseDetails.isStudent = action.payload.enrolled;
-            courseDetails.button_loading = false;
         }
     }
 })
@@ -46,9 +28,6 @@ const {
     courseDetailsRequest,
     courseDetailsRequestFailed,
     courseDetailsReceived,
-    enrollStudentRequest,
-    enrollStudentRequestFail,
-    enrollStudentSuccess
 } = slice.actions;
 
 export default slice.reducer;
@@ -63,13 +42,5 @@ export const LoadCourseDetails = url => apiRequest({
     onError : courseDetailsRequestFailed.type
 });
 
-export const enrollStudent = url => apiRequest({
-    url,
-    method: "POST",
-    onStart : enrollStudentRequest.type,
-    onSuccess : enrollStudentSuccess.type,
-    onError : enrollStudentRequestFail.type
-
-})
 
 

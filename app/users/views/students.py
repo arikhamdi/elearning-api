@@ -10,7 +10,8 @@ from courses.serializers import (
     ModuleWithContentsSerializer,
     ModuleSerializer,
     ContentSerializer,
-    EnrolledCourseSerializer
+    EnrolledCourseSerializer,
+    CourseSerializer
 )
 
 from courses.models import (Course, Module, Content)
@@ -59,3 +60,27 @@ def get_content_by_id(request, course_slug, content_item):
             return Response(serializer.data)
 
     return Response(status=status.HTTP_403_FORBIDDEN)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_course_to_user_favoris(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+
+    if request.method == 'POST':
+        if not course.students.filter(id=request.user.id).exists():
+            course.students.add(request.user)
+    serializer = CourseSerializer(course)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_course_to_user_favoris(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+
+    if request.method == 'POST':
+        if course.students.filter(id=request.user.id).exists():
+            course.students.remove(request.user)
+    serializer = CourseSerializer(course)
+    return Response(serializer.data)
