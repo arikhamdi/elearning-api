@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { Tab, Tabs,Form, Button, Container, InputGroup, FormControl, Navbar  } from 'react-bootstrap';
 import {Layout} from '../Layout/Layout';
 import { updateProfile, clearErrors } from '../../reducers/user/UserActions';
-import ProfilMenu from '../Layout/ProfilMenu';
+import ProfilMenu from '../menu/ProfilMenu';
 
 const UserPersonalInfos = () => {
 

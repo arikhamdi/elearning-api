@@ -3,7 +3,7 @@ import {Layout} from '../Layout/Layout';
 import { CardDeck} from 'react-bootstrap';
 
 import Course from '../course/Course';
-import SubNav from '../Layout/SubNav';
+import SubNav from '../menu/SubNav';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {Loader} from '../Layout/Loader';

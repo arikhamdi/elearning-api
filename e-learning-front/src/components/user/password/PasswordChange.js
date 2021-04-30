@@ -4,7 +4,7 @@ import { Form, Button, Container, InputGroup, FormControl } from 'react-bootstra
 import {Layout} from '../../Layout/Layout';
 import { updatePassword } from '../../../reducers/user/UserActions';
 import { showSuccess } from '../../../utils/Utils';
-import ProfilMenu from '../../Layout/ProfilMenu';
+import ProfilMenu from '../../menu/ProfilMenu';
 
 export const PasswordChange = () => {
 

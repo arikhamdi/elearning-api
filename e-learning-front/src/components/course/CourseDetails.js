@@ -20,7 +20,7 @@ const CourseDetails = ({match}) => {
 
     const { course, loading, error } = useSelector(state => state.entities.courseDetails);
     const { isAuthenticated, isSubscribed } = useSelector(state => state.auth.auth)
-    const { favorisItems } = useSelector(state => state.auth.favoris);
+    const { favorisItems, favoriteLoading} = useSelector(state => state.auth.favoris);
 
     const favoris = favorisItems.find((item) => item.id == course.id);
 
@@ -29,8 +29,7 @@ const CourseDetails = ({match}) => {
     }, [dispatch, isSubscribed])
 
 
-console.log('isSubscribed', isSubscribed)
-console.log('isAuthenticated', isAuthenticated)
+console.log('favoriteLoading', favoriteLoading)
 
 
     const addToFavorisHandler = () => {
@@ -54,7 +53,7 @@ console.log('isAuthenticated', isAuthenticated)
             <h1>{course.title}</h1>
             <p>{course.overview}</p>
             <p>Crée par {course.owner?.name}</p>
-            {loading ? 
+            {favoriteLoading ? 
                 <Button variant="outline-light" size="lg" disabled>
                         <Spinner
                         as="span"
@@ -93,23 +92,27 @@ console.log('isAuthenticated', isAuthenticated)
                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title> 
                 <Card.Text>{course.overview}</Card.Text>
                 <footer className="text-right">
-                {favoris && isSubscribed && isAuthenticated ?
-                    ( 
-                        <Button className="btn btn-info mb-2 form-control"  href={`/student/${course.slug}`}>Accéder au cours</Button>    
-                    ): (
-                        <Fragment>
-                        {isAuthenticated  == false || isSubscribed == false ? 
-                            <Button 
-                            className="btn btn-info mb-2 form-control" 
-                            variant="danger"
-                            >
-                                Abonnez-vous
-                            </Button>
-                            :
-                            null
-                        }
-
-                        {!favoris &&
+                {favoris && isSubscribed && isAuthenticated &&
+                    <Button className="btn btn-info mb-2 form-control"  href={`/student/${course.slug}`}>Accéder au cours</Button>
+                }  
+                    
+                       
+                {isAuthenticated  == false || isSubscribed == false ? 
+                    <Button 
+                    className="btn btn-info mb-2 form-control" 
+                    variant="danger"
+                    >
+                        Abonnez-vous
+                    </Button>
+                    :
+                    null
+                }
+                {favoriteLoading ? 
+                <Button variant="outline-danger" className="btn mb-2 form-control" size="lg" disabled>
+                    <Spinner as="span" animation="grow" role="status" size="sm" role="status" aria-hidden="true"/>
+                    Loading...
+                </Button>
+                    : !favoris &&
                             <Button 
                             className="btn mb-2 form-control" 
                             variant="outline-danger"
@@ -118,10 +121,6 @@ console.log('isAuthenticated', isAuthenticated)
                                 Ajouter aux favoris <i className="far fa-star"></i>
                             </Button>
                         }
-
-                        </Fragment>
-                    )
-                }
                 
                 </footer>
             </Card.Body>

@@ -6,7 +6,7 @@ import {logout} from '../../store/user/auth';
 import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl , Modal} from 'react-bootstrap';
 
 import '../../Styles.css';
-import ShowFavorisIcone from '../menu/menuFavoris';
+import ShowFavorisIcone from './menuFavoris';
 
 const Menu = ({ history }) => {
     const dispatch = useDispatch();

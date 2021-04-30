@@ -1,13 +1,13 @@
 import React, { useEffect }  from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './components/pages/Home';
-import Menu from './components/Layout/Menu';
+import Menu from './components/menu/Menu';
 import Dashboard from './components/user/Dashboard';
 import CourseDetails from './components/course/CourseDetails';
 import Login from './components/user/Login';
 import Signup from './components/user/Signup';
 
-import Footer from './components/Layout/Footer';
+import Footer from './components/Footer';
 import ProtectedRoute from './components/route/ProtectedRoute';
 import Forbidden from './components/pages/Forbidden';
 import NotFound from './components/pages/NotFound';

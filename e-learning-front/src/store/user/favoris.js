@@ -6,30 +6,30 @@ const slice = createSlice({
     name : "favoris",
     initialState: {
         favorisItems: [],
-        loading: false,
+        favoriteLoading: false,
         lastFetch: null
     },
     reducers: {
         favorisItemsRequest : (favoris, action) => {
-            favoris.loading = true;
+            favoris.favoriteLoading = true;
         },
         favorisSetItems : (favoris, action) => {
-            favoris.loading = false;
+            favoris.favoriteLoading = false;
             favoris.favorisItems = action.payload
             localStorage.setItem("favoris", JSON.stringify(favoris.favorisItems))
         },
         favorisAddItem : (favoris, action) => {
-            favoris.loading = false;
+            favoris.favoriteLoading = false;
             favoris.favorisItems.push(action.payload);
             localStorage.setItem("favoris", JSON.stringify(favoris.favorisItems))
         },
         favorisRemoveItem : (favoris, action) => {
-            favoris.loading = false;
+            favoris.favoriteLoading = false;
             favoris.favorisItems = favoris.favorisItems.filter(x => x.id !== action.payload.id);
             localStorage.setItem("favoris", JSON.stringify(favoris.favorisItems))
         },
         favorisRequestFail : (favoris, action) => {
-            favoris.loading = false;
+            favoris.favoriteLoading = false;
             favoris.errors = action.payload;
         }
     }
