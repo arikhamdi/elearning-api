@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
 import authReducer from '../user/auth';
-import cartReducer from '../user/cart';
+import favorisReducer from '../user/favoris';
 
 export default combineReducers({
     auth: authReducer,
-    cart : cartReducer
+    favoris : favorisReducer
 });

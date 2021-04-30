@@ -4,7 +4,7 @@ import { Button, Card,  Container, Jumbotron, ListGroup, Spinner} from 'react-bo
 import { withRouter } from 'react-router-dom';
 import { Loader } from '../Layout/Loader';
 import { enrollStudent, LoadCourseDetails, setCurrentStudent } from '../../store/course/details';
-import {addItemToCart} from '../../store/user/cart'
+import {addItemToFavoris, removeItemFromFavoris} from '../../store/user/favoris'
 import { isEmpty } from '../../utils/Utils';
 import NotFound from '../pages/NotFound';
 
@@ -14,13 +14,11 @@ const CourseDetails = ({match, history}) => {
 
     const dispatch = useDispatch();
 
-    const [favoris, setFavoris] = useState(false);
-
     const { course, loading, button_loading, isStudent } = useSelector(state => state.entities.courseDetails);
     
-    const { cartItems } = useSelector(state => state.auth.cart);
+    const { favorisItems } = useSelector(state => state.auth.favoris);
 
-
+    const favoris = favorisItems.find((item) => item.id == course.id);
 
     useEffect(() => {
         dispatch(LoadCourseDetails(match.params.slug));
@@ -29,12 +27,14 @@ const CourseDetails = ({match, history}) => {
 
 
     const addToFavorisHandler = () => {
-        dispatch(enrollStudent(`${match.params.slug}/enroll/`));
+        // dispatch(enrollStudent(`${match.params.slug}/enroll/`));
+        dispatch(addItemToFavoris(course));
+    }
+    const removefromFavorisHandler = () => {
+        // dispatch(enrollStudent(`${match.params.slug}/enroll/`));
+        dispatch(removeItemFromFavoris(course));
     }
 
-    const addToCartHandler = () => {
-        dispatch(addItemToCart(course));
-    }
 
 
     const displayCourseInfos = () => (
@@ -54,8 +54,20 @@ const CourseDetails = ({match, history}) => {
                         />
                         Loading...
                     </Button>
-                    :
-            <Button variant="outline-light" size="lg" onClick={addToFavorisHandler} >{isStudent ? "Favoris" : "Ajouter aux favoris"}  <i className={isStudent ? "fa fa-heart" : "far fa-heart"}></i></Button>
+                    : favoris ?
+            <Button 
+                variant="outline-light" size="lg" 
+                onClick={removefromFavorisHandler} 
+            >
+                Supprimer des favoris <i class="fas fa-star"></i>
+            </Button>
+            :
+            <Button 
+                variant="outline-light" size="lg" 
+                onClick={addToFavorisHandler} 
+            >
+                Ajouter aux favoris <i class="far fa-star"></i>
+            </Button>
             }
         </Fragment>
     )
@@ -70,30 +82,30 @@ const CourseDetails = ({match, history}) => {
                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title> 
                 <Card.Text>{course.overview}</Card.Text>
                 <footer className="text-right">
-                {favoris  ?
+                {favoris && isStudent ?
                     ( 
                         <Button className="btn btn-info mb-2 form-control"  href={`/student/${course.slug}`}>Accéder au cours</Button>    
                     ): (
                         <Fragment>
-                        {cartItems.find((item) => item.id == course.id) ? 
+                        {!isStudent &&
                             <Button 
                             className="btn btn-info mb-2 form-control" 
                             variant="danger"
-                            href="/cart"
                             >
-                            Accéder au panier
-                        </Button>
-                        :
-                        <Button 
-                            className="btn btn-info mb-2 form-control" 
-                            variant="danger"
-                            onClick={addToCartHandler}
-                            >
-                            Ajouter au panier
-                        </Button>
+                                Abonnez-vous
+                            </Button>
                         }
 
-                        <Button className="btn mb-2 form-control" variant="outline-danger">Acheter ce cours</Button>
+                        {!favoris &&
+                            <Button 
+                            className="btn mb-2 form-control" 
+                            variant="outline-danger"
+                            onClick={addToFavorisHandler} 
+                            >
+                                Ajouter aux favoris <i class="far fa-star"></i>
+                            </Button>
+                        }
+
                         </Fragment>
                     )
                 }

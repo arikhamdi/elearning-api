@@ -6,7 +6,6 @@ import Dashboard from './components/user/Dashboard';
 import CourseDetails from './components/course/CourseDetails';
 import Login from './components/user/Login';
 import Signup from './components/user/Signup';
-import { isEmpty } from './utils/Utils';
 
 import Footer from './components/Layout/Footer';
 import ProtectedRoute from './components/route/ProtectedRoute';
@@ -23,7 +22,7 @@ import ProtectedStudentRoute from './components/route/ProtectedStudentRoute';
 import { useDispatch } from 'react-redux';
 import { loadSubjects } from './store/subject/list';
 import registrationSuccess from './components/pages/registrationSuccess';
-import Cart from './components/user/cart';
+import Favoris from './components/user/Favoris';
 
 
 const Routes = () => {
@@ -49,7 +48,7 @@ const Routes = () => {
                 <Route exact path="/password-reset" component={PasswordReset} />
                 <Route path="/password-reset/confirm/:token" component={PasswordResetConfirm} />
                 <Route exact path="/password-reset/success" component={PasswordResetSuccess} />
-                <Route exact path='/cart' component={Cart} />
+                <Route exact path="/favoris" component={Favoris} />
                 <ProtectedStudentRoute exact path="/student/:slug" component={StudentCourse} />
                 <ProtectedStudentRoute path="/student/:slug/:content" component={StudentCourse} />
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />

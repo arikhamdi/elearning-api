@@ -6,15 +6,15 @@ import {logout} from '../../reducers/user/UserActions';
 import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl, Card } from 'react-bootstrap';
 
 import '../../Styles.css';
+import ShowFavorisIcone from '../menu/menuFavoris';
 
 const Menu = ({ history }) => {
     const dispatch = useDispatch();
 
     const { user, isAuthenticated } = useSelector(state => state.auth.auth);
     const { subjects}  = useSelector(state => state.entities);
-    const { cartItems } = useSelector(state => state.auth.cart);
 
-    console.log(cartItems.length > 0)
+
 
     const isActive = (active, e) => { 
         if (active)
@@ -23,70 +23,7 @@ const Menu = ({ history }) => {
             e.target.style.color = '';
     }
 
-    const showCartHandler = () => {
-        return (
-            <Dropdown alignRight>
-                    <Dropdown.Toggle 
-                        as={Nav.Link} 
-                        onMouseEnter={isActive.bind(this,true)} 
-                        onMouseLeave={isActive.bind(this,false)}
-                    >
-                    <i className="fas fa-shopping-cart"></i>
-                    {(cartItems.length > 0) && 
-                    <span class='badge badge-warning' id='lblCartCount'>{cartItems.length}</span>}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="text-center" style={{width: "330px"}}>
 
-                        {(cartItems.length > 0) ? (
-                            <Fragment>
-                            {cartItems && cartItems.map(item => (
-                                <Fragment key={item.id} >
-                                    <Card 
-                                    style={{flexDirection: 'row', border:'none', margin:"15px"}} 
-                                    className="mb-2">
-                                    <Card.Img variant="top" src={item.image} 
-                                    style={{ objectFit: "cover", width:'90px', height:"90px"}}/>
-                                    <Card.Body className="text-left">
-                                    <Card.Subtitle className="text-capitalize" >{item.title}</Card.Subtitle >
-                                    <Card.Text>{item?.owner?.name}</Card.Text>
-                                    <Card.Title style={{color: "red", fontWeight: "500"}}>249,99 €</Card.Title>
-                                    </Card.Body>
-                                    </Card>
-                                    <Dropdown.Divider />
-                                </Fragment>
-                                
-                            ))}  
-                            <Dropdown.Header 
-                                className="text-left"
-                                style={{fontSize: "24px", fontWeight: "500", color:'black'}} 
-                                >
-                                Total {cartItems.length * 249.99}
-                            </Dropdown.Header>  
-                            { history.location.pathname !== '/cart' && (
-                                <Button 
-                                variant="danger" 
-                                className="text-nowrap from-control"
-                                href='/cart'
-                                >
-                                Accéder au panier
-                            </Button>
-                            )}                          
-
-                            </Fragment>
-                            ): (
-                            <Fragment>
-                                <Dropdown.Header>Votre panier est vide</Dropdown.Header>
-                                <Dropdown.Divider />
-                                <Nav.Link 
-                                    className="nav-link text-dark">
-                                    Continuer vos achats
-                                </Nav.Link>
-                            </Fragment>
-                        )}
-                        </Dropdown.Menu>
-                    </Dropdown>
-        )
-    }
 
 
     const mainMenu = () => (
@@ -181,12 +118,11 @@ const Menu = ({ history }) => {
                 </React.Fragment>
             ) : (
                 <React.Fragment>
+                    <ShowFavorisIcone />
                     <Button variant="outline-dark" className=" mr-sm-2 text-nowrap" href="/login"><i className="fas fa-sign-in-alt"></i> Se connecter</Button>
                     <Button variant="dark" className="mr-sm-2 text-nowrap" href="/signup"><i className="fas fa-user-plus"></i> S'inscrire</Button>
                 </React.Fragment>
             )}
-
-            {showCartHandler()}
             </Nav>
         </Navbar.Collapse>
         </Navbar>
