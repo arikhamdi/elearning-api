@@ -2,42 +2,37 @@ import React, { useEffect, useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { Form, Button, Container, InputGroup, FormControl } from 'react-bootstrap';
 import {Layout} from '../../Layout/Layout';
-import { updatePassword } from '../../../reducers/user/UserActions';
+import { updatePassword } from '../../../store/user/profile';
 import { showSuccess } from '../../../utils/Utils';
 import ProfilMenu from '../../menu/ProfilMenu';
 
 export const PasswordChange = () => {
 
     const { user } = useSelector(state => state.auth.auth);
-    const { error, isUpdated } = useSelector(state => state.profile);
-    const [validated, setValidated] = useState(false);
+    const { error, isUpdated } = useSelector(state => state.auth.profile);
 
+    const [errors, setErrors] = useState({});
     const [values, setValues] = useState({
         email:'',
         new_password1: '',
-        new_password2: '',
-        errors : {}
+        new_password2: ''
     });
 
 
-
     useEffect(() => {
+        if (error) {
+            setErrors({...error});
+        }
+
         if(user) {
             setValues({
                 ...values,                
                 email: user.email
             })
         }
-  
-        if(error) {
-            setValues({
-                ...values,                
-                errors: error
-            })
-        }
     },[user, error, isUpdated])
 
-    const {email, new_password1, new_password2, errors } = values;
+    const {email, new_password1, new_password2} = values;
 
     
     const dispatch = useDispatch();
@@ -45,24 +40,17 @@ export const PasswordChange = () => {
     const handleChange = name => e => {
         setValues({
             ...values,
-            errors: false,
             [name] : e.target.value
-        })
+        });
+        setErrors({});
     }
 
     const submitNewPassword = e => {
         e.preventDefault();
-        const form = e.currentTarget;
-        if (form.checkValidity() === false) {
-            e.stopPropagation();
-        }
 
-        setValidated(true);
         dispatch(updatePassword({new_password1,new_password2})) 
-
     }
 
- 
     const passwordChangeForm = () => (
             <div className="card mt-3">
             <h3 className="card-header mb-3">
@@ -107,7 +95,7 @@ export const PasswordChange = () => {
                      placeholder="Mot de passe"
                      value={new_password1}
                      onChange={handleChange('new_password1')} 
-                     isInvalid={error && error.new_password1}
+                     isInvalid={errors && errors.new_password1}
                  />
                  
              </Form.Group>
@@ -119,16 +107,16 @@ export const PasswordChange = () => {
                      required
                      value={new_password2} 
                      onChange={handleChange('new_password2')} 
-                     isInvalid={error && error.new_password2}
+                     isInvalid={errors && errors.new_password2}
                  />
                  <Form.Control.Feedback type="invalid">
-                    {error&& error.new_password2}
+                    {errors && errors.new_password2}
                 </Form.Control.Feedback>
              </Form.Group>
 
              <hr />
              <Form.Group className="text-center">
-             <Button variant="info" className="w-50 mt-5" type="submit">Modifier mot de passe</Button>
+             <Button variant="danger" className="w-50 mt-5" type="submit">Modifier mot de passe</Button>
              </Form.Group>
             </Form>
             </Container>

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { setAxiosAuthToken } from '../../utils/Utils';
 import { apiRequest } from '../types/api';
 import { mergeAllFavorisToLocalStorage } from './favoris';
@@ -73,10 +74,22 @@ export default slice.reducer;
 
 
 export const login = userData => async dispatch => {
-    await dispatch(loginToServer(userData));
-    await dispatch(getCurrentUser());
-    await dispatch(setCurrentUser(JSON.parse(localStorage.getItem("user"))));
-    await dispatch(mergeAllFavorisToLocalStorage());
+    dispatch(authRequest())
+    try {
+        await axios.post("/auth/login/", userData)
+        .then(response => {
+            dispatch(loginSuccess(response.data))
+            dispatch(getCurrentUser());
+            dispatch(setCurrentUser(JSON.parse(localStorage.getItem("user"))));
+            dispatch(mergeAllFavorisToLocalStorage());
+        });
+    }catch (error) {
+        dispatch(authRequestFail(error.response.data))
+        dispatch(unsetCurrentUser());
+    }
+    // await dispatch(loginToServer(userData));
+
+
 };
 
 export const logout = session => async dispatch => {
@@ -88,16 +101,16 @@ export const logout = session => async dispatch => {
     }
 }
 
-const loginToServer = userData => apiRequest({
-    url : "/auth/login/",
-    method: "Post",
-    data: userData,
-    onStart : authRequest.type,
-    onSuccess : loginSuccess.type,
-    onError : logoutSuccess.type
-});
+// export const loginToServer = userData => apiRequest({
+//     url : "/auth/login/",
+//     method: "Post",
+//     data: userData,
+//     onStart : authRequest.type,
+//     onSuccess : loginSuccess.type,
+//     onError : authRequestFail.type
+// });
 
-const getCurrentUser = () => apiRequest({
+export const getCurrentUser = () => apiRequest({
     url : "/auth/user/",
     onStart : authRequest.type,
     onSuccess : getCurrentUserSuccess.type,
@@ -110,7 +123,7 @@ export const setCurrentUser = user => dispatch => {
     return unsetCurrentUser();
 }
 
-const unsetCurrentUser = () => dispatch => {
+export const unsetCurrentUser = () => dispatch => {
     dispatch({type: unsetCurrentUserSuccess.type});
 }
 

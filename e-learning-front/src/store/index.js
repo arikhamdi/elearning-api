@@ -1,6 +1,5 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import { dashboardReducer, profileReducer } from '../reducers/user/UserReducers';
 import { connectRouter, routerMiddleware} from "connected-react-router";
 import entitiesReducer from './reducers/entities';
 import authReducer from './reducers/auth';
@@ -17,8 +16,6 @@ const reducer = combineReducers({
     router: connectRouter(history),
     entities : entitiesReducer,
     auth: authReducer,
-    dashboard: dashboardReducer,
-    profile: profileReducer
 });
 
 

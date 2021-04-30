@@ -1,30 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { Tab, Tabs,Form, Button, Container, InputGroup, FormControl, Navbar  } from 'react-bootstrap';
+import { Form, Button, Container  } from 'react-bootstrap';
 import {Layout} from '../Layout/Layout';
-import { updateProfile, clearErrors } from '../../reducers/user/UserActions';
+import { updateProfile } from '../../store/user/profile';
 import ProfilMenu from '../menu/ProfilMenu';
 
 const UserPersonalInfos = () => {
 
-    const { user } = useSelector(state => state.auth);
-    const { error, isUpdated } = useSelector(state => state.profile);
+    const { user } = useSelector(state => state.auth.auth);
+    const { error } = useSelector(state => state.auth.profile);
 
+
+    const [errors, setErrors] = useState({});
     const [values, setValues] = useState({
         first_name: '',
         last_name: '',
-        email: '',
-        errors : {}
+        email: ''
     });
 
-    const [validated, setValidated] = useState(false);
 
-    const {first_name, last_name, email, errors } = values;
+    const {first_name, last_name, email} = values;
 
     
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if (error) {
+            setErrors({...error});
+        }
+
         if(user) {
             setValues({
                 ...values,                
@@ -34,35 +38,19 @@ const UserPersonalInfos = () => {
             })
         }
 
-        if(error) {
-            setValues({
-                ...values,                
-                errors: error
-            })
-            console.log(error);
-        }
-
-    },[user, error, isUpdated])
+    },[user, error])
 
     const handleChange = name => e => {
         setValues({
             ...values,
-            [name] : e.target.value,
-            errors: {}
-        })
+            [name] : e.target.value
+        });
+        setErrors({});
     }
 
     const submitProfileForm = e => {
         e.preventDefault();
-        const form = e.currentTarget;
-        if (form.checkValidity() === false) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        setValidated(true);
         dispatch(updateProfile({first_name, last_name, email}));
-        // dispatch(clearErrors());
     }
 
 
@@ -78,9 +66,10 @@ const UserPersonalInfos = () => {
                     color: 'black',
                     marginRight: '1rem'
                 }}
-                />
-                       
+                />      
                </h3>
+
+
                <Container>
                <Form noValidate onSubmit={submitProfileForm}>
                <Form.Group controlId="first_name">
@@ -91,10 +80,10 @@ const UserPersonalInfos = () => {
                         value={first_name} 
                         required 
                         onChange={handleChange('first_name')}
-                        isInvalid={errors.first_name} 
+                        isInvalid={errors?.first_name} 
                     />
                     <Form.Control.Feedback type="invalid">
-                    {errors.first_name && errors.first_name}
+                    {errors?.first_name}
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
@@ -105,10 +94,10 @@ const UserPersonalInfos = () => {
                         onChange={handleChange('last_name')} 
                         required
                         value={last_name}
-                        isInvalid={errors.last_name} 
+                        isInvalid={errors?.last_name} 
                     />
                     <Form.Control.Feedback type="invalid">
-                    {errors.last_name && errors.last_name}
+                    {errors?.last_name}
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-5">
@@ -116,7 +105,7 @@ const UserPersonalInfos = () => {
                 </Form.Group>
                 <hr />
                 <Form.Group className="text-center">
-                <Button variant="info" className="w-50 mt-5" type="submit">Sauvegarder</Button>
+                <Button variant="dark" className="w-50 mt-5" type="submit">Sauvegarder</Button>
                 </Form.Group>
                
 

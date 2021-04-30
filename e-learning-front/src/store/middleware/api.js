@@ -27,10 +27,10 @@ const api = ({dispatch}) => next => async action => {
     } catch(error) {
         if (error.response) {
             // General
-            dispatch(actions.apiRequestFailed(error.response.data));
+            dispatch(actions.apiRequestFailed(error?.response?.data));
             // Specific
             if (onError) dispatch({type: onError, payload: error.response.data});
-        } else if ('error.message', error.message) {
+        } else if (error.message) {
             console.log(JSON.stringify(error.message));
         } else {
             console.log('error', JSON.stringify(error));

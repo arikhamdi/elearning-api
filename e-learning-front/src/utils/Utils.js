@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API } from '../config';
 
 export const setAxiosAuthToken = token => {
     if (typeof token !== "undefined" && token) {
@@ -24,7 +25,9 @@ export const showSuccess = (message) => {
     )
 }
 
-// export const setToken = token => {
-//     setAxiosAuthToken(token);
-//     localStorage.setItem("token", token);
-// };
+export const api = axios.create({
+    baseURL: API,
+    headers: {
+        'Content-Type': 'application/json'
+    },
+})

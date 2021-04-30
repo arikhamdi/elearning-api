@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPassword } from '../../../reducers/user/UserActions';
+import { resetPassword } from '../../../store/user/profile';
 
 import '../../pages/Page.css';
 
@@ -10,7 +10,7 @@ const PasswordReset = () => {
     const [email, setEmail] = useState('');
     const [errors, setErrors] = useState('');
 
-    const {error, isUpdate, loading} = useSelector(state => state.profile)
+    const {error} = useSelector(state => state.auth.profile)
 
     const dispatch = useDispatch();
 
@@ -20,7 +20,6 @@ const PasswordReset = () => {
         if (form.checkValidity() === false) {
             e.stopPropagation();
         }
-        console.log({email})
         dispatch(resetPassword({email}));
     }
 
@@ -28,8 +27,12 @@ const PasswordReset = () => {
         if(error) {
             setErrors(error)
         }
-        console.log('error', error)
     }, [error])
+
+    const handleChange = e => {
+        setEmail(e);
+        setErrors({});
+    }
 
     
 
@@ -45,8 +48,8 @@ const PasswordReset = () => {
                     size="lg"
                     value={email}
                     placeholder="Entrez votre Email..."
-                    onChange={(e) => setEmail(e.target.value)}
-                    isInvalid={error && error.email}
+                    onChange={(e) => handleChange(e.target.value)}
+                    isInvalid={errors?.email}
                     />
 
                     <InputGroup.Append>
@@ -58,7 +61,7 @@ const PasswordReset = () => {
                     </Button>
                     </InputGroup.Append>
                     <Form.Control.Feedback type="invalid">
-                    {error && error.email}
+                    {errors?.email}
                     </Form.Control.Feedback>
                 </InputGroup>
 

@@ -19,6 +19,7 @@ const Login = ({history}) => {
 
     const { isAuthenticated, error, loading } = useSelector(state => state.auth.auth);
 
+        console.log(error)
 
     useEffect(() => {
         if (error) {
@@ -59,14 +60,23 @@ const Login = ({history}) => {
                 <div className="user-sign-form-control">
                 <Form.Group>
                     <Form.Control
+                            type="hidden"
+                            isInvalid={error?.non_field_errors} 
+                        />
+                    <Form.Control.Feedback type="invalid">
+                        {errors?.non_field_errors}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Control
                             type="email"
                             value={email} 
                             placeholder="Entrez un email"
                             onChange={handleChange('email')} 
-                            isInvalid={errors && errors.non_field_errors}
+                            isInvalid={errors?.non_field_errors}
                         />
                     <Form.Control.Feedback type="invalid">
-                        {errors && errors.non_field_errors}
+                        {errors?.non_field_errors}
                     </Form.Control.Feedback>
                     </Form.Group>
                 </div>

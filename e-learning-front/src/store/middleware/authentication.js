@@ -1,6 +1,5 @@
-import { unsetCurrentUser } from "../../reducers/user/UserActions";
 import { isEmpty, setAxiosAuthToken } from "../../utils/Utils";
-import { setCurrentUser } from "../user/auth";
+import { setCurrentUser, unsetCurrentUser } from "../user/auth";
 import { setItemstoFavoris } from "../user/favoris";
 
  /**

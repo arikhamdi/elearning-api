@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPasswordConfirm } from '../../../reducers/user/UserActions';
+import { resetPasswordConfirm } from '../../../store/user/profile';
 
 import '../../pages/Page.css';
 
 const PasswordResetConfirm = ({match, history}) => {
 
-    const { error, isUpdated } = useSelector(state => state.profile);
+    const { error, isUpdated } = useSelector(state => state.auth.profile);
 
-    const [validated, setValidated] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const [password, setPassword] = useState('');
 
@@ -17,6 +17,10 @@ const PasswordResetConfirm = ({match, history}) => {
 
 
     useEffect(() => {
+        if (error) {
+            setErrors({...error});
+        }
+        
         if (isUpdated){
             history.push('/password-reset/success');
             setTimeout(() => history.push('/login'), 5000);
@@ -26,14 +30,14 @@ const PasswordResetConfirm = ({match, history}) => {
 
     const dispatch = useDispatch();
 
+    const handleChange = e => {
+        setPassword(e);
+        setErrors({});
+    }
+
     const submitNewPassword = e => {
         e.preventDefault();
-        const form = e.currentTarget;
-        if (form.checkValidity() === false) {
-            e.stopPropagation();
-        }
 
-        setValidated(true);
         dispatch(resetPasswordConfirm({password, token})) 
 
     }
@@ -47,11 +51,11 @@ const PasswordResetConfirm = ({match, history}) => {
                  size="lg" 
                  placeholder="Entrer votre nouveau mot de passe..."
                  value={password}
-                 isInvalid={error && error.password}
-                 onChange={(e) => setPassword(e.target.value)}
+                 isInvalid={errors?.password}
+                 onChange={(e) => handleChange(e.target.value)}
              />
              <Form.Control.Feedback type="invalid">
-                {error && error.password}
+                {errors?.password}
             </Form.Control.Feedback>
          </Form.Group>
          <hr />
