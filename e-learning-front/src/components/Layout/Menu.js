@@ -1,18 +1,19 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector} from 'react-redux';
-import {logout} from '../../reducers/user/UserActions';
+import {logout} from '../../store/user/auth';
 
-import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl, Card } from 'react-bootstrap';
+import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl , Modal} from 'react-bootstrap';
 
 import '../../Styles.css';
 import ShowFavorisIcone from '../menu/menuFavoris';
 
 const Menu = ({ history }) => {
     const dispatch = useDispatch();
+    const [show, setShow] = useState(false);
 
-    const { user, isAuthenticated } = useSelector(state => state.auth.auth);
-    const { subjects}  = useSelector(state => state.entities);
+    const { user, isAuthenticated} = useSelector(state => state.auth.auth);
+    const { subjects, error }  = useSelector(state => state.entities);
 
 
 
@@ -22,12 +23,55 @@ const Menu = ({ history }) => {
         else
             e.target.style.color = '';
     }
+    
+    useEffect(() => {
+
+            console.log('error', error)
+    }, [error])
 
 
+    const logoutHandler = session => {
+        dispatch(logout(session))
+        .then(() => {
+            logoutModalClosehandler();
+            history.push("/");
+            window.location.reload();
+        });
 
+    }
+
+    const logoutModalClosehandler = () => setShow(false);
+    const logoutModalShowhandler = () => setShow(true);
+
+
+    const logoutModal = () => (
+        <Modal show={show} onHide={logoutModalClosehandler}>
+        <Modal.Header closeButton>
+          <Modal.Title>Se déconnecter</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={logoutModalClosehandler}>
+            Annuler
+          </Button>
+          <Button 
+          variant="primary" 
+          onClick={() => logoutHandler('local')}
+          >
+            Ici uniquement
+          </Button>
+          <Button 
+          variant="danger" 
+          onClick={() => logoutHandler('global')}
+          >
+            Sur tout les appareils
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
 
     const mainMenu = () => (
                 <Navbar id="main-menu"  variant="light" expand="lg"   >
+               
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
             href="/"
@@ -110,7 +154,7 @@ const Menu = ({ history }) => {
                         <Dropdown.Divider />
                         <Nav.Link 
                             className="nav-link text-dark"
-                            onClick={() => dispatch(logout(() => history.push("/")))} >
+                            onClick={logoutModalShowhandler} >
                             <i className="fas fa-power-off"></i> Se déconnecter
                          </Nav.Link>
                         </Dropdown.Menu>
@@ -131,7 +175,13 @@ const Menu = ({ history }) => {
 
     return (
         <Fragment>
-            {history.location.pathname.split("/")[1] !== 'student' && mainMenu() }
+            {history.location.pathname.split("/")[1] !== 'student' && (
+                <Fragment>
+                {logoutModal()}
+                {mainMenu()} 
+                </Fragment>
+                )
+                }
         </Fragment>
     )
             

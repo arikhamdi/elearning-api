@@ -19,24 +19,36 @@ import PasswordResetSuccess from './components/user/password/PasswordResetSucces
 import StudentCourse from './components/user/student/StudentCourse';
 import ProtectedStudentRoute from './components/route/ProtectedStudentRoute';
 
-import { useDispatch } from 'react-redux';
 import { loadSubjects } from './store/subject/list';
 import registrationSuccess from './components/pages/registrationSuccess';
 import Favoris from './components/user/Favoris';
+import { ConnectedRouter } from "connected-react-router";
+import { Provider } from 'react-redux';
+import store, {history} from './store';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+import { API } from './config';
+import axios from 'axios';
+axios.defaults.baseURL = API;
 
 const Routes = () => {
 
-    const dispatch = useDispatch();
-    // Load subjects to feed all menus
+    
+    const { error }  = store.getState().entities.subjects;
 
     useEffect(() => {
-        dispatch(loadSubjects());
-    }, [dispatch])
+        // Load subjects to feed all menus
+        store.dispatch(loadSubjects()); 
+        console.log('error', error) 
+    }, [error])
 
-
+    
 
     return (
+        <Provider store={store}>
+        <ConnectedRouter history={history}>
         <Router >
         <Menu />
             <Switch>
@@ -60,6 +72,9 @@ const Routes = () => {
             </Switch>
             <Footer />
         </Router>
+        </ConnectedRouter>
+      
+      </Provider>
     );
 };
 

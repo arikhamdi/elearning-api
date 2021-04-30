@@ -42,6 +42,15 @@ const Login = ({history}) => {
         setErrors({});
     }
 
+    const submitHandler = (e) => {
+        e.preventDefault();
+        const userData = {
+            email,
+            password
+        }
+        dispatch(login(userData));
+    }
+
     const signinForm = () => (
         <div className="user-container">
         <h4>Connectez-vous à votre compte E-learning !</h4>
@@ -105,18 +114,6 @@ const Login = ({history}) => {
             </div>
         </div>
     );
-
-    
-
-    const submitHandler = (e) => {
-        e.preventDefault();
-        const userData = {
-            email,
-            password
-        }
-        dispatch(login(userData));
-    }
-
 
     return (
         <div>

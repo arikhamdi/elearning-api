@@ -14,9 +14,9 @@ const ShowFavorisIcone = () => {
                 <Dropdown.Toggle 
                     as={Nav.Link} 
                 >
-                <i class="fas fa-star"></i>
+                <i className="fas fa-star"></i>
                 {(countFavoris > 0) && 
-                <span class='badge badge-warning' id='lblCartCount'>{countFavoris}</span>}
+                <span className='badge badge-warning' id='lblCartCount'>{countFavoris}</span>}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="text-center" style={{width: "330px"}}>
 

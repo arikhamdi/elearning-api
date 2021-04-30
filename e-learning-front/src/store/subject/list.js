@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-
 import { apiRequest } from '../types/api';
 
 
@@ -8,7 +7,8 @@ const slice = createSlice({
     initialState : {
         list: [],
         loading: false,
-        lastFetch: null
+        lastFetch: null,
+        error: {}
     },
     reducers: {
         subjectsrequested: (subjects, action) => {
@@ -16,6 +16,7 @@ const slice = createSlice({
         },
         subjectsRequestFailed : (subjects, action) => {
             subjects.loading = false;
+            subjects.errors = action.payload;
         },
         subjectsReceived : (subjects, action) => {
             subjects.list = action.payload;

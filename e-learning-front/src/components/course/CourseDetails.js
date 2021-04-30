@@ -59,14 +59,14 @@ const CourseDetails = ({match, history}) => {
                 variant="outline-light" size="lg" 
                 onClick={removefromFavorisHandler} 
             >
-                Supprimer des favoris <i class="fas fa-star"></i>
+                Supprimer des favoris <i className="fas fa-star"></i>
             </Button>
             :
             <Button 
                 variant="outline-light" size="lg" 
                 onClick={addToFavorisHandler} 
             >
-                Ajouter aux favoris <i class="far fa-star"></i>
+                Ajouter aux favoris <i className="far fa-star"></i>
             </Button>
             }
         </Fragment>
@@ -102,7 +102,7 @@ const CourseDetails = ({match, history}) => {
                             variant="outline-danger"
                             onClick={addToFavorisHandler} 
                             >
-                                Ajouter aux favoris <i class="far fa-star"></i>
+                                Ajouter aux favoris <i className="far fa-star"></i>
                             </Button>
                         }
 
