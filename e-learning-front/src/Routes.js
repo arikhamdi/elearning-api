@@ -8,7 +8,7 @@ import Login from './components/user/Login';
 import Signup from './components/user/Signup';
 
 import Footer from './components/Footer';
-import ProtectedRoute from './components/route/ProtectedRoute';
+import ProtectedRoute from './routes/ProtectedRoute';
 import Forbidden from './components/pages/Forbidden';
 import NotFound from './components/pages/NotFound';
 import PasswordReset from './components/user/password/PasswordReset';
@@ -17,7 +17,7 @@ import UserPersonalInfos from './components/user/UserPersonalInfos';
 import PasswordChange from './components/user/password/PasswordChange';
 import PasswordResetSuccess from './components/user/password/PasswordResetSuccess';
 import StudentCourse from './components/user/student/StudentCourse';
-import ProtectedStudentRoute from './components/route/ProtectedStudentRoute';
+import ProtectedStudentRoute from './routes/ProtectedStudentRoute';
 
 import { loadSubjects } from './store/subject/list';
 import registrationSuccess from './components/pages/registrationSuccess';
@@ -57,7 +57,7 @@ const Routes = () => {
                 <Route path="/password-reset/confirm/:token" component={PasswordResetConfirm} />
                 <Route exact path="/password-reset/success" component={PasswordResetSuccess} />
                 <Route exact path="/favoris" component={Favoris} />
-                <ProtectedStudentRoute exact path="/student/:slug" component={StudentCourse} />
+                <ProtectedStudentRoute path="/student/:slug" component={StudentCourse} />
                 <ProtectedStudentRoute path="/student/:slug/:content" component={StudentCourse} />
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />
                 <ProtectedRoute path="/profile/auth" component={PasswordChange} />
