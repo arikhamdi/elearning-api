@@ -87,8 +87,6 @@ export const login = userData => async dispatch => {
         dispatch(authRequestFail(error.response.data))
         dispatch(unsetCurrentUser());
     }
-    // await dispatch(loginToServer(userData));
-
 
 };
 
@@ -101,14 +99,6 @@ export const logout = session => async dispatch => {
     }
 }
 
-// export const loginToServer = userData => apiRequest({
-//     url : "/auth/login/",
-//     method: "Post",
-//     data: userData,
-//     onStart : authRequest.type,
-//     onSuccess : loginSuccess.type,
-//     onError : authRequestFail.type
-// });
 
 export const getCurrentUser = () => apiRequest({
     url : "/auth/user/",

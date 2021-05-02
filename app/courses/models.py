@@ -123,6 +123,13 @@ class Content(models.Model):
     item = GenericForeignKey('content_type', 'object_id')
     order = models.PositiveIntegerField(blank=True)
 
+    # Records students who have marked their content as "already seen".
+    already_seen = models.ManyToManyField(
+        get_user_model(), related_name='content_readed', blank=True)
+    # Records the students who are currently viewing this content
+    currently_viewing = models.ManyToManyField(
+        get_user_model(), related_name='content_current', blank=True)
+
     def __str__(self):
         return f'{self.id} {str(self.content_type.model)}'
 

@@ -11,7 +11,7 @@ const slice = createSlice({
         lastFetch: null,
     },
     reducers: {
-        profileRequest :(profile, action) => {
+        profileRequest :(profile) => {
             profile.profileLoading = true;
         },
         profileRequestSuccess :(profile, action) => {

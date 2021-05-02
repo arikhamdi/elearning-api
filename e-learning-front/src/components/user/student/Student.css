@@ -14,3 +14,34 @@ body {
   height: 100vh;
   overflow: auto;
 }
+
+.content-control-prev,
+.content-control-next {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-control-prev span,
+.content-control-next span {
+  display: block;
+  padding: 20px 10px;
+  background-color: rgba(41, 41, 41, 0.349);
+  color: white;
+}
+
+.content-control-prev span:hover,
+.content-control-next span:hover {
+  background-color: rgba(41, 41, 41, 0.749);
+}
+
+.content-control-prev {
+  left: 0;
+}
+
+.content-control-next {
+  right: 0;
+}

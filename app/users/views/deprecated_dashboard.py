@@ -15,7 +15,7 @@ from courses.models import (Course, Module, Content)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly])
-def dashboard(request):
+def get_favorite_courses(request):
     courses = Course.published.filter(students__in=[request.user])
 
     if request.user.is_teacher:

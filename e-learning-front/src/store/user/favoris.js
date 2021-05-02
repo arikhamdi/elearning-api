@@ -76,7 +76,7 @@ export const removeItemToFavorisLoggedInUser = item => apiRequest({
 })
 
 export const loadFavoris = () => apiRequest({
-    url: "/users/dashboard/",
+    url: "/users/get_favorite_courses/",
     onStart : favorisItemsRequest.type,
     onSuccess : favorisSetItems.type,
     onError : favorisRequestFail.type

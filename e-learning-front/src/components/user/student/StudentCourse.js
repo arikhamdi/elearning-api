@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect } from 'react'
-import { Accordion, Card, Col, Container, Nav, Row, Tab, Tabs } from 'react-bootstrap';
+import { Accordion, Card, Col, Container, Form, Row, Spinner, Tab, Tabs } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { isEmpty } from '../../../utils/Utils';
 import StudentMenu from './StudentMenu';
 import ReactPlayer from 'react-player'
 import { Link } from 'react-router-dom';
@@ -10,30 +9,74 @@ import { Link } from 'react-router-dom';
 import './Student.css';
 import { LoadCourseDetails } from '../../../store/course/details';
 import { history } from '../../../store';
-import { Loadcontents } from '../../../store/course/content';
+import { 
+    loadcontents,
+    markContentAsAlreadySeen,
+    unmarkContentAsAlreadySeen } from '../../../store/course/content';
 import { Loader } from '../../Layout/Loader';
+import { isEmpty } from '../../../utils/Utils';
 
 const StudentCourse = ({match}) => {
 
-    const {course, loading, error} = useSelector(state => state.entities.courseDetails);
-    const {content, content_errors} = useSelector(state => state.entities.content);
+    const {course} = useSelector(state => state.entities.courseDetails);
+    const {content, loading, checkBoxloading, alreadySeen } = useSelector(state => state.entities.content);
+    const { user } = useSelector(state => state.auth.auth);
+
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (error || content_errors) {
-            history.push(`/student/${match.params.slug}/6/`);
-            dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/6/`));
-            getContent(6);
-        }else {
-            dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/${match.params.content}/`));
-            getContent(match.params.content);
-        }
 
-    },[dispatch, error, content_errors])
+
+    const currentContent = content;
+
+
+    useEffect(() => {
+        dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/7/`));
+    },[alreadySeen])
+
+    useEffect(() => {
+        history.push(`/student/${match.params.slug}/7/`);
+        // dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/7/`));
+        getContent(7);
+    },[])
+
+    const contentsList = course?.modules?.find((module) => module.id == content.module);
+    const prevContent = contentsList?.contents?.find((x) => x.order === content.order -1);
+    const nextContent = contentsList?.contents?.find((x) => x.order === content.order +1);
+    const nextModule = course?.modules?.find(module => module.order === contentsList.order + 1);
+    const prevModule = course?.modules?.find(module => module.order === contentsList.order - 1);
 
     const getContent = (contentId) => {
-        dispatch(Loadcontents(`/users/student/${match.params.slug}/content/${contentId}/`));
+        dispatch(loadcontents(`/users/student/${match.params.slug}/content/${contentId}/`));
     } 
+
+    const alreadySeenHandler = (e, id) => {
+        if (e === true) {
+            dispatch(markContentAsAlreadySeen(`${course.slug}/${id}/add/`));
+        } else {
+            dispatch(unmarkContentAsAlreadySeen(`${course.slug}/${id}/remove/`));
+        }
+    }
+
+    const contentNextHandler = () => {        
+        if(nextContent){
+            dispatch(markContentAsAlreadySeen(`${course.slug}/${content.id}/add/`))
+            .then(() => getContent(nextContent.id));  
+        } else {
+            const firstContentNextModule = nextModule?.contents?.find(content => content.order === 1);
+            dispatch(markContentAsAlreadySeen(`${course.slug}/${content.id}/add/`))
+            .then(() => getContent(firstContentNextModule?.id));
+        }
+        
+    }
+
+    const contentPrevHandler = () => {        
+        if(prevContent){
+            getContent(prevContent.id)
+        } else {
+            const lastContentPrevModule = nextModule?.contents?.find(content => content.order === prevModule?.contents?.length);
+            getContent(lastContentPrevModule?.id);
+        }
+    }
 
 
     const modulesSidebar = () => {
@@ -41,7 +84,7 @@ const StudentCourse = ({match}) => {
             <Accordion >
                 {course.modules && course.modules.map(
                     module => (
-                        <Card key={module.id} style={{cursor: 'pointer'}}>
+                        <div key={module.id} style={{cursor: 'pointer', overflowX: 'hidden'}}>
                             <Accordion.Toggle as={Card.Header} eventKey={module.id} style={{textTransform: "capitalize", padding:'30px'}}>
                             Section {module.id} : {module.title}
                             </Accordion.Toggle>
@@ -51,21 +94,32 @@ const StudentCourse = ({match}) => {
                                     eventKey={module.id}
                                     style={{ margin:'0px'}}
                                     >
-                                    <Card.Body  
+                                    <Row >
+                                    <Col xs={{ span: 1, offset: 1 }} style={{paddingTop: '20px'}}>
+                                    {checkBoxloading ? 
+                                        <Spinner as="span" animation="grow" role="status" role="status" aria-hidden="true"/>
+                                        :
+                                        <Form.Check 
+                                        aria-label="readed"
+                                        checked={item?.already_seen?.filter(x => x === user.pk) > 0}
+                                        onChange={(e) => alreadySeenHandler(e.target.checked, item.id)} />
+                                        }
+                                    </Col>
+                                    <Col xs="10" 
                                     onClick={() => getContent(item.id)}
-                                    style={{padding:'0px'}}
                                     >
                                         <Link 
                                         className="nav-link" 
                                         to={`/student/${match.params.slug}/${item.id}/`}
                                         style={{backgroundColor: match.params.content == item.id && '#eaeaea', padding:'20px'}}
                                         >
-                                        {item.item.title}
+                                        {item.item.title} 
                                         </Link>
-                                    </Card.Body>
+                                    </Col>
+                                    </Row>
                                 </Accordion.Collapse>
                             ))}
-                        </Card>
+                        </div>
                     ) 
                 )}      
             </Accordion>
@@ -74,15 +128,11 @@ const StudentCourse = ({match}) => {
 
 
     const mainContent = () => {
-        if(loading || isEmpty(content)) {
-            <Loader />
-        }
-            else{
-            if (content.item.url)
+            if (content.item?.url)
                 return (
                     <Fragment>
                     
-                        <ReactPlayer url={content.item.url} 
+                        <ReactPlayer url={content.item?.url} 
                                         controls
                                         playbackRate = {2}
                                         width = "100%"
@@ -91,28 +141,28 @@ const StudentCourse = ({match}) => {
                         
                     </Fragment>
                 );
-            if (content && content.item.image)
+            if (content && content.item?.image)
                 return (
                     <Fragment>
-                        {content.item.image}
+                        {content.item?.image}
                     </Fragment>
 
                     );
-            else if (content && content.item.file) 
+            else if (content && content.item?.file) 
                 return (
                     <Fragment>
-                    <h2 className="text-center mb-5">{content.item.title}</h2>
+                    <h2 className="text-center mb-5">{content.item?.title}</h2>
                         {content.item.file}
                     </Fragment>);
             else 
                 return (
                     <Container 
                         style={{padding: '5vh 15vh'}}>
-                    <h2 className="text-center mb-5">{content.item.title}</h2>
-                        {content.item.content}
+                    <h2 className="text-center mb-5">{content.item?.title}</h2>
+                        {content.item?.content}
                     </Container>
                 );
-        }         
+              
     }
 
     const courseSubNavigation = () => {
@@ -150,12 +200,53 @@ const StudentCourse = ({match}) => {
         <Fragment>
         <StudentMenu title={course.title} />
         <Row id="student-page"  style={{marginRight: '0'}}>
-            <Col xs={12} md={8} style={{padding: '0'}}>
-            {mainContent()}
-            <hr/>
+            <Col xs={12} md={9} style={{paddingRight: '0px'}}>
+            <Container fluid style={{position:'relative',}}>
+                {checkBoxloading ? mainContent()
+                    : loading ? <Loader /> : mainContent()}
+
+                
+                { !isEmpty(prevContent)? 
+                    <div className="content-control-prev">
+                    <span role="button" onClick={contentPrevHandler} ><i className="fas fa-arrow-left"></i></span>
+                </div>
+                    :
+                    null
+
+                }
+                { isEmpty(prevContent) ? 
+                    isEmpty(prevModule) ?
+                        null
+                        :
+                        <div className="content-control-prev">
+                            <span role="button" onClick={contentPrevHandler} ><i className="fas fa-arrow-left"></i></span>
+                        </div>
+                        :
+                    <div className="content-control-prev">
+                        <span role="button" onClick={contentPrevHandler} ><i className="fas fa-arrow-left"></i></span>
+                    </div>
+                }
+                { isEmpty(nextContent) ? 
+                    isEmpty(nextModule) ?
+                    null
+                    :
+                    <div className="content-control-next">
+                        <span role="button" onClick={contentNextHandler}  ><i className="fas fa-arrow-right"></i></span>
+                    </div>
+                    :
+                    <div className="content-control-next">
+                        <span role="button" onClick={contentNextHandler}  ><i className="fas fa-arrow-right"></i></span>
+                    </div>
+                }
+
+                
+            </Container>
+
+        
+            <hr style={{marginTop: '0px'}} />
             {courseSubNavigation()}
             </Col>
-            <Col xs={12} md={4} style={{padding: '0'}}>
+            <Col xs={12} md={3} style={{padding: '0'}}>
             <div className="wrap" id="wrap">        
                 {modulesSidebar()}
             </div>     

@@ -6,22 +6,34 @@ const slice = createSlice({
     name : "content",
     initialState: {
         content: {},
-        loading: true,
+        loading: false,
+        checkBoxloading: false,
+        alreadySeen: [],
         lastFetch: null,
-        content_errors : ""
+        error : ""
     },
     reducers: {
-        contentRequest : (content, action) => {
+        contentRequest : (content) => {
             content.loading = true;
         },
         contentRequestFailed : (content, action) => {
-            content.loading = true;
-            content.content_errors = action.payload;
+            content.loading = false;
+            content.error = action.payload;
         },
         contentReceived : (content, action) => {
             content.content  = action.payload;
             content.loading = false;
-           
+        },
+        contentMarkedAsReadRequest : (content) => {
+            content.checkBoxloading = true;
+        },
+        contentMarkedAsReadFail : (content, action) => {
+            content.checkBoxloading = false;
+            content.error = action.payload;
+        },
+        contentMarkedAsReadSuccess : (content, action) => {
+            content.checkBoxloading = false;
+            content.alreadySeen = action.payload?.already_seen;
         }
     }
 })
@@ -29,7 +41,10 @@ const slice = createSlice({
 const {
     contentRequest,
     contentRequestFailed,
-    contentReceived
+    contentReceived,
+    contentMarkedAsReadRequest,
+    contentMarkedAsReadSuccess,
+    contentMarkedAsReadFail
 } = slice.actions;
 
 export default slice.reducer;
@@ -37,10 +52,27 @@ export default slice.reducer;
 
 // Actions Creators
 
-export const Loadcontents = url => apiRequest({
+export const loadcontents = url => apiRequest({
     url,
     onStart : contentRequest.type,
     onSuccess : contentReceived.type,
     onError : contentRequestFailed.type
 });
+
+export const markContentAsAlreadySeen = url => apiRequest({
+    url: `/users/${url}`,
+    method: "POST",
+    onStart : contentMarkedAsReadRequest.type,
+    onSuccess : contentMarkedAsReadSuccess.type,
+    onError : contentMarkedAsReadFail.type
+});
+
+export const unmarkContentAsAlreadySeen = url => apiRequest({
+    url: `/users/${url}`,
+    method: "POST",
+    onStart : contentMarkedAsReadRequest.type,
+    onSuccess : contentMarkedAsReadSuccess.type,
+    onError : contentMarkedAsReadFail.type
+});
+
 
