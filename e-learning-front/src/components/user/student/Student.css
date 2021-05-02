@@ -15,6 +15,10 @@ body {
   overflow: auto;
 }
 
+/**
+* STUDENT COURSE NAVIGATION => StudentCourse.js
+*/
+
 .content-control-prev,
 .content-control-next {
   position: absolute;

@@ -1,12 +1,8 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Accordion, Card, Col, Container, Form, Row, Spinner, Tab, Tabs } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import StudentMenu from './StudentMenu';
 import ReactPlayer from 'react-player'
-import { Link } from 'react-router-dom';
-
-
-import './Student.css';
 import { LoadCourseDetails } from '../../../store/course/details';
 import { history } from '../../../store';
 import { 
@@ -16,37 +12,63 @@ import {
 import { Loader } from '../../Layout/Loader';
 import { isEmpty } from '../../../utils/Utils';
 
+import './Student.css';
+
 const StudentCourse = ({match}) => {
 
     const {course} = useSelector(state => state.entities.courseDetails);
     const {content, loading, checkBoxloading, alreadySeen } = useSelector(state => state.entities.content);
     const { user } = useSelector(state => state.auth.auth);
 
+    const [newContent, setNewContent] = useState(true);
+
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        /**
+         * Searches for the first content marked as unread and loads the associated content
+         * if all the contents are marked as already seen, that means the course has been 100% completed
+         * and load the first content of the course
+         * newContent is a flag that allows to do this operation only after the page has been reloaded 
+         */
+        if(newContent && !isEmpty(course)){
+            let finish = true;
+            let firstContent = null;
 
-
-    const currentContent = content;
-
+            for (const module of course.modules) {
+                for (const content of module?.contents) {
+                    if(!content.already_seen.find(x => x === user.pk)) {
+                        getContent(content.id);
+                        finish = false;
+                        console.log('in', finish)
+                        break;
+                    }else if (firstContent === null) {
+                        firstContent = content;
+                    }
+                }  
+            }
+            if (finish) getContent(firstContent.id);
+            setNewContent(false);
+        }
+    },[course])
 
     useEffect(() => {
-        dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/7/`));
+        dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/`));
     },[alreadySeen])
 
-    useEffect(() => {
-        history.push(`/student/${match.params.slug}/7/`);
-        // dispatch(LoadCourseDetails(`/users/student/${match.params.slug}/7/`));
-        getContent(7);
-    },[])
 
-    const contentsList = course?.modules?.find((module) => module.id == content.module);
-    const prevContent = contentsList?.contents?.find((x) => x.order === content.order -1);
-    const nextContent = contentsList?.contents?.find((x) => x.order === content.order +1);
-    const nextModule = course?.modules?.find(module => module.order === contentsList.order + 1);
-    const prevModule = course?.modules?.find(module => module.order === contentsList.order - 1);
+
+    const contentsList = course?.modules?.find((module) => module.id == content?.module);
+    const prevContent = contentsList?.contents?.find((x) => x?.order === content?.order -1);
+    const nextContent = contentsList?.contents?.find((x) => x?.order === content?.order +1);
+    const nextModule = course?.modules?.find(module => module?.order === contentsList?.order + 1);
+    const prevModule = course?.modules?.find(module => module?.order === contentsList?.order - 1);
+
 
     const getContent = (contentId) => {
-        dispatch(loadcontents(`/users/student/${match.params.slug}/content/${contentId}/`));
+        
+        dispatch(loadcontents(`/users/student/${match.params.slug}/content/${contentId}/`))
+        .then(() => history.push(`/student/${match.params.slug}/${contentId}/`));
     } 
 
     const alreadySeenHandler = (e, id) => {
@@ -66,10 +88,9 @@ const StudentCourse = ({match}) => {
             dispatch(markContentAsAlreadySeen(`${course.slug}/${content.id}/add/`))
             .then(() => getContent(firstContentNextModule?.id));
         }
-        
     }
 
-    const contentPrevHandler = () => {        
+    const contentPreviousHandler = () => {        
         if(prevContent){
             getContent(prevContent.id)
         } else {
@@ -102,19 +123,19 @@ const StudentCourse = ({match}) => {
                                         <Form.Check 
                                         aria-label="readed"
                                         checked={item?.already_seen?.filter(x => x === user.pk) > 0}
-                                        onChange={(e) => alreadySeenHandler(e.target.checked, item.id)} />
+                                        onChange={(e) => alreadySeenHandler(e.target.checked, item.id)} 
+                                        />
                                         }
                                     </Col>
                                     <Col xs="10" 
                                     onClick={() => getContent(item.id)}
                                     >
-                                        <Link 
+                                        <div 
                                         className="nav-link" 
-                                        to={`/student/${match.params.slug}/${item.id}/`}
                                         style={{backgroundColor: match.params.content == item.id && '#eaeaea', padding:'20px'}}
                                         >
                                         {item.item.title} 
-                                        </Link>
+                                        </div>
                                     </Col>
                                     </Row>
                                 </Accordion.Collapse>
@@ -157,7 +178,7 @@ const StudentCourse = ({match}) => {
             else 
                 return (
                     <Container 
-                        style={{padding: '5vh 15vh'}}>
+                        style={{padding: '5vh 15vh', height: '90vh', overflowY: 'scroll'}}>
                     <h2 className="text-center mb-5">{content.item?.title}</h2>
                         {content.item?.content}
                     </Container>
@@ -201,38 +222,20 @@ const StudentCourse = ({match}) => {
         <StudentMenu title={course.title} />
         <Row id="student-page"  style={{marginRight: '0'}}>
             <Col xs={12} md={9} style={{paddingRight: '0px'}}>
-            <Container fluid style={{position:'relative',}}>
+            <Container fluid style={{position:'relative', height: '90vh'}}>
                 {checkBoxloading ? mainContent()
                     : loading ? <Loader /> : mainContent()}
 
                 
-                { !isEmpty(prevContent)? 
-                    <div className="content-control-prev">
-                    <span role="button" onClick={contentPrevHandler} ><i className="fas fa-arrow-left"></i></span>
-                </div>
-                    :
-                    null
-
-                }
-                { isEmpty(prevContent) ? 
-                    isEmpty(prevModule) ?
-                        null
-                        :
-                        <div className="content-control-prev">
-                            <span role="button" onClick={contentPrevHandler} ><i className="fas fa-arrow-left"></i></span>
-                        </div>
-                        :
-                    <div className="content-control-prev">
-                        <span role="button" onClick={contentPrevHandler} ><i className="fas fa-arrow-left"></i></span>
-                    </div>
-                }
-                { isEmpty(nextContent) ? 
-                    isEmpty(nextModule) ?
+                {isEmpty(prevContent) && isEmpty(prevModule) ?
                     null
                     :
-                    <div className="content-control-next">
-                        <span role="button" onClick={contentNextHandler}  ><i className="fas fa-arrow-right"></i></span>
+                    <div className="content-control-prev">
+                        <span role="button" onClick={contentPreviousHandler} ><i className="fas fa-arrow-left"></i></span>
                     </div>
+                }
+                { isEmpty(nextContent) && isEmpty(nextModule) ?
+                    null
                     :
                     <div className="content-control-next">
                         <span role="button" onClick={contentNextHandler}  ><i className="fas fa-arrow-right"></i></span>

@@ -36,7 +36,7 @@ urlpatterns = [
          unmark_content_as_already_seen),
 
     # Students interfaces
-    path('student/<slug:course_slug>/<int:content_item>/',
+    path('student/<slug:course_slug>/',
          student_course_detail),
     path('student/<slug:course_slug>/content/<int:content_item>/', get_content_by_id),
     #     path('student/<slug:course_slug>/', student_get_modules_list),

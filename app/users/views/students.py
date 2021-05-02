@@ -42,7 +42,7 @@ def get_favorite_courses(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def student_course_detail(request, course_slug, content_item):
+def student_course_detail(request, course_slug):
     course = get_object_or_404(Course, slug=course_slug)
     is_enrolled = course.students.filter(id=request.user.id).exists()
 
