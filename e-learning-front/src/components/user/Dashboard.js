@@ -30,7 +30,8 @@ const Dashboard = () => {
         return (
             <Fragment>
             <p style={{fontSize: "20px", fontWeight: "400"}}>{countFavoris} cours dans les favoris</p>
-            {favorisItems && favorisItems.map( course => (
+            { loading ? <Loader />
+            : countFavoris > 0 ? favorisItems.map( course => (
                 <Card key={course.id} style={{flexDirection: 'row'}} className="mb-2">
                 <Card.Img variant="top" src={course.image} style={{width:'20%'}}/>
                 <Card.Body style={{width:'60%'}}>
@@ -55,40 +56,13 @@ const Dashboard = () => {
                 </Card.Body>
                 </Card>
                 
-            ))}
+            ))
+            :
+            <PageLayout title="Aucun contenu" />
+            }
             </Fragment>
         )
     }
-
-
-    //  const favoriteCourse = () => {
-    //     return (
-    //         <Fragment>
-    //         <h2>Mes favoris</h2>
-
-    //         {loading ? <Loader />
-    //         : favorisItems.length > 0  ? favorisItems.map( course => (
-    //             <Card key={course.id} style={{flexDirection: 'row'}} className="mb-2">
-    //             <Card.Img variant="top" src={course.image} style={{width:'30%'}}/>
-    //             <Card.Body>
-    //             <Card.Title className="text-capitalize" >{course.title}</Card.Title>
-    //                 <Card.Text>{course.overview}</Card.Text>
-    //                 <Button variant="danger" 
-    //                         style={{float: 'right'}} 
-    //                         onClick={() => removefromFavorisHandler(course)}>
-    //                         Arreter ce cours    
-    //                 </Button>
-    //             </Card.Body>
-
-    //             </Card>
-                
-    //         ))
-    //         :
-    //         <PageLayout title="Aucun contenu" />
-    //         }
-    //         </Fragment>
-    //     )
-    // }
 
 
      const archivedCourses = () => {

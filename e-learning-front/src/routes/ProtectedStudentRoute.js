@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useState} from 'react'
-import { useSelector, useStore } from 'react-redux';
-import { Redirect, Route, useHistory} from 'react-router-dom';
-import { isEmpty } from '../utils/Utils';
+import React, { Fragment} from 'react'
+import { useSelector } from 'react-redux';
+import { Redirect, Route} from 'react-router-dom';
 
 
 
@@ -18,6 +17,7 @@ const ProtectedStudentRoute = ({component:Component, ...rest}) => {
         <Fragment>
             <Route 
                 {...rest}
+                
                 render={props => {
                     if (!isAuthenticated) {
                             return <Redirect to="/login" />

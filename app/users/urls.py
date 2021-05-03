@@ -5,7 +5,7 @@ from .views.users import user
 from .views.teachers import (
     teacher_detail,
     teacher_list,
-
+    teacher_list_courses,
     modules_list,
     module_detail,
     content_list_by_module,
@@ -50,6 +50,7 @@ urlpatterns = [
     # teachers interfaces
 
     # teachers
+    path('teacher/courses/', teacher_list_courses),
     path('teachers/', teacher_list),
     path('teacher/<int:id>/', teacher_detail),
 

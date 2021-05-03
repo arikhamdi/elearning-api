@@ -45,21 +45,23 @@ def teacher_detail(request, id):
 # Teachers DashBoard
 # Courses
 
-# @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-# def teacher_dashboard(request):
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
+def teacher_list_courses(request):
 
-#     if request.method == 'GET':
-#         courses = Course.objects.filter(owner=request.user)
-#         serializer = CourseSerializer(courses, many=True)
-#         return Response(serializer.data)
+    if request.user.is_teacher:
+        if request.method == 'GET':
+            courses = Course.objects.filter(owner=request.user)
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
-#     elif request.method == 'POST':
-#         serializer = CourseSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save(owner=request.user)
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'POST':
+            serializer = CourseSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(owner=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])

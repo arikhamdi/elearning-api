@@ -1,0 +1,21 @@
+.teacher-post {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  color: #000;
+  width: 95%;
+  height: 25vh;
+  margin: 0 auto;
+  padding: 0 33px;
+  box-shadow: 1px 1px 5px -2px rgba(0, 0, 0, 0.36);
+  -webkit-box-shadow: 1px 1px 5px -2px rgba(0, 0, 0, 0.36);
+  -moz-box-shadow: 1px 1px 5px -2px rgba(0, 0, 0, 0.36);
+}
+
+.teacher-post:hover {
+  box-shadow: 1px 1px 10px -2px rgba(0, 0, 0, 0.36);
+  -webkit-box-shadow: 1px 1px 10px -2px rgba(0, 0, 0, 0.36);
+  -moz-box-shadow: 1px 1px 10px -2px rgba(0, 0, 0, 0.36);
+}

@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Accordion, Card, Col, Container, Form, Row, Spinner, Tab, Tabs } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import StudentMenu from './StudentMenu';
 import ReactPlayer from 'react-player'
 import { LoadCourseDetails } from '../../../store/course/details';
 import { history } from '../../../store';
@@ -47,7 +46,7 @@ const StudentCourse = ({match}) => {
                     }
                 }  
             }
-            if (finish) getContent(firstContent.id);
+            if (finish) getContent(firstContent?.id);
             setNewContent(false);
         }
     },[course])
@@ -219,7 +218,6 @@ const StudentCourse = ({match}) => {
     return (
 
         <Fragment>
-        <StudentMenu title={course.title} />
         <Row id="student-page"  style={{marginRight: '0'}}>
             <Col xs={12} md={9} style={{paddingRight: '0px'}}>
             <Container fluid style={{position:'relative', height: '90vh'}}>

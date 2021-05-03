@@ -27,22 +27,24 @@ from courses.models import (Course, Module, Content)
 def get_favorite_courses(request):
     courses = Course.published.filter(students__in=[request.user])
 
-    if request.user.is_teacher:
-        if request.method == 'GET':
-            courses = Course.objects.filter(owner=request.user)
-            serializer = CourseSerializer(courses, many=True)
-            return Response(serializer.data)
+    # if request.user.is_teacher:
+    #     if request.method == 'GET':
+    #         courses = Course.objects.filter(owner=request.user)
+    #         serializer = CourseSerializer(courses, many=True)
+    #         return Response(serializer.data)
 
-        elif request.method == 'POST':
-            serializer = CourseSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save(owner=request.user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     elif request.method == 'POST':
+    #         serializer = CourseSerializer(data=request.data)
+    #         if serializer.is_valid():
+    #             serializer.save(owner=request.user)
+    #             return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
         serializer = CourseSerializer(courses, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(['GET'])
@@ -54,7 +56,7 @@ def student_course_detail(request, course_slug):
     if is_enrolled:
         if request.method == 'GET':
             serializer = EnrolledCourseSerializer(course)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(status=status.HTTP_403_FORBIDDEN)
 
@@ -69,7 +71,7 @@ def student_get_modules_list(request, course_slug):
     if is_enrolled:
         if request.method == 'GET':
             serializer = ModuleSerializer(modules)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(status=status.HTTP_403_FORBIDDEN)
 
@@ -85,7 +87,7 @@ def get_content_by_id(request, course_slug, content_item):
     if is_enrolled:
         if request.method == 'GET':
             serializer = ContentSerializer(content)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(status=status.HTTP_403_FORBIDDEN)
 
@@ -98,8 +100,9 @@ def add_course_to_user_favoris(request, course_slug):
     if request.method == 'POST':
         if not course.students.filter(id=request.user.id).exists():
             course.students.add(request.user)
-    serializer = CourseSerializer(course)
-    return Response(serializer.data)
+        serializer = CourseSerializer(course)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

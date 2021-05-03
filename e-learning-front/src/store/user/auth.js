@@ -11,7 +11,7 @@ const slice = createSlice({
         loading : false,
         isAuthenticated: false,
         isSubscribed: false,
-        isRegistered: false,
+        isTeacher: false,
         error: [],
     },
     reducers: {
@@ -36,13 +36,15 @@ const slice = createSlice({
         getCurrentUserSuccess: (auth, action) => {
             auth.user = action.payload;
             auth.isAuthenticated = true;
+            auth.isTeacher = action.payload.is_teacher;
             localStorage.setItem("user", JSON.stringify(auth.user));
         },
         setCurrentUserSuccess: (auth, action) => {
             auth.user = action.payload;
-            const subscription  = new Date(action.payload.subscribed* 1000);
-            const jsFormatendOfSubscribe = subscription .toUTCString();
-            console.log(subscription)
+            // const subscription  = new Date(action.payload.subscribed* 1000);
+            // const jsFormatendOfSubscribe = subscription .toUTCString();
+            // console.log(subscription)
+            auth.isTeacher = action.payload.is_teacher;
             auth.isSubscribed =  (action.payload.subscribed * 1000) > Date.now()
             auth.isAuthenticated = true;
         },
