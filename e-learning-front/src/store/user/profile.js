@@ -43,8 +43,8 @@ export const updateProfile = userData => async dispatch => {
 };
 
 const putUpdatedUserInfoToServer = userData => apiRequest({
-    url : "/auth/user/",
-    method: "PUT",
+    url : "/users/user/",
+    method: "PATCH",
     data: userData,
     onStart : profileRequest.type,
     onSuccess : profileRequestSuccess.type,

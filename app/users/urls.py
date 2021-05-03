@@ -1,5 +1,7 @@
 from django.urls import path
 
+from .views.users import user
+
 from .views.teachers import (
     teacher_detail,
     teacher_list,
@@ -18,14 +20,17 @@ from .views.students import (
     add_course_to_user_favoris,
     remove_course_to_user_favoris,
     mark_content_as_already_seen,
-    unmark_content_as_already_seen
+    unmark_content_as_already_seen,
+    user_has_subscribe
 )
 
 app_name = 'users'
 
 urlpatterns = [
 
-    path('dashboard/', get_favorite_courses),
+    path('user/', user),
+
+    path('get_favorite_courses/', get_favorite_courses),
 
     path('<slug:course_slug>/favoris-add/', add_course_to_user_favoris),
     path('<slug:course_slug>/favoris-remove/', remove_course_to_user_favoris),
@@ -41,7 +46,7 @@ urlpatterns = [
     path('student/<slug:course_slug>/content/<int:content_item>/', get_content_by_id),
     #     path('student/<slug:course_slug>/', student_get_modules_list),
 
-
+    path('subscribe/<str:duration>/', user_has_subscribe),
     # teachers interfaces
 
     # teachers

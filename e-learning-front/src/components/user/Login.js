@@ -27,7 +27,12 @@ const Login = ({history}) => {
         }
 
         if (isAuthenticated) {
-            history.push('/');
+            const next = history?.location?.search;
+            if (next) {
+                history.push(next.split("=")[1]);
+            }else {
+                history.push('/');
+            }
         }
 
     }, [dispatch, isAuthenticated, error])

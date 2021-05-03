@@ -192,6 +192,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # configure DRF
 REST_FRAMEWORK = {
+    'DATE_FORMAT': '%s',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),

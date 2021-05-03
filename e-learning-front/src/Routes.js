@@ -31,6 +31,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { API } from './config';
 import axios from 'axios';
+import Subscribe from './components/user/Subscribe';
+import SubscribeConfirm from './components/user/SubscribeConfirm';
 axios.defaults.baseURL = API;
 
 const Routes = () => {
@@ -57,11 +59,13 @@ const Routes = () => {
                 <Route path="/password-reset/confirm/:token" component={PasswordResetConfirm} />
                 <Route exact path="/password-reset/success" component={PasswordResetSuccess} />
                 <Route exact path="/favoris" component={Favoris} />
+                <Route exact path="/subscribe" component={Subscribe} />
                 <ProtectedStudentRoute path="/student/:slug" component={StudentCourse} />
                 <ProtectedStudentRoute path="/student/:slug/:content" component={StudentCourse} />
                 <ProtectedRoute exact path="/profile" component={UserPersonalInfos} />
                 <ProtectedRoute path="/profile/auth" component={PasswordChange} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+                <ProtectedRoute exact path="/subscribe-confirm" component={SubscribeConfirm} />
                 <Route exact path='/registration-success' component={registrationSuccess}/>
                 <Route path='/forbidden' component={Forbidden} />
                 <Route path='*' exact component={NotFound} />

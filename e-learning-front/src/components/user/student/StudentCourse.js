@@ -37,7 +37,7 @@ const StudentCourse = ({match}) => {
 
             for (const module of course.modules) {
                 for (const content of module?.contents) {
-                    if(!content.already_seen.find(x => x === user.pk)) {
+                    if(!content.already_seen.find(x => x === user.id)) {
                         getContent(content.id);
                         finish = false;
                         console.log('in', finish)
@@ -122,7 +122,7 @@ const StudentCourse = ({match}) => {
                                         :
                                         <Form.Check 
                                         aria-label="readed"
-                                        checked={item?.already_seen?.filter(x => x === user.pk) > 0}
+                                        checked={item?.already_seen?.filter(x => x === user.id) > 0}
                                         onChange={(e) => alreadySeenHandler(e.target.checked, item.id)} 
                                         />
                                         }

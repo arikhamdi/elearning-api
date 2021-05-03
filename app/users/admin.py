@@ -22,6 +22,7 @@ class UserAdmin(BaseUserAdmin):
                 'is_staff',
                 'is_superuser',
                 'is_teacher',
+                'subscribed',
                 'groups',
                 'user_permissions',
             )}

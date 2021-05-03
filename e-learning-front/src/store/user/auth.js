@@ -10,12 +10,12 @@ const slice = createSlice({
         user : {},
         loading : false,
         isAuthenticated: false,
-        isSubscribed: true,
+        isSubscribed: false,
         isRegistered: false,
         error: [],
     },
     reducers: {
-        authRequest : (auth, action) => {
+        authRequest : (auth) => {
             auth.loading = true;
         },
         authRequestFail : (auth, action) => {
@@ -29,7 +29,7 @@ const slice = createSlice({
             setAxiosAuthToken(token);
             localStorage.setItem("token", token);
         },
-        registrationSuccess : (auth, action) => {
+        registrationSuccess : (auth) => {
             auth.loading = false;
             auth.isRegistered = true;
         },
@@ -40,18 +40,27 @@ const slice = createSlice({
         },
         setCurrentUserSuccess: (auth, action) => {
             auth.user = action.payload;
+            const subscription  = new Date(action.payload.subscribed* 1000);
+            const jsFormatendOfSubscribe = subscription .toUTCString();
+            console.log(subscription)
+            auth.isSubscribed =  (action.payload.subscribed * 1000) > Date.now()
             auth.isAuthenticated = true;
         },
         logoutSuccess : (auth, action) => {
             auth.loading = false;
         },
-        unsetCurrentUserSuccess : (auth, action) => {
+        unsetCurrentUserSuccess : (auth) => {
             setAxiosAuthToken("");
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             localStorage.removeItem("favoris");
             auth.user = null;
             auth.isAuthenticated = false;
+        },
+        userSubscribed : (auth, action) => {
+            auth.loading = false;
+            auth.user = action.payload;
+            localStorage.setItem("user", JSON.stringify(auth.user));
         }
     }
 });
@@ -64,7 +73,8 @@ const {
     getCurrentUserSuccess,
     setCurrentUserSuccess,
     unsetCurrentUserSuccess,
-    logoutSuccess
+    logoutSuccess,
+    userSubscribed
 } = slice.actions;
 
 export default slice.reducer;
@@ -99,8 +109,15 @@ export const logout = session => async dispatch => {
     }
 }
 
-
 export const getCurrentUser = () => apiRequest({
+    url : "/users/user/",
+    onStart : authRequest.type,
+    onSuccess : getCurrentUserSuccess.type,
+    onError : authRequestFail.type
+
+})
+
+export const getCurrentUserOld = () => apiRequest({
     url : "/auth/user/",
     onStart : authRequest.type,
     onSuccess : getCurrentUserSuccess.type,
@@ -132,5 +149,12 @@ export const registration = userData => apiRequest({
     data: userData,
     onStart : authRequest.type,
     onSuccess : registrationSuccess.type,
+    onError : authRequestFail.type 
+})
+
+export const subscribe = duration => apiRequest({
+    url: `/users/subscribe/${duration}`,
+    onStart : authRequest.type,
+    onSuccess : userSubscribed.type,
     onError : authRequestFail.type 
 })

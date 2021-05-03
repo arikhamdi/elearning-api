@@ -13,7 +13,8 @@ const ProtectedRoute = ({component:Component, ...rest}) => {
                 {...rest}
                 render={props => {
                     if (isEmpty(localStorage.getItem("token"))) {
-                            return <Redirect to="/login" />
+                        const redirectAfterLogin = rest.location.pathname;
+                            return <Redirect to={`/login?next=${redirectAfterLogin}`} />
                     }
                     return <Component {...props} />
                 }}

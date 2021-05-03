@@ -29,9 +29,6 @@ const CourseDetails = ({match}) => {
     }, [dispatch, isSubscribed])
 
 
-console.log('favoriteLoading', favoriteLoading)
-
-
     const addToFavorisHandler = () => {
         if(isAuthenticated) {
            return  dispatch(addItemToFavorisLoggedInUser(course));
@@ -44,8 +41,6 @@ console.log('favoriteLoading', favoriteLoading)
          }
         dispatch(removeItemFromFavoris(course));
     }
-
-
 
     const displayCourseInfos = () => (
         <Fragment>
@@ -101,6 +96,7 @@ console.log('favoriteLoading', favoriteLoading)
                     <Button 
                     className="btn btn-info mb-2 form-control" 
                     variant="danger"
+                    href="/subscribe"
                     >
                         Abonnez-vous
                     </Button>

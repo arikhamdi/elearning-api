@@ -26,7 +26,11 @@ const  Home = ({match}) => {
         <Layout title="Soyez ambitieux" 
                 description="L'apprentissage vous permet de rester en tête." 
                 image="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.irlabnp.org%2Fwp-content%2Fuploads%2F2015%2F11%2Fschoolgirl-1.png&f=1&nofb=1"
-                className="container">
+                className="container"
+                button_link="/subscribe"
+                button_content="Abonnez-vous"
+                align="right"
+                >
         <SubNav active={match.params.subject}/>
         <CardDeck>
         {loading ? <Loader/> : errors ? <NotFoundSmall /> :

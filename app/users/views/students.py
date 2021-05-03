@@ -1,4 +1,7 @@
 from rest_framework.response import Response
+from datetime import datetime
+import time
+from dateutil.relativedelta import relativedelta
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.decorators import api_view, permission_classes
@@ -13,6 +16,8 @@ from courses.serializers import (
     EnrolledCourseSerializer,
     CourseSerializer
 )
+
+from users.serializers import UserSerializer
 
 from courses.models import (Course, Module, Content)
 
@@ -118,8 +123,9 @@ def mark_content_as_already_seen(request, course_slug, content_item):
     if request.method == 'POST':
         if not content.already_seen.filter(id=request.user.id).exists():
             content.already_seen.add(request.user)
-    serializer = ContentSerializer(content)
-    return Response(serializer.data)
+        serializer = ContentSerializer(content)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -131,5 +137,31 @@ def unmark_content_as_already_seen(request, course_slug, content_item):
     if request.method == 'POST':
         if content.already_seen.filter(id=request.user.id).exists():
             content.already_seen.remove(request.user)
-    serializer = ContentSerializer(content)
-    return Response(serializer.data)
+        serializer = ContentSerializer(content)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_has_subscribe(request, duration):
+
+    if request.method == "GET":
+        if request.user.subscribed == None or request.user.subscribed.replace(tzinfo=None) < datetime.now():
+            if duration == 'month':
+                request.user.subscribed = datetime.now() + relativedelta(months=1)
+            if duration == 'year':
+                request.user.subscribed = datetime.now() + relativedelta(years=1)
+        else:
+            if duration == 'month':
+                request.user.subscribed = request.user.subscribed + \
+                    relativedelta(months=1)
+            if duration == 'year':
+                request.user.subscribed = request.user.subscribed + \
+                    relativedelta(years=1)
+        request.user.save()
+        print('request.user.subscribed', int(time.mktime(
+            request.user.subscribed.timetuple())) * 1000)
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
