@@ -25,7 +25,7 @@ const Signup = ({history}) => {
             setErrors({...error});
         }
         if (isRegistered) {
-            history.push('/registration-success')
+            history.push('/registration-success');
         }
     }, [dispatch, isRegistered, error])
 

@@ -6,12 +6,11 @@ from .views.teachers import (
     teacher_detail,
     teacher_list,
     teacher_list_courses,
-    teacher_add_new_course,
-    modules_list,
-    module_detail,
+    teacher_modules_list,
+    teacher_module_details,
     content_list_by_module,
     content_detail,
-    course_detail
+    teacher_course_detail
 )
 from .views.students import (
     get_favorite_courses,
@@ -56,16 +55,15 @@ urlpatterns = [
 
 
     path('teacher/courses/', teacher_list_courses),
-    path('teacher/courses/add', teacher_add_new_course),
 
     path('teacher/<slug:course_slug>/',
-         course_detail, name="courses-detail"),
+         teacher_course_detail, name="courses-detail"),
 
     # Modules
     path('teacher/<slug:course_slug>/modules/',
-         modules_list, name='modules-list'),
+         teacher_modules_list, name='modules-list'),
     path('teacher/module/<int:module_id>/',
-         module_detail, name="module-detail"),
+         teacher_module_details, name="module-detail"),
 
 
     # Contents

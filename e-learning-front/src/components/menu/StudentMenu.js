@@ -13,7 +13,7 @@ const StudentMenu = () => {
 
     return (
         <Navbar  expand="lg" bg="dark" variant="dark">
-        <LogoutModal display={show}/>
+        <LogoutModal display={show} handleClose={() => setShow(false)}/>
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
             href="/"

@@ -12,8 +12,8 @@ const TeacherMenu = () => {
     const { user } = useSelector(state => state.auth.auth);
 
     return (
-        <Navbar className="bg-light justify-content-between" >
-        <LogoutModal display={show}/>
+        <Navbar className="bg-white justify-content-between" >
+        <LogoutModal display={show} handleClose={() => setShow(false)}/>
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
             href="/"

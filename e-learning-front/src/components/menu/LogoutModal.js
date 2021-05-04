@@ -5,14 +5,17 @@ import { history } from '../../store';
 import {logout} from '../../store/user/auth';
 
 
-const LogoutModal = ({display}) => {
+const LogoutModal = ({handleClose, display}) => {
 
     
 
     const [show, setShow] = useState(false);
     const dispatch = useDispatch();
 
-    const logoutModalClosehandler = () => setShow(false);
+    const logoutModalClosehandler = () => {
+        handleClose();
+        setShow(false);
+    }
 
     const logoutHandler = session => {
         dispatch(logout(session))
@@ -57,4 +60,4 @@ const LogoutModal = ({display}) => {
 
 }
 
-export default LogoutModal
+export default LogoutModal;

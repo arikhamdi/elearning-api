@@ -45,7 +45,7 @@ def teacher_detail(request, id):
 # Teachers DashBoard
 # Courses
 
-@api_view(['GET'])
+@api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
 def teacher_list_courses(request):
 
@@ -54,29 +54,36 @@ def teacher_list_courses(request):
             courses = Course.objects.filter(owner=request.user)
             serializer = CourseSerializer(courses, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+    if request.method == 'POST':
+        serializer = CourseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user,
+                            subject_id=request.data['subject'])
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-def teacher_add_new_course(request):
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
+# def teacher_add_new_course(request):
 
-    if request.user.is_teacher:
-        if request.method == 'POST':
-            serializer = CourseSerializer(data=request.data)
-
-            if serializer.is_valid():
-                serializer.save(owner=request.user,
-                                subject_id=request.data['subject'])
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+#     if request.user.is_teacher:
+#         if request.method == 'POST':
+#             serializer = CourseSerializer(data=request.data)
+#             if serializer.is_valid():
+#                 serializer.save(owner=request.user,
+#                                 subject_id=request.data['subject'])
+#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-def course_detail(request, course_slug):
+def teacher_course_detail(request, course_slug):
     course = get_object_or_404(Course, slug=course_slug)
 
     if request.method == 'GET':
@@ -99,7 +106,7 @@ def course_detail(request, course_slug):
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-def modules_list(request, course_slug):
+def teacher_modules_list(request, course_slug):
     course = get_object_or_404(Course, slug=course_slug)
 
     if request.method == 'GET':
@@ -116,7 +123,7 @@ def modules_list(request, course_slug):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def module_detail(request, module_id):
+def teacher_module_details(request, module_id):
     module = get_object_or_404(Module, id=module_id)
 
     if request.method == 'GET':

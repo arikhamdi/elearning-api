@@ -106,7 +106,7 @@ const StudentCourse = ({match}) => {
                     module => (
                         <div key={module.id} style={{cursor: 'pointer', overflowX: 'hidden'}}>
                             <Accordion.Toggle as={Card.Header} eventKey={module.id} style={{textTransform: "capitalize", padding:'30px'}}>
-                            Section {module.id} : {module.title}
+                            Section {module.order} : {module.title}
                             </Accordion.Toggle>
                             {module.contents && module.contents.map(item => (
                                 <Accordion.Collapse 

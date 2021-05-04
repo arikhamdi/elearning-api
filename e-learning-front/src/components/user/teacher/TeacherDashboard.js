@@ -1,16 +1,22 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Card, Col, Row, Tab, Tabs } from 'react-bootstrap'
+import { Button, Card, Col, Row, Tab, Tabs, Modal } from 'react-bootstrap'
 import { LayoutFluid } from '../../Layout/Layout'
 
 import './teacher.css';
 import { Loader } from '../../Layout/Loader';
 import PageLayout from '../../Layout/PageLayout';
 import { LoadCourses } from '../../../store/course/list';
+import { deleteCourse } from '../../../store/course/details';
+import { history } from '../../../store';
+import DeleteModal from './DeleteModal';
 
 const TeacherDashboard = () => {
-    const { list, loading } = useSelector(state => state.entities.courses);
 
+    const [key, setKey] = useState(history.location.hash ? history.location.hash : '#published');
+    const [show, setShow] = useState(false);
+    const [courseToDelete, setCourseToDelete] = useState("");
+    const { list, loading } = useSelector(state => state.entities.courses);
 
     const publishedCourses = list?.filter(course => course.status === "published");
     const draftCourses = list?.filter(course => course.status === "draft");
@@ -20,6 +26,12 @@ const TeacherDashboard = () => {
     useEffect(() => {
         dispatch(LoadCourses('/users/teacher/courses/'));
     }, [dispatch])
+
+    const deleteModalOpenhandler = courseSlug => {
+        setCourseToDelete(courseSlug);
+        setShow(true);
+    }
+
 
     const publishedCourse = () => {
         return (
@@ -82,24 +94,36 @@ const TeacherDashboard = () => {
                 </Card.Body>
                 <Card.Body className="text-left" style={{width:'20%'}}>
                     <Button 
-                    variant="dark" 
+                    variant="primary" 
                     className="mb-2 form-control"
                     href={`/teacher/course/${course.slug}/edit`}
                     >
                             Editer ce cours   
                     </Button>
                     <Button 
+                     variant="success"
+                     className="mb-2 form-control"
+                     >
+                            Publier ce cours    
+                    </Button>
+                    {course?.students?.length > 0  ?
+                        <Button 
                     variant="dark" 
                     className="mb-2 form-control"
                     >
                             Archiver ce cours   
                     </Button>
-                     <Button 
-                     variant="danger"
-                     className="mb-2 form-control"
-                     >
-                            Publier ce cours    
+                    :
+                    <Button 
+                    variant="danger" 
+                    className="mb-2 form-control"
+                    onClick={() => deleteModalOpenhandler(course.slug)}
+                    >
+                            Supprimer ce cours   
                     </Button>
+                    }
+                    
+                     
                 </Card.Body>
                 </Card>
                 
@@ -117,6 +141,15 @@ const TeacherDashboard = () => {
             title="Teacher"
             className="container"
             >
+
+            <DeleteModal 
+            show={show} 
+            url={`/users/teacher/${courseToDelete}`} 
+            type={'course'} redirectTo={'/teacher/course#draft'} 
+            handleClose={() => 
+            setShow(false)} 
+
+            />
             <Row className="teacher-post row mb-5">
             <Col xs="12" md="8">
                     <h5 
@@ -142,12 +175,15 @@ const TeacherDashboard = () => {
               
             </Row>
 
-            <Tabs defaultActiveKey="favoris">
+            <Tabs 
+            activeKey={key}
+            onSelect={(k) => setKey(k)}
+            >
 
-                <Tab eventKey="favoris" title="Cours publié">
+                <Tab eventKey="#published" title="Cours publié">
                     {publishedCourse()}
                 </Tab> 
-                <Tab eventKey="archives" title="Brouillon">
+                <Tab eventKey="#draft" title="Brouillon">
                    {unpublishedCourse()}
                 </Tab>
             </Tabs>

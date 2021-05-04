@@ -7,7 +7,8 @@ const slice = createSlice({
     initialState : {
         list: [],
         loading: false,
-        lastFetch: null
+        lastFetch: null,
+        error : {}
     },
     reducers: {
         coursesRequested : (courses, action) => {
@@ -20,6 +21,11 @@ const slice = createSlice({
         coursesReceived : (courses, action) => {
             courses.list = action.payload;
             courses.loading = false;
+        },
+        coursesCreatedSuccess : (courses, action) => {
+            courses.list = action.payload;
+            courses.error = null;
+            courses.loading = false;
         }
     }
     
@@ -28,7 +34,8 @@ const slice = createSlice({
 const {
     coursesReceived,
     coursesRequested,
-    coursesRequestFailed
+    coursesRequestFailed,
+    coursesCreatedSuccess
 } = slice.actions;
 
 export default slice.reducer;
@@ -43,10 +50,10 @@ export const LoadCourses = url => apiRequest({
 });
 
 export const addNewCourse = course => apiRequest({
-    url : "/users/teacher/courses/add",
+    url : "/users/teacher/courses/",
     method: "POST",
     data: course,
     onStart : coursesRequested.type,
-    onSuccess : coursesReceived.type,
+    onSuccess : coursesCreatedSuccess.type,
     onError : coursesRequestFailed.type
 });

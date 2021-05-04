@@ -16,7 +16,7 @@ const MainMenu = () => {
 
     return (
         <Navbar id="main-menu"  variant="light" expand="lg"   >
-            <LogoutModal display={show}/>
+            <LogoutModal display={show} handleClose={() => setShow(false)}/>
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
             href="/"

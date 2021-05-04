@@ -40,7 +40,7 @@ class Course(models.Model):
     image = models.URLField()
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     overview = models.TextField()
-    publish = models.DateTimeField(default=timezone.now)
+    publish = models.DateTimeField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(
@@ -64,7 +64,7 @@ class Course(models.Model):
         return self.title
 
     class Meta:
-        ordering = ('-publish',)
+        ordering = ('-publish', '-created')
         verbose_name = 'cours'
         verbose_name_plural = 'cours'
 
@@ -73,13 +73,13 @@ class Module(models.Model):
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, related_name='modules')
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    overview = models.TextField(blank=True)
     order = models.PositiveIntegerField(blank=True)
     publish = models.DateTimeField(default=timezone.now)
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
-        default='draft')
+        default='publish')
 
     objects = models.Manager()
     published = PublishedManager()
