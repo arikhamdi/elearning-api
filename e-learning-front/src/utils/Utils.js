@@ -25,9 +25,16 @@ export const showSuccess = (message) => {
     )
 }
 
-export const api = axios.create({
-    baseURL: API,
-    headers: {
-        'Content-Type': 'application/json'
-    },
-})
+
+/**
+ *  Active menu item on hover
+ * @param {*} e 
+ */
+
+export const setActiveHandler = e => {
+    e.target.style.color = "red"
+}
+
+export const unSetActiveHandler = e => {
+    e.target.style.color = ""
+}

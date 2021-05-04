@@ -7,7 +7,8 @@ from .models import File, Image, Subject, Course, Module, Text, Video, Content
 class OwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['id', 'name', 'email', 'last_login', 'date_joined']
+        fields = ['id', 'first_name', 'last_name',
+                  'email', 'last_login', 'date_joined']
         read_only_fields = ('id',)
 
 

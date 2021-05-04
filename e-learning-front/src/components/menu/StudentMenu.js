@@ -3,6 +3,7 @@ import { Nav, Navbar, Dropdown } from 'react-bootstrap'
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import LogoutModal from './LogoutModal';
+import {setActiveHandler, unSetActiveHandler} from '../../utils/Utils'
 
 const StudentMenu = () => {
     const [show, setShow] = useState(false);
@@ -10,21 +11,14 @@ const StudentMenu = () => {
     const { user } = useSelector(state => state.auth.auth);
     const {title} = useSelector(state => state.entities.courseDetails.course) 
 
-    const isActive = (active, e) => { 
-        if (active)
-            e.target.style.color = 'red';   
-        else
-            e.target.style.color = '';
-    }
-
     return (
         <Navbar  expand="lg" bg="dark" variant="dark">
         <LogoutModal display={show}/>
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
             href="/"
-            onMouseEnter={isActive.bind(this,true)} 
-            onMouseLeave={isActive.bind(this,false)} >
+            onMouseEnter={setActiveHandler} 
+            onMouseLeave={unSetActiveHandler} >
             <span style={{color:'red'}}>E</span>learning
         </Nav.Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -36,8 +30,8 @@ const StudentMenu = () => {
             <Dropdown alignRight>
                     <Dropdown.Toggle 
                         as={Nav.Link} 
-                        onMouseEnter={isActive.bind(this,true)} 
-                        onMouseLeave={isActive.bind(this,false)}
+                        onMouseEnter={setActiveHandler} 
+                        onMouseLeave={unSetActiveHandler}
                     >
                     <i className="fas fa-user-graduate"></i>
                         </Dropdown.Toggle>

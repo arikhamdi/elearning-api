@@ -1,31 +1,18 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import { useDispatch, useSelector} from 'react-redux';
-import {logout} from '../../store/user/auth';
-
-import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl , Modal} from 'react-bootstrap';
-
-import '../../Styles.css';
+import { useSelector} from 'react-redux';
+import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
 import ShowFavorisIcone from './menuFavoris';
 import LogoutModal from './LogoutModal';
+import {setActiveHandler, unSetActiveHandler} from '../../utils/Utils'
+import '../../Styles.css';
 
-const MainMenu = ({history}) => {
+const MainMenu = () => {
 
-    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const { user, isAuthenticated, isTeacher} = useSelector(state => state.auth.auth);
     const { subjects }  = useSelector(state => state.entities);
-
-
-
-    const isActive = (active, e) => { 
-        if (active)
-            e.target.style.color = 'red';   
-        else
-            e.target.style.color = '';
-    }
-
 
     return (
         <Navbar id="main-menu"  variant="light" expand="lg"   >
@@ -33,8 +20,8 @@ const MainMenu = ({history}) => {
         <Nav.Link 
             className="navbar-brand mb-0 h1" 
             href="/"
-            onMouseEnter={isActive.bind(this,true)} 
-            onMouseLeave={isActive.bind(this,false)} >
+            onMouseEnter={setActiveHandler} 
+            onMouseLeave={unSetActiveHandler} >
             <span style={{color:'red'}}>E</span>learning
         </Nav.Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -43,8 +30,8 @@ const MainMenu = ({history}) => {
                 <Dropdown>
                 <Dropdown.Toggle 
                         as={Nav.Link} 
-                        onMouseEnter={isActive.bind(this,true)} 
-                        onMouseLeave={isActive.bind(this,false)}
+                        onMouseEnter={setActiveHandler} 
+                        onMouseLeave={unSetActiveHandler}
                     >
                     Categories
                     </Dropdown.Toggle>
@@ -69,8 +56,10 @@ const MainMenu = ({history}) => {
                 <InputGroup style={{width: '100%'}}>
                 <InputGroup.Append>
                     <Button 
-                    variant="outline-dark"
-                    style={{borderRadius : "50px 0 0 50px" , borderRightColor: 'white'}}><i className="fas fa-search"></i></Button>
+                    variant="bg-white"
+                    onMouseEnter={setActiveHandler} 
+                    onMouseLeave={unSetActiveHandler}
+                    style={{borderColor: 'black',borderRadius : "50px 0 0 50px" , borderRightColor: 'white'}}><i className="fas fa-search"></i></Button>
                     </InputGroup.Append>
                     <FormControl
                     placeholder="Chercher un cours"
@@ -78,7 +67,6 @@ const MainMenu = ({history}) => {
                     aria-describedby="Chercher un cours"
                     style={{borderRadius : "0 50px 50px 0" ,borderColor:"#000"}}
                     />
-                    
                 </InputGroup>
 
                 </Form>
@@ -91,23 +79,23 @@ const MainMenu = ({history}) => {
                     <Nav.Link 
                     className="nav-link text-nowrap" 
                     href="/teacher/course" 
-                    onMouseEnter={isActive.bind(this,true)} 
-                    onMouseLeave={isActive.bind(this,false)}>
+                    onMouseEnter={setActiveHandler} 
+                    onMouseLeave={unSetActiveHandler}>
                     Formateur
                 </Nav.Link>
                 }
                 <Nav.Link 
                     className="nav-link text-nowrap" 
                     href="/dashboard" 
-                    onMouseEnter={isActive.bind(this,true)} 
-                    onMouseLeave={isActive.bind(this,false)}>
+                    onMouseEnter={setActiveHandler} 
+                    onMouseLeave={unSetActiveHandler}>
                     Tableau de bord
                 </Nav.Link>
                 <Dropdown alignRight>
                     <Dropdown.Toggle 
                         as={Nav.Link} 
-                        onMouseEnter={isActive.bind(this,true)} 
-                        onMouseLeave={isActive.bind(this,false)}
+                        onMouseEnter={setActiveHandler} 
+                        onMouseLeave={unSetActiveHandler}
                     >
                     <i className="fas fa-user-graduate"></i>
                         </Dropdown.Toggle>
@@ -138,7 +126,6 @@ const MainMenu = ({history}) => {
         </Navbar.Collapse>
         </Navbar>
     )
-
 }
 
-export default MainMenu
+export default withRouter(MainMenu)

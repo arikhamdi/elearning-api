@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react'
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Card, Col, ListGroup, Row, Tab, Tabs } from 'react-bootstrap'
-import { Layout, LayoutFluid } from '../../Layout/Layout'
+import { Button, Card, Col, Row, Tab, Tabs } from 'react-bootstrap'
+import { LayoutFluid } from '../../Layout/Layout'
 
 import './teacher.css';
 import { Loader } from '../../Layout/Loader';
@@ -33,7 +33,7 @@ const TeacherDashboard = () => {
                 <Card.Title className="text-capitalize">
                     <Card.Link href={`/course/${course.slug}`}>{course.title}</Card.Link>
                 </Card.Title>
-                    <Card.Text>{course.owner?.name}</Card.Text>
+                    <Card.Text>{course.owner?.first_name} {course.owner?.last_name}</Card.Text>
                 </Card.Body>
                 <Card.Body className="text-left" style={{width:'20%'}}>
                     <Button 
@@ -76,9 +76,9 @@ const TeacherDashboard = () => {
                 <Card.Img variant="top" src={course.image} style={{width:'20%'}}/>
                 <Card.Body style={{width:'60%'}}>
                 <Card.Title className="text-capitalize">
-                    <Card.Link href={`/course/${course.slug}`}>{course.title}</Card.Link>
+                    {course.title}
                 </Card.Title>
-                    <Card.Text>{course.owner?.name}</Card.Text>
+                    <Card.Text>{course.owner?.first_name} {course.owner?.last_name}</Card.Text>
                 </Card.Body>
                 <Card.Body className="text-left" style={{width:'20%'}}>
                     <Button 

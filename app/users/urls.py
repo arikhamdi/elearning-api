@@ -6,6 +6,7 @@ from .views.teachers import (
     teacher_detail,
     teacher_list,
     teacher_list_courses,
+    teacher_add_new_course,
     modules_list,
     module_detail,
     content_list_by_module,
@@ -50,10 +51,12 @@ urlpatterns = [
     # teachers interfaces
 
     # teachers
-    path('teacher/courses/', teacher_list_courses),
     path('teachers/', teacher_list),
     path('teacher/<int:id>/', teacher_detail),
 
+
+    path('teacher/courses/', teacher_list_courses),
+    path('teacher/courses/add', teacher_add_new_course),
 
     path('teacher/<slug:course_slug>/',
          course_detail, name="courses-detail"),

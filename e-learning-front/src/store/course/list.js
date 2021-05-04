@@ -15,7 +15,7 @@ const slice = createSlice({
         },
         coursesRequestFailed : (courses, action) => {
             courses.loading = false;
-            courses.errors = action.payload;
+            courses.error = action.payload;
         },
         coursesReceived : (courses, action) => {
             courses.list = action.payload;
@@ -37,6 +37,15 @@ export default slice.reducer;
 
 export const LoadCourses = url => apiRequest({
     url,
+    onStart : coursesRequested.type,
+    onSuccess : coursesReceived.type,
+    onError : coursesRequestFailed.type
+});
+
+export const addNewCourse = course => apiRequest({
+    url : "/users/teacher/courses/add",
+    method: "POST",
+    data: course,
     onStart : coursesRequested.type,
     onSuccess : coursesReceived.type,
     onError : coursesRequestFailed.type

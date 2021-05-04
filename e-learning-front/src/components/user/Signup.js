@@ -135,9 +135,12 @@ const Signup = ({history}) => {
         <div>
             <Container>
                 {signUpForm()}
+
             </Container>
         </div>
     )
 }
 
 export default Signup
+
+

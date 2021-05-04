@@ -81,7 +81,7 @@ const CourseDetails = ({match}) => {
         <React.Fragment>
                 <Card className="mb-3">
                 <Card.Img variant="top" src={course.image} />
-                <Card.Header style={{textTransform: 'capitalize'}}>Créé par <cite title="Source Title">{course.owner?.name}</cite>
+                <Card.Header style={{textTransform: 'capitalize'}}>Créé par <cite title="Source Title">{course.owner?.first_name} {course.owner?.last_name}</cite>
                 </Card.Header>
                 <Card.Body>
                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title> 

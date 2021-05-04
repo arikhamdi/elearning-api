@@ -1,8 +1,5 @@
-import { push } from 'connected-react-router';
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import {Link, useHistory} from 'react-router-dom';
-import store, { history } from '../../store';
 
 
 
@@ -21,7 +18,7 @@ const Course = ({course}) => {
                 <Card.Title style={{textTransform: 'capitalize'}} >{course.title}</Card.Title>
                 <Card.Text>{course.overview}</Card.Text>
                 <footer className="blockquote-footer">
-                    <cite title="Source Title">{course.owner.name}</cite>
+                    <cite title="Source Title">{course.owner?.first_name} {course.owner?.last_name}</cite>
                 </footer>
             </Card.Body>
                             

@@ -45,7 +45,7 @@ def teacher_detail(request, id):
 # Teachers DashBoard
 # Courses
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
 def teacher_list_courses(request):
 
@@ -54,11 +54,21 @@ def teacher_list_courses(request):
             courses = Course.objects.filter(owner=request.user)
             serializer = CourseSerializer(courses, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
-        elif request.method == 'POST':
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
+def teacher_add_new_course(request):
+
+    if request.user.is_teacher:
+        if request.method == 'POST':
             serializer = CourseSerializer(data=request.data)
+
             if serializer.is_valid():
-                serializer.save(owner=request.user)
+                serializer.save(owner=request.user,
+                                subject_id=request.data['subject'])
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
