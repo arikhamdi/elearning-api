@@ -6,8 +6,10 @@ const slice = createSlice({
     name : "content",
     initialState: {
         content: {},
+        contentsList: [],
         loading: false,
         checkBoxloading: false,
+        isEdited : true,
         alreadySeen: [],
         lastFetch: null,
         error : ""
@@ -22,6 +24,10 @@ const slice = createSlice({
         },
         contentReceived : (content, action) => {
             content.content  = action.payload;
+            content.loading = false;
+        },
+        contentsReceived : (content, action) => {
+            content.contentsList  = action.payload;
             content.loading = false;
         },
         contentMarkedAsReadRequest : (content) => {
@@ -42,6 +48,7 @@ const {
     contentRequest,
     contentRequestFailed,
     contentReceived,
+    contentsReceived,
     contentMarkedAsReadRequest,
     contentMarkedAsReadSuccess,
     contentMarkedAsReadFail
@@ -76,3 +83,9 @@ export const unmarkContentAsAlreadySeen = url => apiRequest({
 });
 
 
+export const teacherLoadContents = (moduleId) => apiRequest({
+    url : `/users/teacher/module/${moduleId}/content/'`,
+    onStart : contentRequest.type,
+    onSuccess : contentsReceived.type,
+    onError : contentRequestFailed.type
+});

@@ -123,6 +123,7 @@ def teacher_modules_list(request, course_slug):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
 def teacher_module_details(request, module_id):
     module = get_object_or_404(Module, id=module_id)
 
@@ -142,7 +143,31 @@ def teacher_module_details(request, module_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
+def teacher_publish_course(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+
+    if request.method == 'GET':
+        course.status = 'published'
+        course.save()
+        serializer = CourseSerializer(course)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
+def teacher_unpublish_course(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+
+    if request.method == 'GET':
+        course.status = 'draft'
+        course.save()
+        serializer = CourseSerializer(course)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 # Content type
+
 
 def get_model(model_name):
     """
@@ -172,7 +197,7 @@ def get_serializer_class(model_name, *args, **kwargs):
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
-def content_list_by_module(request, module_id, model_name="text"):
+def teacher_get_content_list_by_module(request, module_id, model_name="text"):
     """
     Get list of contents or post a new one for the current module
     """

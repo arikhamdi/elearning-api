@@ -21,10 +21,13 @@ const slice = createSlice({
             courseDetails.course  = action.payload;
             courseDetails.loading = false;
         },
-        courseDetailsEditSuccess : (courseDetails, action) => {
+        courseDetailsEditedSuccess : (courseDetails, action) => {
             courseDetails.course  = action.payload;
             courseDetails.loading = false;
             courseDetails.error = null;
+        },
+        coursePublishedSuccess : (courseDetails, action) => {
+            courseDetails.loading = false;
         },
         courseDeleted : (courseDetails, action) => {
             courseDetails.loading = false;
@@ -36,7 +39,8 @@ const {
     courseDetailsRequest,
     courseDetailsRequestFailed,
     courseDetailsReceived,
-    courseDetailsEditSuccess,
+    courseDetailsEditedSuccess,
+    coursePublishedSuccess,
     courseDeleted
 } = slice.actions;
 
@@ -66,7 +70,21 @@ export const EditCourseDetails = (url, course) => apiRequest({
     method: "PUT",
     data: course,
     onStart : courseDetailsRequest.type,
-    onSuccess : courseDetailsEditSuccess.type,
+    onSuccess : courseDetailsEditedSuccess.type,
+    onError : courseDetailsRequestFailed.type
+});
+
+export const publishCourse = courseSlug => apiRequest({
+    url: `/users/teacher/${courseSlug}/publish`,
+    onStart : courseDetailsRequest.type,
+    onSuccess : coursePublishedSuccess.type,
+    onError : courseDetailsRequestFailed.type
+});
+
+export const unPublishCourse = courseSlug => apiRequest({
+    url: `/users/teacher/${courseSlug}/unpublish`,
+    onStart : courseDetailsRequest.type,
+    onSuccess : coursePublishedSuccess.type,
     onError : courseDetailsRequestFailed.type
 });
 

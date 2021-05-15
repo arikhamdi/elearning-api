@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { history } from '../../../store';
+import { teacherLoadContents } from '../../../store/course/content';
 import { LoadCourseDetails, EditCourseDetails } from '../../../store/course/details';
 import DeleteModal from './DeleteModal';
 
@@ -9,8 +10,10 @@ const TeacherEditeCourse = ({match}) => {
 
     const dispatch = useDispatch()
     const [show, setShow] = useState(false);
+    const [currentModule, setCurrentModule] = useState('');
     const { course, error } = useSelector(state => state.entities.courseDetails);
     const { list } = useSelector(state => state.entities.subjects);
+    const {contentsList} = useSelector(state => state.entities.content)
 
     const [errors, setErrors] = useState({});
 
@@ -66,6 +69,11 @@ const TeacherEditeCourse = ({match}) => {
         setErrors({});
     }
 
+    const loadModuleContents = (moduleId) => {
+        dispatch(teacherLoadContents(moduleId))
+        .then(setCurrentModule(moduleId))
+    }
+
 
     const courseEditForm = () => (
         <div className="bg-light" style={{padding: '30px'}}>
@@ -79,7 +87,7 @@ const TeacherEditeCourse = ({match}) => {
                             as="select"
                             onChange={formChangeHandler('subject')}>
                                 {list && list.map(subjectOption => (
-                                    <option key={subjectOption.id} selected={subject == subjectOption.id ? 'selected' : false} value={subjectOption.id}>{subjectOption.title}</option>
+                                    <option key={subjectOption.id}  value={subjectOption.id} selected={subject == subjectOption.id ? 'selected' : false}>{subjectOption.title}</option>
                                 ))}
                             </Form.Control>
                         </Col>
@@ -186,12 +194,12 @@ const TeacherEditeCourse = ({match}) => {
         <ul>
         {
             course && course?.modules?.map((module) => (
-                <li style={{padding:"10px", listStyle: "none"}}>
-                    <a href="">
+                <li key={module?.id} style={{padding:"10px", listStyle: "none"}}>
+                    <div onClick={() => loadModuleContents(module?.id)} style={{cursor: "pointer"}}>
                     <span>MODULE {module.order}</span><a className="float-right" href={`/teacher/course/${course?.slug}/${module?.id}/edit`}>editer</a>
                     <br />
                     <span style={{textTransform: "capitalize"}}>{module.title}</span>
-                    </a>
+                    </div>
                 </li>
             ))
         }
@@ -209,11 +217,24 @@ const TeacherEditeCourse = ({match}) => {
 
     const contentsEdit = () => (
         <Fragment>
-            <h4>Ajouter un nouveau contenu</h4>
-            <Button variant="light" className="mr-2">Texte</Button>
+        {contentsList && contentsList.map( content => (
+            <Fragment>
+            <h3>{content?.item?.title}</h3>
+            </Fragment>
+        ))}
+         {currentModule !== "" ? 
+         <Fragment>
+         <h4>Ajouter un nouveau contenu</h4>
+            <Button variant="light" className="mr-2" href={`/teacher/course/module/${currentModule}/content/text`}>Texte</Button>
             <Button variant="light" className="mr-2">Image</Button>
             <Button variant="light" className="mr-2">Video</Button>
             <Button variant="light" className="mr-2">Fichier</Button>
+         </Fragment>
+         :
+         <h4>Selectionner un module pour y ajouter du contenu</h4>
+         }
+
+            
         </Fragment>
 
     )

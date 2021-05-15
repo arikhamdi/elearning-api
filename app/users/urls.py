@@ -8,9 +8,11 @@ from .views.teachers import (
     teacher_list_courses,
     teacher_modules_list,
     teacher_module_details,
-    content_list_by_module,
+    teacher_get_content_list_by_module,
     content_detail,
-    teacher_course_detail
+    teacher_course_detail,
+    teacher_publish_course,
+    teacher_unpublish_course
 )
 from .views.students import (
     get_favorite_courses,
@@ -59,6 +61,9 @@ urlpatterns = [
     path('teacher/<slug:course_slug>/',
          teacher_course_detail, name="courses-detail"),
 
+    path('teacher/<slug:course_slug>/publish', teacher_publish_course),
+    path('teacher/<slug:course_slug>/unpublish', teacher_unpublish_course),
+
     # Modules
     path('teacher/<slug:course_slug>/modules/',
          teacher_modules_list, name='modules-list'),
@@ -68,11 +73,11 @@ urlpatterns = [
 
     # Contents
     path('teacher/module/<int:module_id>/content/',
-         content_list_by_module,
+         teacher_get_content_list_by_module,
          name='module-content-list'),
 
     path('teacher/module/<int:module_id>/content/<model_name>/',
-         content_list_by_module,
+         teacher_get_content_list_by_module,
          name='module-content-create'),
     path('teacher/content/<int:content_id>/',
          content_detail,

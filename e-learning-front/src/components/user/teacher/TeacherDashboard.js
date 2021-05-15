@@ -1,15 +1,15 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Card, Col, Row, Tab, Tabs, Modal } from 'react-bootstrap'
+import { Button, Card, Col, Row, Tab, Tabs } from 'react-bootstrap'
 import { LayoutFluid } from '../../Layout/Layout'
 
 import './teacher.css';
 import { Loader } from '../../Layout/Loader';
 import PageLayout from '../../Layout/PageLayout';
 import { LoadCourses } from '../../../store/course/list';
-import { deleteCourse } from '../../../store/course/details';
 import { history } from '../../../store';
 import DeleteModal from './DeleteModal';
+import { publishCourse, unPublishCourse } from '../../../store/course/details';
 
 const TeacherDashboard = () => {
 
@@ -30,6 +30,16 @@ const TeacherDashboard = () => {
     const deleteModalOpenhandler = courseSlug => {
         setCourseToDelete(courseSlug);
         setShow(true);
+    }
+
+    const publishCourseHandler = courseSlug => {
+        dispatch(publishCourse(courseSlug));
+        window.location.reload()
+    }
+
+    const unPublishCourseHandler = courseSlug => {
+        dispatch(unPublishCourse(courseSlug));
+        window.location.reload()
     }
 
 
@@ -64,6 +74,7 @@ const TeacherDashboard = () => {
                      <Button 
                      variant="danger"
                      className="mb-2 form-control"
+                     onClick={() => unPublishCourseHandler(course.slug)}
                      >
                             Dépublier ce cours    
                     </Button>
@@ -103,6 +114,7 @@ const TeacherDashboard = () => {
                     <Button 
                      variant="success"
                      className="mb-2 form-control"
+                     onClick={() => publishCourseHandler(course.slug)}
                      >
                             Publier ce cours    
                     </Button>

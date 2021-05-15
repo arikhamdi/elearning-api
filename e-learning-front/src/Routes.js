@@ -36,6 +36,7 @@ import TeacherCreateNewCourse from './components/user/teacher/TeacherCreateNewCo
 import TeacherEditeCourse from './components/user/teacher/TeacherEditeCourse';
 import TeacherAddModule from './components/user/teacher/TeacherAddModule';
 import TeacherEditModule from './components/user/teacher/TeacherEditModule';
+import TeacherCreateContent from './components/user/teacher/TeacherCreateContent';
 axios.defaults.baseURL = API;
 
 const Routes = () => {
@@ -65,6 +66,7 @@ const Routes = () => {
                 <Route exact path='/registration-success' component={registrationSuccess}/>
                 <Route exact path='/forbidden' component={Forbidden} />
                 <ProtectedTeacherRoute exact path='/teacher/course/new' component={TeacherCreateNewCourse} />
+                <ProtectedTeacherRoute exact path='/teacher/course/module/:moduleId/content/:modelName' component={TeacherCreateContent} />
                 <ProtectedTeacherRoute exact path='/teacher/course/:slug/edit' component={TeacherEditeCourse} />
                 <ProtectedTeacherRoute exact path='/teacher/course/:slug/module/new' component={TeacherAddModule} />
                 <ProtectedTeacherRoute exact path='/teacher/course/:slug/:module/edit' component={TeacherEditModule} />

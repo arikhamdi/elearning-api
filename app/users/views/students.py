@@ -25,20 +25,7 @@ from courses.models import (Course, Module, Content)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_favorite_courses(request):
-    courses = Course.published.filter(students__in=[request.user])
-
-    # if request.user.is_teacher:
-    #     if request.method == 'GET':
-    #         courses = Course.objects.filter(owner=request.user)
-    #         serializer = CourseSerializer(courses, many=True)
-    #         return Response(serializer.data)
-
-    #     elif request.method == 'POST':
-    #         serializer = CourseSerializer(data=request.data)
-    #         if serializer.is_valid():
-    #             serializer.save(owner=request.user)
-    #             return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    courses = Course.objects.filter(students__in=[request.user])
 
     if request.method == 'GET':
         serializer = CourseSerializer(courses, many=True)
@@ -163,8 +150,6 @@ def user_has_subscribe(request, duration):
                 request.user.subscribed = request.user.subscribed + \
                     relativedelta(years=1)
         request.user.save()
-        print('request.user.subscribed', int(time.mktime(
-            request.user.subscribed.timetuple())) * 1000)
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
