@@ -10,6 +10,7 @@ const slice = createSlice({
         loading: false,
         checkBoxloading: false,
         isEdited : true,
+        successAdded: false,
         alreadySeen: [],
         lastFetch: null,
         error : ""
@@ -28,6 +29,11 @@ const slice = createSlice({
         },
         contentsReceived : (content, action) => {
             content.contentsList  = action.payload;
+            content.loading = false;
+        },
+        contentAddedSuccess: (content, action) => {
+            content.contentsList  = action.payload;
+            content.successAdded  = true;
             content.loading = false;
         },
         contentMarkedAsReadRequest : (content) => {
@@ -51,7 +57,8 @@ const {
     contentsReceived,
     contentMarkedAsReadRequest,
     contentMarkedAsReadSuccess,
-    contentMarkedAsReadFail
+    contentMarkedAsReadFail,
+    contentAddedSuccess
 } = slice.actions;
 
 export default slice.reducer;
@@ -89,3 +96,12 @@ export const teacherLoadContents = (moduleId) => apiRequest({
     onSuccess : contentsReceived.type,
     onError : contentRequestFailed.type
 });
+
+export const teacherAddTextContent = (moduleId,newText) => apiRequest({
+    url: `/users/teacher/module/${moduleId}/content/text/`,
+    method: "POST",
+    data: newText,
+    onStart : contentRequest.type,
+    onSuccess : contentAddedSuccess.type,
+    onError : contentRequestFailed.type
+})

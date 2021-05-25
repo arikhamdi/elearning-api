@@ -78,6 +78,7 @@
     "owner": 3,
     "subject": 3,
     "title": "beginning with scope",
+    "image": "https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     "slug": "beginning-with-scope",
     "overview": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in nibh nisl. Donec at fermentum eros. Curabitur in blandit nisl, ut pharetra mauris.",
     "publish": "2021-03-20T22:53:32.027Z",
@@ -93,6 +94,7 @@
     "owner": 3,
     "subject": 3,
     "title": "beginning with javascript",
+    "image": "https://images.pexels.com/photos/4584830/pexels-photo-4584830.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     "slug": "beginning-with-javascript",
     "overview": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in nibh nisl. Donec at fermentum eros. Curabitur in blandit nisl, ut pharetra mauris.",
     "publish": "2021-03-20T22:54:07.922Z",
@@ -122,7 +124,7 @@
   "fields": {
     "course": 2,
     "title": "modules with scope",
-    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "overview": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
     "order": 1,
     "publish": "2021-03-20T22:57:51.008Z",
     "status": "published"
@@ -134,7 +136,7 @@
   "fields": {
     "course": 2,
     "title": "variables",
-    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "overview": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
     "order": 2,
     "publish": "2021-03-20T22:58:31.312Z",
     "status": "published"
@@ -146,7 +148,7 @@
   "fields": {
     "course": 2,
     "title": "Operators",
-    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "overview": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
     "order": 3,
     "publish": "2021-03-20T22:59:14.147Z",
     "status": "published"
@@ -158,7 +160,7 @@
   "fields": {
     "course": 2,
     "title": "Conditionals",
-    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "overview": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
     "order": 4,
     "publish": "2021-03-20T22:59:28.625Z",
     "status": "published"
@@ -170,7 +172,7 @@
   "fields": {
     "course": 2,
     "title": "Arrays",
-    "description": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
+    "overview": "sdfsdfsfdsdf ker-compsqdfqsfqfqfose ru",
     "order": 5,
     "publish": "2021-03-20T22:59:36.838Z",
     "status": "published"

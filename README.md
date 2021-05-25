@@ -23,13 +23,13 @@
 Make sure you have docker installed on your computer.
 
 ```
-docker-compose ue
+docker-compose up
 ```
 
 # Populate database for manual test
 
 ```
-python manage.py loaddata */fixtures/*.json`
+docker-compose run --rm app sh -c "python manage.py loaddata */fixtures/*.json"
 ```
 
 # <p style="color: red">Run tests<p>

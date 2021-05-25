@@ -225,7 +225,7 @@ const TeacherEditeCourse = ({match}) => {
          {currentModule !== "" ? 
          <Fragment>
          <h4>Ajouter un nouveau contenu</h4>
-            <Button variant="light" className="mr-2" href={`/teacher/course/module/${currentModule}/content/text`}>Texte</Button>
+            <Button variant="light" className="mr-2" href={`/teacher/course/module/${match.params.slug}/${currentModule}/content/text`}>Texte</Button>
             <Button variant="light" className="mr-2">Image</Button>
             <Button variant="light" className="mr-2">Video</Button>
             <Button variant="light" className="mr-2">Fichier</Button>

@@ -110,7 +110,7 @@ const StudentCourse = ({match}) => {
                             </Accordion.Toggle>
                             {module.contents && module.contents.map(item => (
                                 <Accordion.Collapse 
-                                    key={item.item.id}  
+                                    key={item.item?.id}  
                                     eventKey={module.id}
                                     style={{ margin:'0px'}}
                                     >
@@ -133,7 +133,7 @@ const StudentCourse = ({match}) => {
                                         className="nav-link" 
                                         style={{backgroundColor: match.params.content == item.id && '#eaeaea', padding:'20px'}}
                                         >
-                                        {item.item.title} 
+                                        {item?.item?.title} 
                                         </div>
                                     </Col>
                                     </Row>
