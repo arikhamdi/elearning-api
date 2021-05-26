@@ -37,6 +37,9 @@ import TeacherEditeCourse from './components/user/teacher/TeacherEditeCourse';
 import TeacherAddModule from './components/user/teacher/TeacherAddModule';
 import TeacherEditModule from './components/user/teacher/TeacherEditModule';
 import TeacherCreateContentText from './components/user/teacher/TeacherCreateContentText';
+import TeacherCreateContentImage from './components/user/teacher/TeacherCreateContentImage';
+import TeacherCreateContentVideo from './components/user/teacher/TeacherCreateContentVideo';
+import TeacherCreateContentFile from './components/user/teacher/TeacherCreateContentFile';
 axios.defaults.baseURL = API;
 
 const Routes = () => {
@@ -67,6 +70,9 @@ const Routes = () => {
                 <Route exact path='/forbidden' component={Forbidden} />
                 <ProtectedTeacherRoute exact path='/teacher/course/new' component={TeacherCreateNewCourse} />
                 <ProtectedTeacherRoute exact path='/teacher/course/module/:slug/:moduleId/content/text' component={TeacherCreateContentText} />
+                <ProtectedTeacherRoute exact path='/teacher/course/module/:slug/:moduleId/content/image' component={TeacherCreateContentImage} />
+                <ProtectedTeacherRoute exact path='/teacher/course/module/:slug/:moduleId/content/video' component={TeacherCreateContentVideo} />
+                <ProtectedTeacherRoute exact path='/teacher/course/module/:slug/:moduleId/content/file' component={TeacherCreateContentFile} />
                 <ProtectedTeacherRoute exact path='/teacher/course/:slug/edit' component={TeacherEditeCourse} />
                 <ProtectedTeacherRoute exact path='/teacher/course/:slug/module/new' component={TeacherAddModule} />
                 <ProtectedTeacherRoute exact path='/teacher/course/:slug/:module/edit' component={TeacherEditModule} />

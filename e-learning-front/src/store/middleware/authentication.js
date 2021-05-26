@@ -40,22 +40,16 @@ const authentication = store => next => action => {
      *  Clear local storage from all devices after a global logout
      */
 
-     const clearLocalStorageAndReload = () => {
-        store.dispatch(unsetCurrentUser());
-        alert("vous avez ete deconnecté");
-        window.location.reload();
-    }
-   
-    if (store.getState()?.entities?.subjects?.errors?.detail){
-        if (!isEmpty(localStorage.getItem("token"))) {
-            clearLocalStorageAndReload();
-        } 
+
+    if (store.getState()?.entities?.courses?.error?.detail === "Token non valide."){
+        localStorage.clear()
+        window.location.reload()
+    } 
+    else if (store.getState()?.entities?.subjects?.error?.detail  === "Token non valide."){
+        localStorage.clear()
+        window.location.reload()
         
-    } else if (store.getState()?.entities?.courses?.errors?.detail){
-        if (!isEmpty(localStorage.getItem("token"))){
-            clearLocalStorageAndReload();
-        } 
-    }
+    } 
 
     return next(action);
 

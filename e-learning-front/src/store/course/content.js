@@ -32,7 +32,6 @@ const slice = createSlice({
             content.loading = false;
         },
         contentAddedSuccess: (content, action) => {
-            content.contentsList  = action.payload;
             content.successAdded  = true;
             content.loading = false;
         },
@@ -101,6 +100,33 @@ export const teacherAddTextContent = (moduleId,newText) => apiRequest({
     url: `/users/teacher/module/${moduleId}/content/text/`,
     method: "POST",
     data: newText,
+    onStart : contentRequest.type,
+    onSuccess : contentAddedSuccess.type,
+    onError : contentRequestFailed.type
+})
+
+export const teacherAddImageContent = (moduleId,formData) => apiRequest({
+    url: `/users/teacher/module/${moduleId}/content/image/`,
+    method: "POST",
+    data: formData,
+    onStart : contentRequest.type,
+    onSuccess : contentAddedSuccess.type,
+    onError : contentRequestFailed.type
+})
+
+export const teacherAddVideoContent = (moduleId,formData) => apiRequest({
+    url: `/users/teacher/module/${moduleId}/content/video/`,
+    method: "POST",
+    data: formData,
+    onStart : contentRequest.type,
+    onSuccess : contentAddedSuccess.type,
+    onError : contentRequestFailed.type
+})
+
+export const teacherAddFileContent = (moduleId,formData) => apiRequest({
+    url: `/users/teacher/module/${moduleId}/content/file/`,
+    method: "POST",
+    data: formData,
     onStart : contentRequest.type,
     onSuccess : contentAddedSuccess.type,
     onError : contentRequestFailed.type

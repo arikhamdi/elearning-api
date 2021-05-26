@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Accordion, Card, Col, Container, Form, Row, Spinner, Tab, Tabs } from 'react-bootstrap';
+import { Accordion, Card, Col, Container, Form, Image, Row, Spinner, Tab, Tabs } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactPlayer from 'react-player'
 import { LoadCourseDetails } from '../../../store/course/details';
@@ -10,10 +10,12 @@ import {
     unmarkContentAsAlreadySeen } from '../../../store/course/content';
 import { Loader } from '../../Layout/Loader';
 import { isEmpty } from '../../../utils/Utils';
+import { MEDIA_ROOT } from '../../../config';
 
 import './Student.css';
 
 const StudentCourse = ({match}) => {
+
 
     const {course} = useSelector(state => state.entities.courseDetails);
     const {content, loading, checkBoxloading, alreadySeen } = useSelector(state => state.entities.content);
@@ -64,8 +66,7 @@ const StudentCourse = ({match}) => {
     const prevModule = course?.modules?.find(module => module?.order === contentsList?.order - 1);
 
 
-    const getContent = (contentId) => {
-        
+    const getContent = (contentId) => {  
         dispatch(loadcontents(`/users/student/${match.params.slug}/content/${contentId}/`))
         .then(() => history.push(`/student/${match.params.slug}/${contentId}/`));
     } 
@@ -163,9 +164,10 @@ const StudentCourse = ({match}) => {
                 );
             if (content && content.item?.image)
                 return (
-                    <Fragment>
-                        {content.item?.image}
-                    </Fragment>
+                    <Container style={{padding: '5vh 15vh', height: '90vh', overflowY: 'scroll'}}>
+                        <h2 className="text-center mb-5">{content.item?.title}</h2>
+                        <Image src={`${MEDIA_ROOT}${content.item?.image}`} style={{width: "99%" }}/>
+                    </Container>
 
                     );
             else if (content && content.item?.file) 
@@ -177,7 +179,7 @@ const StudentCourse = ({match}) => {
             else 
                 return (
                     <Container 
-                        style={{padding: '5vh 15vh', height: '90vh', overflowY: 'scroll'}}>
+                        style={{padding: '5vh 15vh', height: '90vh', overflowY: 'scroll', wordWrap: "break-word"}}>
                     <h2 className="text-center mb-5">{content.item?.title}</h2>
                         {content.item?.content}
                     </Container>
