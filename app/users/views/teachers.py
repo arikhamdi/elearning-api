@@ -228,7 +228,7 @@ def teacher_get_content_list_by_module(request, module_id, model_name="text"):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
 def content_detail(request, content_id):
     """
@@ -243,10 +243,10 @@ def content_detail(request, content_id):
 
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
+    elif request.method == 'PATCH':
 
         serializer = get_serializer_class(
-            content.content_type.name, model, data=request.data)
+            content.content_type.name, model, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()

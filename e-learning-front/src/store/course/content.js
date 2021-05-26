@@ -111,9 +111,9 @@ export const teacherAddTextContent = (moduleId,newText) => apiRequest({
     onError : contentRequestFailed.type
 })
 
-export const teacherEditTextContent = (contentId,formData) => apiRequest({
+export const teacherEditContent = (contentId,formData) => apiRequest({
     url: `/users/teacher/content/${contentId}/`,
-    method: "PUT",
+    method: "PATCH",
     data: formData,
     onStart : contentRequest.type,
     onSuccess : contentAddedSuccess.type,

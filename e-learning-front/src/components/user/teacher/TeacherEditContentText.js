@@ -3,7 +3,7 @@ import { Container, Form, Button, Row, Col, Alert } from 'react-bootstrap'
 import marked from 'marked'
 import DOMPurify from 'dompurify'
 import { useDispatch, useSelector } from 'react-redux'
-import {loadcontents, teacherEditTextContent} from '../../../store/course/content'
+import {loadcontents, teacherEditContent} from '../../../store/course/content'
 import { history } from '../../../store'
 import DeleteModal from './DeleteModal';
 
@@ -66,13 +66,13 @@ const TeacherEditContentText = ({match}) => {
         const editedText = {
             title:title,
             content:overview}
-        dispatch(teacherEditTextContent(contentId,editedText))
+        dispatch(teacherEditContent(contentId,editedText))
     }
 
     return (
         <Container className="mt-5">
         <DeleteModal 
-        show={show} url={`/users/teacher/content/`} 
+        show={show} url={`/users/teacher/content/${contentId}`} 
         type={'content'} 
         redirectTo={`/teacher/course/${match.params.slug}/edit`} 
         handleClose={() => setShow(false)} 
@@ -118,7 +118,8 @@ const TeacherEditContentText = ({match}) => {
             <div dangerouslySetInnerHTML={renderText(values['overview'])} style={{wordWrap: "break-word"}}/>
             </Col>
             </Row>
-            <Button type="submit">Enregistrer</Button>
+            <Button className="mr-3" type="submit">Enregistrer</Button>
+            <Button variant="dark" className="mr-3" href={`/teacher/course/${match.params.slug}/edit`}>Retour</Button>
             <Button variant="danger" className="float-right" onClick={() => setShow(true)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
             </Form>
             

@@ -229,10 +229,12 @@ const TeacherEditeCourse = ({match}) => {
         <ListGroup>
         {contentsList && contentsList.map( content => (
             <ListGroup.Item key={content?.item?.id}>
+                
                 {content?.item?.title}
                 {/* <Button variant="danger" className="float-right" onClick={() => setShow(true)}><i className="fa fa-trash" aria-hidden="true"></i></Button> */}
-                <Button  className="mr-2 float-right" href={`/teacher/course/module/${match.params.slug}/${currentModule}/content/${content?.id}/${contentType[content?.content_type]}/edit`}><i className="fas fa-pencil-alt"></i></Button>
 
+                <Button  className="float-right" href={`/teacher/course/module/${match.params.slug}/${currentModule}/content/${content?.id}/${contentType[content?.content_type]}/edit`}><i className="fas fa-pencil-alt"></i></Button>
+                <Button variant="light" className="mr-2 float-right">{contentType[content?.content_type]}</Button>
             </ListGroup.Item>
 
         ))}
