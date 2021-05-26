@@ -3,12 +3,12 @@ import { Container, Form, Button, Row, Col , Image} from 'react-bootstrap'
 import marked from 'marked'
 import DOMPurify from 'dompurify'
 import { useDispatch, useSelector } from 'react-redux'
-import {teacherAddImageContent, teacherAddTextContent} from '../../../store/course/content'
+import {teacherAddFileContent} from '../../../store/course/content'
 import { history } from '../../../store'
 import {useDropzone} from 'react-dropzone'
 import axios from 'axios'
 
-const TeacherCreateContentImage = ({match}) => {
+const TeacherCreateContentFile = ({match}) => {
 
     const dispatch = useDispatch()
     const { successAdded, error, loading } = useSelector(state => state.entities.content)
@@ -47,83 +47,36 @@ const TeacherCreateContentImage = ({match}) => {
 
     
 
-    const renderText = text => {
-        let clean = DOMPurify.sanitize( text , {USE_PROFILES: {html: true}});
-        const __html = marked(clean)
-        return {__html}
-    }
-
-    const AddTextContentHandler = (e) => {
-        e.preventDefault()
-        const newText = {
-            title:title
-        }
-        dispatch(teacherAddTextContent(moduleId,newText))
-    }
-
     const onDrop = useCallback(acceptedFiles => {
         setFiles(acceptedFiles.map(file => Object.assign(file, {
-            preview: URL.createObjectURL(file)
+            preview: file.name
           })))
       }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: 'image/jpeg, image/png'})
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: '.pdf'})
 
-    const thumbsContainer = {
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginTop: 16
-      };
-
-    const thumb = {
-        display: 'inline-flex',
-        borderRadius: 2,
-        border: '1px solid #eaeaea',
-        marginBottom: 8,
-        marginRight: 8,
-        width: 400,
-        height: 250,
-        padding: 4,
-        boxSizing: 'border-box'
-      };
-      
-      const thumbInner = {
-        display: 'flex',
-        minWidth: 0,
-        overflow: 'hidden'
-      };
-      
-      const img = {
-        display: 'block',
-        width: 'auto',
-        height: '100%'
-      };
-
-    const thumbs = files.map(file => (
-        <div style={thumb} key={file.name}>
-          <div style={thumbInner}>
-            <img
-              src={file.preview}
-              style={img}
-            />
-          </div>
-        </div>
-      ));
      
-    const sendImageHandler = e => {
+    const sendFileHandler = e => {
         e.preventDefault()
         let formData = new FormData()
         formData.append('title', title)
-        files.map(file => formData.append('image', file, file?.name))
+        files.map(file => formData.append('file', file, file?.name))
 
-        dispatch(teacherAddImageContent(moduleId, formData))
+        dispatch(teacherAddFileContent(moduleId, formData))
     }
+
+    const thumbs = files.map(file => (
+        <div key={file.name}>
+          <div className="text-center">
+            <h3>{file.preview}</h3>
+          </div>
+        </div>
+      ));
 
     return (
         <Container>
-        <h1 className="text-center">{`Ajouter une image`}</h1>
+        <h1 className="text-center">{`Ajouter un fichier pdf`}</h1>
             
-            <Form onSubmit={sendImageHandler}>
+            <Form onSubmit={sendFileHandler}>
             <Form.Group>
             <Form.Control type="text" 
                 placeholder="Entrer votre titre"
@@ -147,11 +100,10 @@ const TeacherCreateContentImage = ({match}) => {
             }
             
             </div>
-            <aside style={thumbsContainer}>
+            </Form.Group>
+            <aside>
                 {thumbs}
             </aside>
-            </Form.Group>
-
             <Button type="submit">Ajouter</Button>
             </Form>
             
@@ -161,6 +113,6 @@ const TeacherCreateContentImage = ({match}) => {
     )
 }
 
-export default TeacherCreateContentImage
+export default TeacherCreateContentFile
 
 

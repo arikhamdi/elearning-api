@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Accordion, Card, Col, Container, Form, Image, Row, Spinner, Tab, Tabs } from 'react-bootstrap';
+import { Accordion, Card, Col, Container, Form, Image, Row, Spinner, Tab, Tabs, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactPlayer from 'react-player'
 import { LoadCourseDetails } from '../../../store/course/details';
@@ -171,10 +171,14 @@ const StudentCourse = ({match}) => {
                     );
             else if (content && content.item?.file) 
                 return (
-                    <Fragment>
+                    <Container className="text-center" style={{padding: '5vh 15vh', height: '90vh', overflowY: 'scroll'}}>
                     <h2 className="text-center mb-5">{content.item?.title}</h2>
-                        {content.item.file}
-                    </Fragment>);
+                    <Button 
+                    style={{width: "70%", height: "70px", fontSize: "2em"}}
+                    variant="warning" 
+                    href={`${MEDIA_ROOT}${content.item?.file}`} 
+                    target="_blank"  >Afficher le PDF</Button>
+                    </Container>);
             else 
                 return (
                     <Container 

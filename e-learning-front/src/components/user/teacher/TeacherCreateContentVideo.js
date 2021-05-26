@@ -54,7 +54,7 @@ const TeacherCreateContentVideo = ({match}) => {
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: 'video/*'})
 
      
-    const sendImageHandler = e => {
+    const sendVideoHandler = e => {
         e.preventDefault()
         let formData = new FormData()
         formData.append('title', title)
@@ -85,7 +85,7 @@ const TeacherCreateContentVideo = ({match}) => {
         <Container>
         <h1 className="text-center">{`Ajouter une vidéo`}</h1>
             
-            <Form onSubmit={sendImageHandler}>
+            <Form onSubmit={sendVideoHandler}>
             <Form.Group>
             <Form.Control type="text" 
                 placeholder="Entrer votre titre"
