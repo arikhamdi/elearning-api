@@ -29,7 +29,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./e-learning-front:/e-learning-front
+      - ./e-learning-front:/app
     command: >
       npm start
 

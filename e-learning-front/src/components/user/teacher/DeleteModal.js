@@ -4,6 +4,7 @@ import { useDispatch} from 'react-redux';
 import { history } from '../../../store';
 import { deleteCourse } from '../../../store/course/details';
 import { deleteModule } from '../../../store/course/module';
+import { deleteContent } from '../../../store/course/content';
 
 
 const DeleteModal = ({handleClose, show, url, redirectTo, type}) => {
@@ -20,6 +21,14 @@ const DeleteModal = ({handleClose, show, url, redirectTo, type}) => {
         }else if (type === 'module') {
             console.log(url)
             dispatch(deleteModule(url))
+            .then(() => {
+                history.push(redirectTo)
+                window.location.reload();
+            });
+        }
+        else if (type === 'content') {
+            console.log(url)
+            dispatch(deleteContent(url))
             .then(() => {
                 history.push(redirectTo)
                 window.location.reload();

@@ -33,7 +33,7 @@ const TeacherCreateContentImage = ({match}) => {
         }
 
         if (localStorage?.getItem("moduleId") === moduleId){
-            setTitle(localStorage.getItem(`title`) ==! null ? localStorage.getItem(`title`) : "")
+            setTitle(localStorage.getItem(`title`) !== null ? localStorage.getItem(`title`) : "")
 
         } else {
             localStorage.setItem("moduleId", moduleId)

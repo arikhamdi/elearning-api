@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import ReactPlayer from 'react-player'
 import { LoadCourseDetails } from '../../../store/course/details';
 import { history } from '../../../store';
+import marked, { use } from 'marked'
+import DOMPurify from 'dompurify'
 import { 
     loadcontents,
     markContentAsAlreadySeen,
@@ -41,7 +43,6 @@ const StudentCourse = ({match}) => {
                     if(!content.already_seen.find(x => x === user.id)) {
                         getContent(content.id);
                         finish = false;
-                        console.log('in', finish)
                         break;
                     }else if (firstContent === null) {
                         firstContent = content;
@@ -104,14 +105,14 @@ const StudentCourse = ({match}) => {
         return (
             <Accordion >
                 {course.modules && course.modules.map(
-                    module => (
+                   ( module, index) => (
                         <div key={module.id} style={{cursor: 'pointer', overflowX: 'hidden'}}>
                             <Accordion.Toggle as={Card.Header} eventKey={module.id} style={{textTransform: "capitalize", padding:'30px'}}>
-                            Section {module.order} : {module.title}
+                            Section {index + 1} : {module.title}
                             </Accordion.Toggle>
                             {module.contents && module.contents.map(item => (
                                 <Accordion.Collapse 
-                                    key={item.item?.id}  
+                                    key={`${item?.id}`}  
                                     eventKey={module.id}
                                     style={{ margin:'0px'}}
                                     >
@@ -145,6 +146,12 @@ const StudentCourse = ({match}) => {
                 )}      
             </Accordion>
         )
+    }
+
+    const renderText = text => {
+        let clean = DOMPurify.sanitize( text , {USE_PROFILES: {html: true}});
+        const __html = marked(clean)
+        return {__html}
     }
 
 
@@ -184,7 +191,7 @@ const StudentCourse = ({match}) => {
                     <Container 
                         style={{padding: '5vh 15vh', height: '90vh', overflowY: 'scroll', wordWrap: "break-word"}}>
                     <h2 className="text-center mb-5">{content.item?.title}</h2>
-                        {content.item?.content}
+                    <div dangerouslySetInnerHTML={renderText(content.item?.content)} />
                     </Container>
                 );
               

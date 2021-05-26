@@ -45,7 +45,12 @@ const slice = createSlice({
         contentMarkedAsReadSuccess : (content, action) => {
             content.checkBoxloading = false;
             content.alreadySeen = action.payload?.already_seen;
+        },
+        contentDeletedSuccess : (content, action) => {
+            content.error = null;
+            content.loading = false;
         }
+    
     }
 })
 
@@ -57,7 +62,8 @@ const {
     contentMarkedAsReadRequest,
     contentMarkedAsReadSuccess,
     contentMarkedAsReadFail,
-    contentAddedSuccess
+    contentAddedSuccess,
+    contentDeletedSuccess
 } = slice.actions;
 
 export default slice.reducer;
@@ -105,6 +111,15 @@ export const teacherAddTextContent = (moduleId,newText) => apiRequest({
     onError : contentRequestFailed.type
 })
 
+export const teacherEditTextContent = (contentId,formData) => apiRequest({
+    url: `/users/teacher/content/${contentId}/`,
+    method: "PUT",
+    data: formData,
+    onStart : contentRequest.type,
+    onSuccess : contentAddedSuccess.type,
+    onError : contentRequestFailed.type
+})
+
 export const teacherAddImageContent = (moduleId,formData) => apiRequest({
     url: `/users/teacher/module/${moduleId}/content/image/`,
     method: "POST",
@@ -123,11 +138,20 @@ export const teacherAddVideoContent = (moduleId,formData) => apiRequest({
     onError : contentRequestFailed.type
 })
 
+
 export const teacherAddFileContent = (moduleId,formData) => apiRequest({
     url: `/users/teacher/module/${moduleId}/content/file/`,
     method: "POST",
     data: formData,
     onStart : contentRequest.type,
     onSuccess : contentAddedSuccess.type,
+    onError : contentRequestFailed.type
+})
+
+export const deleteContent = (url) => apiRequest({
+    url,
+    method: "DELETE",
+    onStart : contentRequest.type,
+    onSuccess : contentDeletedSuccess.type,
     onError : contentRequestFailed.type
 })

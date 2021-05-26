@@ -3,15 +3,19 @@ import { Container, Form, Button, Row, Col, Alert } from 'react-bootstrap'
 import marked from 'marked'
 import DOMPurify from 'dompurify'
 import { useDispatch, useSelector } from 'react-redux'
-import {teacherAddTextContent} from '../../../store/course/content'
+import {loadcontents, teacherEditTextContent} from '../../../store/course/content'
 import { history } from '../../../store'
+import DeleteModal from './DeleteModal';
 
-const TeacherCreateContentText = ({match}) => {
+const TeacherEditContentText = ({match}) => {
 
     const dispatch = useDispatch()
-    const { successAdded, contentsList, loading } = useSelector(state => state.entities.content)
+    const { successAdded, content, loading } = useSelector(state => state.entities.content)
+    const [show, setShow] = useState(false);
 
-    const moduleId = match.params.moduleId
+    console.log(content)
+
+    const contentId = match.params.contentId
 
     const [errors, setErrors] = useState({})
 
@@ -21,34 +25,26 @@ const TeacherCreateContentText = ({match}) => {
     }) 
     const { title, overview } = values
 
-    
+    useEffect(() => {
+        dispatch(loadcontents(`/users/student/${match.params.slug}/content/${contentId}/`))
+    },[dispatch])
 
     useEffect(() => {
         if (successAdded) {
-            localStorage.removeItem("moduleId")
-            localStorage.removeItem("title")
-            localStorage.removeItem("text")
             history.push(`/teacher/course/${match.params.slug}/edit`);
             window.location.reload();
-        }
-
-        if (localStorage?.getItem("moduleId") === moduleId){
-            setValues({
-                title : localStorage.getItem(`title`) !== null ? localStorage.getItem(`title`): "",
-                overview : localStorage.getItem(`text`)  !== null ? localStorage.getItem(`text`): "" 
-            })
-        } else {
-            localStorage.setItem("moduleId", moduleId)
-        }     
+        }    
     },[successAdded])
 
     useEffect(() => {
-        localStorage.setItem("text", overview)
-    },[overview])
+        setValues({
+            title : content?.item?.title || "",
+            overview: content?.item?.content || ""
+        })
+    },[content])
 
-    useEffect(() => {
-        localStorage.setItem("title", title)
-    },[title])
+
+    
 
     
 
@@ -67,15 +63,21 @@ const TeacherCreateContentText = ({match}) => {
 
     const AddTextContentHandler = (e) => {
         e.preventDefault()
-        const newText = {
+        const editedText = {
             title:title,
             content:overview}
-        dispatch(teacherAddTextContent(moduleId,newText))
+        dispatch(teacherEditTextContent(contentId,editedText))
     }
 
     return (
-        <Container>
-        <h1 className="text-center">{`Ajouter un text`}</h1>
+        <Container className="mt-5">
+        <DeleteModal 
+        show={show} url={`/users/teacher/content/`} 
+        type={'content'} 
+        redirectTo={`/teacher/course/${match.params.slug}/edit`} 
+        handleClose={() => setShow(false)} 
+        />
+        <h1 className="text-center">{`Editer un text`}</h1>
             
             <Form onSubmit={AddTextContentHandler}>
             <Form.Group>
@@ -95,6 +97,8 @@ const TeacherCreateContentText = ({match}) => {
                 Vous ne savez pas comment cela fonctionne? 
                 <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Suivez le guide</a></p>
             </Alert>
+                
+                
                 <Col sm={6}>
             <Form.Group>
             <Form.Control 
@@ -114,7 +118,8 @@ const TeacherCreateContentText = ({match}) => {
             <div dangerouslySetInnerHTML={renderText(values['overview'])} style={{wordWrap: "break-word"}}/>
             </Col>
             </Row>
-            <Button type="submit">Ajouter</Button>
+            <Button type="submit">Enregistrer</Button>
+            <Button variant="danger" className="float-right" onClick={() => setShow(true)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
             </Form>
             
             
@@ -123,6 +128,6 @@ const TeacherCreateContentText = ({match}) => {
     )
 }
 
-export default TeacherCreateContentText
+export default TeacherEditContentText
 
 

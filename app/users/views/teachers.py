@@ -92,8 +92,9 @@ def teacher_course_detail(request, course_slug):
 
     elif request.method == 'PUT':
         serializer = CourseSerializer(course, data=request.data)
+        print(request.data['subject'])
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(subject_id=request.data['subject'])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
