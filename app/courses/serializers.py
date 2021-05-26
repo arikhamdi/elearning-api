@@ -34,7 +34,7 @@ class ImageSerializer(serializers.ModelSerializer):
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = ['id', 'title', 'url']
+        fields = ['id', 'title', 'video']
 
 
 class ItemRelatedField(serializers.RelatedField):

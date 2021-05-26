@@ -149,23 +149,22 @@ const StudentCourse = ({match}) => {
 
 
     const mainContent = () => {
-            if (content.item?.url)
+            if (content && content.item?.video)
                 return (
-                    <Fragment>
-                    
-                        <ReactPlayer url={content.item?.url} 
+                    <Container>
+                        <h2 className="text-center mb-2">{content.item?.title}</h2>
+                        <ReactPlayer url={`${MEDIA_ROOT}${content.item?.video}`}
                                         controls
-                                        playbackRate = {2}
                                         width = "100%"
-                                        height = "90vh"
+                                        height = "80vh"
                                     />
                         
-                    </Fragment>
+                    </Container>
                 );
             if (content && content.item?.image)
                 return (
                     <Container style={{padding: '5vh 15vh', height: '90vh', overflowY: 'scroll'}}>
-                        <h2 className="text-center mb-5">{content.item?.title}</h2>
+                        <h2 className="text-center mb-2">{content.item?.title}</h2>
                         <Image src={`${MEDIA_ROOT}${content.item?.image}`} style={{width: "99%" }}/>
                     </Container>
 

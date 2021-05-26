@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import {teacherAddImageContent, teacherAddTextContent} from '../../../store/course/content'
 import { history } from '../../../store'
 import {useDropzone} from 'react-dropzone'
-import axios from 'axios'
 
 const TeacherCreateContentImage = ({match}) => {
 
