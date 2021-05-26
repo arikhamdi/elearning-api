@@ -229,16 +229,5 @@
     "updated": "2021-03-21T13:05:00.978Z",
     "content": "egestas non odio sed, molestie tincidunt arcu. Fusce at auctor ante. Integer sed congue lectus. Proin congue molestie nisl, non dignissim nunc lacinia eget. Integer convallis dignissim ante blandit congue. Nam quis tur"
   }
-},
-{
-  "model": "courses.video",
-  "pk": 4,
-  "fields": {
-    "owner": 3,
-    "title": "Arrays in video",
-    "created": "2021-03-21T13:02:36.818Z",
-    "updated": "2021-03-21T13:04:14.225Z",
-    "url": "https://www.youtube.com/watch?v=cRYgGm1slaA&ab_channel=ARTE"
-  }
 }
 ]

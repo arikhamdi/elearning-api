@@ -20,6 +20,18 @@ services:
       - DB_PASS=postgres
     depends_on:
       - database
+  
+  front:
+    container_name: elearning_front
+    build:
+      context: ./e-learning-front
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./e-learning-front:/e-learning-front
+    command: >
+      npm start
 
   database:
     container_name: elearning_api_db
