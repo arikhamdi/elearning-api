@@ -156,9 +156,6 @@ const CourseDetails = ({match}) => {
                             <Container className="course-details" >
                                 <div  className="course-content">
                                     {displayCourseContents()}  
-                                    {displayCourseContents()}  
-                                    {displayCourseContents()}  
-                                    {displayCourseContents()}  
                                 </div>
                                 <div className="course-side">
                                     {displayCourseSideSticky()}

@@ -67,7 +67,7 @@ export const PasswordChange = () => {
             </h3>
             <Container>
             <Form noValidate onSubmit={submitNewPassword}>
-            <Form.Group>
+            {/* <Form.Group>
             <InputGroup>
                     <FormControl
                     type="email" 
@@ -86,7 +86,7 @@ export const PasswordChange = () => {
                     </InputGroup.Append>
                 </InputGroup>
              </Form.Group>
-             <hr />
+             <hr /> */}
              <Form.Group>
                  <Form.Control 
                      type="password"

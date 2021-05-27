@@ -12,6 +12,7 @@ const Dashboard = () => {
     const dispatch = useDispatch();
 
      const { favorisItems, loading } = useSelector(state => state.auth.favoris);
+     const { isAuthenticated, isSubscribed } = useSelector(state => state.auth.auth)
      const countFavoris = favorisItems.length;
      let archivedItems = [];
 
@@ -34,24 +35,27 @@ const Dashboard = () => {
             : countFavoris > 0 ? favorisItems.map( course => (
                 <Card key={course.id} style={{flexDirection: 'row'}} className="mb-2">
                 <Card.Img variant="top" src={course.image} style={{width:'20%'}}/>
-                <Card.Body style={{width:'60%'}}>
+                <Card.Body style={{width:'55%'}}>
                 <Card.Title className="text-capitalize">
                     <Card.Link href={`/course/${course.slug}`}>{course.title}</Card.Link>
                 </Card.Title>
                     <Card.Text>{course.owner?.name}</Card.Text>
                 </Card.Body>
-                <Card.Body className="text-left" style={{width:'20%'}}>
+                <Card.Body className="text-left" style={{width:'25%'}}>
+                {isAuthenticated  === true && isSubscribed === true ? 
                     <Button 
                     variant="dark" 
                     className="mb-2 form-control"
                     href={`/student/${course.slug}`}>
                             Accéder au cours   
                     </Button>
+                    : null
+                }
                      <Button 
                      variant="danger"
                      className="mb-2 form-control"
                      onClick={() => removefromFavorisHandler(course)}>
-                            Arreter ce cours    
+                            Retirer des favoris    
                     </Button>
                 </Card.Body>
                 </Card>
@@ -103,15 +107,26 @@ const Dashboard = () => {
                 description="Investissez dans votre avenir."
 
                 className="container">
+                    {isAuthenticated  === false || isSubscribed === false ? 
+                    <Button 
+                    className="btn btn-info mb-2 form-control" 
+                    variant="danger"
+                    href="/subscribe"
+                    >
+                        Abonnez-vous pour avoir accès au cours
+                    </Button>
+                    :
+                    null
+                }
 
             <Tabs defaultActiveKey="favoris">
 
                 <Tab eventKey="favoris" title="Mes favoris">
                     {favorisList()}
                 </Tab> 
-                <Tab eventKey="archives" title="Mes archives">
+                {/* <Tab eventKey="archives" title="Mes archives">
                     {archivedCourses()}
-                </Tab>
+                </Tab> */}
             </Tabs>
         </Layout>
     )
