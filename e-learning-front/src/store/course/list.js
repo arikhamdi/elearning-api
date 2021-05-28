@@ -57,3 +57,10 @@ export const addNewCourse = course => apiRequest({
     onSuccess : coursesCreatedSuccess.type,
     onError : coursesRequestFailed.type
 });
+
+export const searchCourses = url => apiRequest({
+    url,
+    onStart : coursesRequested.type,
+    onSuccess : coursesReceived.type,
+    onError : coursesRequestFailed.type
+});

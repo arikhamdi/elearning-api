@@ -36,6 +36,13 @@ class CoursesListAPIView(generics.ListAPIView):
     queryset = Course.published.all()
     serializer_class = CourseSerializer
 
+class SearchCoursesListAPIView(generics.ListAPIView):
+    queryset = Course.published.all()
+    serializer_class = CourseSerializer
+
+    def get_queryset(self):
+        print(self.request.query_params.get('keyword'))
+        return Course.published.filter(title__icontains=self.request.query_params.get('keyword'))
 
 class CourseListBySubjectAPIView(generics.ListAPIView):
     serializer_class = CourseSerializer

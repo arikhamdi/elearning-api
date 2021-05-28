@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink, useHistory, withRouter } from 'react-router-dom';
 import { useSelector} from 'react-redux';
 import { Navbar, Nav, Form, Button, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
 import ShowFavorisIcone from './menuFavoris';
@@ -10,9 +10,19 @@ import '../../Styles.css';
 const MainMenu = () => {
 
     const [show, setShow] = useState(false);
+    const [keyword, setKeyword] = useState('')
 
     const { user, isAuthenticated, isTeacher} = useSelector(state => state.auth.auth);
     const { subjects }  = useSelector(state => state.entities);
+
+    const history = useHistory()
+
+    const submitHandler = e => {
+        e.preventDefault()
+        if (keyword) {
+            history.push(`/search?keyword=${keyword}`)
+        }
+    }
 
     return (
         <Navbar id="main-menu"  variant="light" expand="lg"   >
@@ -51,12 +61,13 @@ const MainMenu = () => {
                 </Dropdown>
                 </Nav>
                 <Nav className="mr-auto" style={{width: '100%'}}>
-                <Form inline style={{width: '100%'}} >
+                <Form inline style={{width: '100%'}} onSubmit={submitHandler}>
  
                 <InputGroup style={{width: '100%'}}>
                 <InputGroup.Append>
                     <Button 
                     variant="bg-white"
+                    type="submit"
                     onMouseEnter={setActiveHandler} 
                     onMouseLeave={unSetActiveHandler}
                     style={{borderColor: 'black',borderRadius : "50px 0 0 50px" , borderRightColor: 'white'}}><i className="fas fa-search"></i></Button>
@@ -65,6 +76,9 @@ const MainMenu = () => {
                     placeholder="Chercher un cours"
                     aria-label="Chercher un cours"
                     aria-describedby="Chercher un cours"
+                    type="text"
+                    name="q"
+                    onChange={e => setKeyword(e.target.value)}
                     style={{borderRadius : "0 50px 50px 0" ,borderColor:"#000"}}
                     />
                 </InputGroup>

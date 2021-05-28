@@ -45,6 +45,7 @@ import TeacherEditContentText from './components/user/teacher/TeacherEditContent
 import TeacherEditContentImage from './components/user/teacher/TeacherEditContentImage';
 import TeacherEditContentVideo from './components/user/teacher/TeacherEditContentVideo';
 import TeacherEditContentFile from './components/user/teacher/TeacherEditContentFile';
+import Search from './components/pages/Search';
 axios.defaults.baseURL = API;
 
 const Routes = () => {
@@ -93,6 +94,7 @@ const Routes = () => {
                 <ProtectedRoute path="/profile/auth" component={PasswordChange} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
                 <ProtectedRoute exact path="/subscribe-confirm" component={SubscribeConfirm} />
+                <Route path="/search" component={Search} /> 
                 <Route path="/" component={Home} /> 
                 <Route path='*' exact component={NotFound} />
             </Switch>

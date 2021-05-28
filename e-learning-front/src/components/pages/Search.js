@@ -1,38 +1,37 @@
 import React, {useEffect} from 'react';
 import {Layout} from '../Layout/Layout';
 import { CardDeck} from 'react-bootstrap';
-
+import { useHistory } from 'react-router-dom';
 import Course from '../course/Course';
-import SubNav from '../menu/SubNav';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {Loader} from '../Layout/Loader';
-import {NotFoundSmall} from '../pages/NotFound';
-import { LoadCourses } from '../../store/course/list';
+import {NotFoundSmall} from './NotFound';
 import PageLayout from '../Layout/PageLayout';
+import { searchCourses } from '../../store/course/list';
+// import { history } from '../../store';
 
-const  Home = ({match}) => {
+const  Search = () => {
 
     const dispatch = useDispatch();
 
     const coursesList = useSelector(state => state.entities.courses);
     const { loading, list, errors } = coursesList;
 
-
+    const history = useHistory()    
+    
     useEffect(() => {
-        dispatch(LoadCourses(match.url));
-    }, [dispatch, match.url])
+        console.log(history.location.search)
+        dispatch(searchCourses(`search${history.location.search}`))
+    }, [dispatch, history.location.search])
 
     return (
-        <Layout title="Soyez ambitieux" 
-                description="L'apprentissage vous permet de rester en tête." 
+        <Layout title="Recherche"
+                description={`Votre résultat pour "${history.location.search.split("=")[1]}"`}
                 image="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.irlabnp.org%2Fwp-content%2Fuploads%2F2015%2F11%2Fschoolgirl-1.png&f=1&nofb=1"
                 className="container"
-                button_link="/subscribe"
-                button_content="Abonnez-vous"
-                align="right"
                 >
-        <SubNav active={match.params.subject}/>
+                    <h5>Il y a {list.length} cours contenant "{history.location.search.split("=")[1]}"</h5>
         <CardDeck>
         {loading ? <Loader/> : errors ? <NotFoundSmall /> :
             (list.length ? list.map(
@@ -47,4 +46,4 @@ const  Home = ({match}) => {
     )
     };
 
-export default Home;
+export default Search;

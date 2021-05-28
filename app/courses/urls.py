@@ -4,7 +4,8 @@ from .views import (
     SubjectListAPIView,
     CoursesListAPIView,
     CourseListBySubjectAPIView,
-    CourseDetailAPIView
+    CourseDetailAPIView,
+    SearchCoursesListAPIView
 )
 
 
@@ -19,4 +20,5 @@ urlpatterns = [
 
     path('<slug:course_slug>/', CourseDetailAPIView.as_view(), name="course-detail"),
     path('', CoursesListAPIView.as_view(), name="courses-list"),
+    path('search', SearchCoursesListAPIView.as_view(), name="courses-list"),
 ]

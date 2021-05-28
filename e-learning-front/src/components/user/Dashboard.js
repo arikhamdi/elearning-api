@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Tab, Tabs, Card, Button, ListGroup  } from 'react-bootstrap';
+import { Tab, Tabs, Card, Button, ListGroup, Alert  } from 'react-bootstrap';
 import {Layout} from '../Layout/Layout';
 import { loadFavoris, removeItemToFavorisLoggedInUser } from '../../store/user/favoris';
 import PageLayout from '../Layout/PageLayout';
@@ -12,12 +12,16 @@ const Dashboard = () => {
     const dispatch = useDispatch();
 
      const { favorisItems, loading } = useSelector(state => state.auth.favoris);
-     const { isAuthenticated, isSubscribed } = useSelector(state => state.auth.auth)
-     const countFavoris = favorisItems.length;
-     let archivedItems = [];
+     const { isAuthenticated, isSubscribed, user } = useSelector(state => state.auth.auth)
+     const countFavoris = favorisItems.length
+     let archivedItems = []
+
+    const subscription  = new Date(user.subscribed* 1000)
+    const jsFormatendOfSubscribe = subscription .toUTCString()
+    console.log(subscription)
 
      useEffect(() => {
-        dispatch(loadFavoris());
+        dispatch(loadFavoris())
      }, [dispatch])
 
 
@@ -116,7 +120,11 @@ const Dashboard = () => {
                         Abonnez-vous pour avoir accès au cours
                     </Button>
                     :
-                    null
+                    (
+                        <Alert variant="primary">
+                            vous étes abonné jusqu'au {jsFormatendOfSubscribe}
+                        </Alert>
+                    )
                 }
 
             <Tabs defaultActiveKey="favoris">

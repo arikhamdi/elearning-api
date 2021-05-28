@@ -203,12 +203,12 @@ const StudentCourse = ({match}) => {
                     <Tab eventKey="about" title="Présentation">
                         {aboutThisCourse()}
                     </Tab>
-                    <Tab eventKey="profile" title="Commentaires">
+                    {/* <Tab eventKey="profile" title="Commentaires">
                         <h3 className="text-center">Commentaires</h3>
                     </Tab>
                     <Tab eventKey="contact" title="Questions">
                         <h3 className="text-center" >Questions</h3>
-                    </Tab>
+                    </Tab> */}
                 </Tabs>
         );
     }

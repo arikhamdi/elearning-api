@@ -65,12 +65,6 @@ const TeacherDashboard = () => {
                     >
                             Editer ce cours   
                     </Button>
-                    <Button 
-                    variant="dark" 
-                    className="mb-2 form-control"
-                    >
-                            Editer ce cours   
-                    </Button>
                      <Button 
                      variant="danger"
                      className="mb-2 form-control"
@@ -150,7 +144,7 @@ const TeacherDashboard = () => {
 
     return (
             <LayoutFluid
-            title="Teacher"
+            title="Formateur"
             className="container"
             >
 
