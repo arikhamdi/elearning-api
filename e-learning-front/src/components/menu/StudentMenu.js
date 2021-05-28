@@ -9,7 +9,9 @@ const StudentMenu = () => {
     const [show, setShow] = useState(false);
 
     const { user } = useSelector(state => state.auth.auth);
-    const {title} = useSelector(state => state.entities.courseDetails.course) 
+    const {course , progress} = useSelector(state => state.entities.courseDetails) 
+
+    let purcentOfProgress = (progress.count_readed_content / progress.count_content) *100
 
     return (
         <Navbar  expand="lg" bg="dark" variant="dark">
@@ -24,7 +26,10 @@ const StudentMenu = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
-                <Navbar.Brand style={{textTransform: 'capitalize'}}>{title}</Navbar.Brand>
+                <Navbar.Brand style={{textTransform: 'capitalize'}}>{course?.title}</Navbar.Brand>
+            </Nav>
+            <Nav className="mr-auto">
+                <Navbar.Brand >Cours complété à {purcentOfProgress} %</Navbar.Brand>
             </Nav>
             <Nav>
             <Dropdown alignRight>

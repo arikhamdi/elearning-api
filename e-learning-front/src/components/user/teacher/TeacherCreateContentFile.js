@@ -52,7 +52,7 @@ const TeacherCreateContentFile = ({match}) => {
             preview: file.name
           })))
       }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: '.pdf'})
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: '.pdf, .zip'})
 
      
     const sendFileHandler = e => {

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Accordion, Card, Col, Container, Form, Image, Row, Spinner, Tab, Tabs, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactPlayer from 'react-player'
-import { LoadCourseDetails } from '../../../store/course/details';
+import { getCourseDetailsProgress, LoadCourseDetails } from '../../../store/course/details';
 import { history } from '../../../store';
 import marked, { use } from 'marked'
 import DOMPurify from 'dompurify'
@@ -24,6 +24,8 @@ const StudentCourse = ({match}) => {
     const { user } = useSelector(state => state.auth.auth);
 
     const [newContent, setNewContent] = useState(true);
+
+
 
     const dispatch = useDispatch();
 
@@ -59,6 +61,9 @@ const StudentCourse = ({match}) => {
     },[alreadySeen])
 
 
+    useEffect(() => {
+        dispatch(getCourseDetailsProgress(`/users/student/${match.params.slug}/progress`))
+    },[course])
 
     const contentsList = course?.modules?.find((module) => module.id == content?.module);
     const prevContent = contentsList?.contents?.find((x) => x?.order === content?.order -1);
@@ -184,7 +189,7 @@ const StudentCourse = ({match}) => {
                     style={{width: "70%", height: "70px", fontSize: "2em"}}
                     variant="warning" 
                     href={`${MEDIA_ROOT}${content.item?.file}`} 
-                    target="_blank"  >Afficher le PDF</Button>
+                    target="_blank"  >Telecharger le fichier</Button>
                     </Container>);
             else 
                 return (
@@ -221,6 +226,11 @@ const StudentCourse = ({match}) => {
                     style={{padding: '5vh 15vh'}}
                     >
                     {course && course.overview}
+                    {/* <br/>
+                    <br/>
+                    <br/>
+                    <h5>Adresse email du formateur</h5>
+                    {course && course.owner?.email} */}
                 </p>
             </Fragment>
         )

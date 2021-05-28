@@ -17,6 +17,8 @@ from courses.serializers import (
     CourseSerializer
 )
 
+from django.db.models import Count
+
 from users.serializers import UserSerializer
 
 from courses.models import (Course, Module, Content)
@@ -43,10 +45,27 @@ def student_course_detail(request, course_slug):
     if is_enrolled:
         if request.method == 'GET':
             serializer = EnrolledCourseSerializer(course)
+            serializer.data['count_content'] = Count(Content.objects.filter(module__course__slug=course_slug))
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(status=status.HTTP_403_FORBIDDEN)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def student_course_progess(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+    is_enrolled = course.students.filter(id=request.user.id).exists()
+
+    if is_enrolled:
+        if request.method == 'GET':
+            count_content = len(Content.objects.filter(module__course__slug=course_slug))
+            count_readed_content = len(Content.objects.filter(module__course__slug=course_slug, already_seen=request.user))
+            return Response({
+                'count_content': count_content,
+                'count_readed_content': count_readed_content
+                }, status=status.HTTP_200_OK)
+
+    return Response(status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

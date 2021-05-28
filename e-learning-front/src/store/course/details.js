@@ -6,6 +6,7 @@ const slice = createSlice({
     name : "courseDetails",
     initialState: {
         course: {},
+        progress : 0, 
         loading: false,
         lastFetch: null
     },
@@ -20,6 +21,9 @@ const slice = createSlice({
         courseDetailsReceived : (courseDetails, action) => {
             courseDetails.course  = action.payload;
             courseDetails.loading = false;
+        },
+        courseDetailsProgressReceived : (courseDetails, action) => {
+            courseDetails.progress  = action.payload;
         },
         courseDetailsEditedSuccess : (courseDetails, action) => {
             courseDetails.course  = action.payload;
@@ -41,7 +45,8 @@ const {
     courseDetailsReceived,
     courseDetailsEditedSuccess,
     coursePublishedSuccess,
-    courseDeleted
+    courseDeleted,
+    courseDetailsProgressReceived
 } = slice.actions;
 
 export default slice.reducer;
@@ -53,6 +58,13 @@ export const LoadCourseDetails = url => apiRequest({
     url,
     onStart : courseDetailsRequest.type,
     onSuccess : courseDetailsReceived.type,
+    onError : courseDetailsRequestFailed.type
+});
+
+export const getCourseDetailsProgress = url => apiRequest({
+    url,
+    onStart : courseDetailsRequest.type,
+    onSuccess : courseDetailsProgressReceived.type,
     onError : courseDetailsRequestFailed.type
 });
 
