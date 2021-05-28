@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, Col, Container, Form } from 'react-bootstrap'
+import { Button, Col, Container, Form, OverlayTrigger, Popover } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { history } from '../../../store';
 import { addNewCourse } from '../../../store/course/list';
@@ -25,6 +25,17 @@ const TeacherCreateNewCourse = () => {
     
     
     const { title, image, overview, subject } = values;
+
+    const popover = (
+        <Popover id="popover-basic">
+          <Popover.Title as="h3">Image de couverture</Popover.Title>
+          <Popover.Content>
+            Nous ne stockons pas directement d'image sur le site. Seul un lien vers l'image peut être ajouté.
+            Si vous ne savez pas comment faire, nous vous invitons à regarder du coté de platform tel que -  
+            <a href="https://cloudinary.com/" target="_blank">Coudinary</a>
+          </Popover.Content>
+        </Popover>
+      );
 
     useEffect(() => {
         if (error) {
@@ -131,7 +142,10 @@ const TeacherCreateNewCourse = () => {
                 <Form.Group>
                 <Form.Row>
                     <Form.Label column lg={2}>
-                        Image
+                        Image 
+                        <OverlayTrigger  trigger="click" placement="right" overlay={popover}>
+                            <Button className="float-right" size="sm" variant="outline-dark" style={{border:"none"}}><i className="fas fa-question-circle"></i></Button>
+                        </OverlayTrigger>
                     </Form.Label>
                     <Col>
                         <Form.Control 
@@ -144,6 +158,7 @@ const TeacherCreateNewCourse = () => {
                         <Form.Control.Feedback type="invalid">
                             {errors?.image}
                         </Form.Control.Feedback>
+                        
                     </Col>
                 </Form.Row>
                 </Form.Group>
@@ -167,7 +182,8 @@ const TeacherCreateNewCourse = () => {
                     </Col>
                 </Form.Row>
             </Form.Group>
-            <Button type="submit">Ajouter</Button>
+            <Button className="float-right" type="submit">Ajouter</Button>
+            <Button className="ml-3" variant="dark" href={`/teacher/course`} >Retour</Button>
         </Form>
             
         </Container>

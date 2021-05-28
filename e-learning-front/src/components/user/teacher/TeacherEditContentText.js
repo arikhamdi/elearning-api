@@ -77,7 +77,7 @@ const TeacherEditContentText = ({match}) => {
         redirectTo={`/teacher/course/${match.params.slug}/edit`} 
         handleClose={() => setShow(false)} 
         />
-        <h1 className="text-center">{`Editer un text`}</h1>
+        <h1 className="text-center">{`Editer un texte`}</h1>
             
             <Form onSubmit={AddTextContentHandler}>
             <Form.Group>
@@ -93,7 +93,7 @@ const TeacherEditContentText = ({match}) => {
             </Form.Group>
             <Row>
             <Alert variant="primary">
-            <p>Le text ci-dessous dois être rédigé en markdown. 
+            <p>Le texte ci-dessous dois être rédigé en markdown. 
                 Vous ne savez pas comment cela fonctionne? 
                 <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Suivez le guide</a></p>
             </Alert>
@@ -104,7 +104,7 @@ const TeacherEditContentText = ({match}) => {
             <Form.Control 
                 as="textarea" 
                 rows={35} 
-                placeholder="Entrer votre text"
+                placeholder="Entrer votre texte"
                 value={overview}
                 onChange={formChangeHandler('overview')}
                 isInvalid={errors?.overview}

@@ -104,7 +104,8 @@ const TeacherCreateContentFile = ({match}) => {
             <aside>
                 {thumbs}
             </aside>
-            <Button type="submit">Ajouter</Button>
+            <Button variant="dark" href={`/teacher/course/${match.params.slug}/edit`}>Retour</Button>
+            <Button className="float-right" type="submit">Ajouter</Button>
             </Form>
             
             

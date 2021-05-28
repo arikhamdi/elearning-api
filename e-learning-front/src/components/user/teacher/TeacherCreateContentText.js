@@ -75,7 +75,7 @@ const TeacherCreateContentText = ({match}) => {
 
     return (
         <Container>
-        <h1 className="text-center">{`Ajouter un text`}</h1>
+        <h1 className="text-center">{`Ajouter un texte`}</h1>
             
             <Form onSubmit={AddTextContentHandler}>
             <Form.Group>
@@ -91,7 +91,7 @@ const TeacherCreateContentText = ({match}) => {
             </Form.Group>
             <Row>
             <Alert variant="primary">
-            <p>Le text ci-dessous dois être rédigé en markdown. 
+            <p>Le texte ci-dessous dois être rédigé en markdown. 
                 Vous ne savez pas comment cela fonctionne? 
                 <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Suivez le guide</a></p>
             </Alert>
@@ -100,7 +100,7 @@ const TeacherCreateContentText = ({match}) => {
             <Form.Control 
                 as="textarea" 
                 rows={35} 
-                placeholder="Entrer votre text"
+                placeholder="Entrer votre texte"
                 value={overview}
                 onChange={formChangeHandler('overview')}
                 isInvalid={errors?.overview}
@@ -114,7 +114,8 @@ const TeacherCreateContentText = ({match}) => {
             <div dangerouslySetInnerHTML={renderText(values['overview'])} style={{wordWrap: "break-word"}}/>
             </Col>
             </Row>
-            <Button type="submit">Ajouter</Button>
+            <Button variant="dark" href={`/teacher/course/${match.params.slug}/edit`}>Retour</Button>
+            <Button className="float-right" type="submit">Ajouter</Button>
             </Form>
             
             
