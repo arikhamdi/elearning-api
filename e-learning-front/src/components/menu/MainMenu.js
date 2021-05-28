@@ -46,7 +46,7 @@ const MainMenu = () => {
                     Categories
                     </Dropdown.Toggle>
                     <Dropdown.Menu  className="text-center">
-                        {subjects.list.map(subject => (
+                        {subjects?.list?.map(subject => (
                             <NavLink 
                             
                             className="nav-link text-dark" 

@@ -123,7 +123,7 @@ def teacher_modules_list(request, course_slug):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated, IsAuthorOrReadOnly, IsTeacher])
 def teacher_module_details(request, module_id):
     module = get_object_or_404(Module, id=module_id)
@@ -132,8 +132,8 @@ def teacher_module_details(request, module_id):
         serializer = ModuleSerializer(module)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        serializer = ModuleSerializer(module, data=request.data)
+    elif request.method == 'PATCH':
+        serializer = ModuleSerializer(module, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

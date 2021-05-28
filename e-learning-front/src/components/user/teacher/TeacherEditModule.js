@@ -52,7 +52,7 @@ const TeacherEditModule = ({match}) => {
             title,
             overview
         };
-        dispatch(editModule(`/users/teacher/module/${match.params.module}/`, module));
+        dispatch(editModule(`/users/teacher/module/${match.params.module}/`, module))
     };
 
     return (

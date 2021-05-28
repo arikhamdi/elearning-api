@@ -7,6 +7,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth import get_user_model
 
 
+from .fields import OrderField
+
 STATUS_CHOICES = (
     ('draft', 'Draft'),
     ('published', 'Published'),
@@ -74,7 +76,8 @@ class Module(models.Model):
         Course, on_delete=models.CASCADE, related_name='modules')
     title = models.CharField(max_length=200)
     overview = models.TextField(blank=True)
-    order = models.PositiveIntegerField(blank=True)
+    # order = models.PositiveIntegerField(blank=True)
+    order = OrderField(blank=True, for_fields=['course'])
     publish = models.DateTimeField(default=timezone.now)
     status = models.CharField(
         max_length=10,
@@ -90,21 +93,21 @@ class Module(models.Model):
     class Meta:
         ordering = ('order',)
 
-    def save(self, *args, **kwargs) -> None:
-        # if it is the first module for the current course
-        if self.course.modules.all().count() == 0 and not self.order:
-            self.order = 1
-        elif self.order:
-            pass
-        # else: get the max value for the modules order field for the current course
-        else:
-            query = {
-                field.order: field.id for field in self.course.modules.all()
-            }
-            if not self.order or self.order in query:
-                biggest_order_value = max(query.keys())
-                self.order = biggest_order_value + 1
-        super(Module, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs) -> None:
+    #     # if it is the first module for the current course
+    #     if self.course.modules.all().count() == 0 and not self.order:
+    #         self.order = 1
+    #     elif self.order:
+    #         pass
+    #     # else: get the max value for the modules order field for the current course
+    #     else:
+    #         query = {
+    #             field.order: field.id for field in self.course.modules.all()
+    #         }
+    #         if not self.order or self.order in query:
+    #             biggest_order_value = max(query.keys())
+    #             self.order = biggest_order_value + 1
+    #     super(Module, self).save(*args, **kwargs)
 
 
 class Content(models.Model):
@@ -121,7 +124,8 @@ class Content(models.Model):
         )})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
-    order = models.PositiveIntegerField(blank=True)
+    # order = models.PositiveIntegerField(blank=True)
+    order = OrderField(blank=True, for_fields=['module'])
 
     # Records students who have marked their content as "already seen".
     already_seen = models.ManyToManyField(
@@ -136,19 +140,19 @@ class Content(models.Model):
     class Meta:
         ordering = ('order',)
 
-    def save(self, *args, **kwargs) -> None:
-        # if it is the first contenht for the current module
-        if self.module.contents.all().count() == 0 and not self.order:
-            self.order = 1
-        elif self.order:
-            pass
-        # else: get the max value for the content order field for the current module
-        else:
-            query = [field.order for field in self.module.contents.all()]
-            if not self.order or self.order in query:
-                biggest_order_value = max(query)
-                self.order = biggest_order_value + 1
-        super(Content, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs) -> None:
+    #     # if it is the first contenht for the current module
+    #     if self.module.contents.all().count() == 0 and not self.order:
+    #         self.order = 1
+    #     elif self.order:
+    #         pass
+    #     # else: get the max value for the content order field for the current module
+    #     else:
+    #         query = [field.order for field in self.module.contents.all()]
+    #         if not self.order or self.order in query:
+    #             biggest_order_value = max(query)
+    #             self.order = biggest_order_value + 1
+    #     super(Content, self).save(*args, **kwargs)
 
 
 class ItemBase(models.Model):

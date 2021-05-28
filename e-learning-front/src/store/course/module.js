@@ -71,7 +71,7 @@ export const addNewModule =(url, module) => apiRequest({
 
 export const editModule =(url, module) => apiRequest({
     url,
-    method: "PUT",
+    method: "PATCH",
     data: module,
     onStart : moduleRequested.type,
     onSuccess : moduleEditionSuccess.type,

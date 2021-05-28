@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
+from elearning.pagination import CustomPagination
 
 from django.shortcuts import get_object_or_404, redirect
 from django.apps import apps
@@ -35,10 +36,12 @@ class SubjectListAPIView(generics.ListAPIView):
 class CoursesListAPIView(generics.ListAPIView):
     queryset = Course.published.all()
     serializer_class = CourseSerializer
+    pagination_class = CustomPagination
 
 class SearchCoursesListAPIView(generics.ListAPIView):
     queryset = Course.published.all()
     serializer_class = CourseSerializer
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         print(self.request.query_params.get('keyword'))
@@ -46,6 +49,7 @@ class SearchCoursesListAPIView(generics.ListAPIView):
 
 class CourseListBySubjectAPIView(generics.ListAPIView):
     serializer_class = CourseSerializer
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         subject = Subject.objects.get(slug=self.kwargs['subject_slug'])
