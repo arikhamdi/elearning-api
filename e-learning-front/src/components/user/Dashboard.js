@@ -6,6 +6,9 @@ import { loadFavoris, removeItemToFavorisLoggedInUser } from '../../store/user/f
 import PageLayout from '../Layout/PageLayout';
 import { Loader } from '../Layout/Loader';
 
+import Moment from 'react-moment';
+import 'moment/locale/fr';
+
 const Dashboard = () => {
 
 
@@ -16,9 +19,9 @@ const Dashboard = () => {
      const countFavoris = favorisItems.length
      let archivedItems = []
 
-    const subscription  = new Date(user.subscribed* 1000)
-    const jsFormatendOfSubscribe = subscription .toUTCString()
-    console.log(subscription)
+    const subscription  = new Date(user.subscribed * 1000)
+
+
 
      useEffect(() => {
         dispatch(loadFavoris())
@@ -122,7 +125,7 @@ const Dashboard = () => {
                     :
                     (
                         <Alert variant="primary">
-                            vous étes abonné jusqu'au {jsFormatendOfSubscribe}
+                            Vous étes abonné jusqu'au <Moment locale="fr" format='Do MMMM YYYY, HH:mm'>{subscription}</Moment>
                         </Alert>
                     )
                 }
