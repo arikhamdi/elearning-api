@@ -1,10 +1,10 @@
-From node:alpine
+FROM node:alpine
 
-WORKDIR /app
-# ENV PATH /app/node_modules/.bin:$PATH
+WORKDIR '/app'
 
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm i
+COPY package.json .
+RUN npm install
 
-COPY . ./
+COPY . .
+
+CMD ["npm", "run", "start"]

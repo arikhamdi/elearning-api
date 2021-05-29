@@ -49,7 +49,7 @@ const  Search = () => {
             ) : <PageLayout title="Aucun contenu" />)}
         </CardColumns>
             
-        {lastPage !== 1 ? 
+        {lastPage > 1 ? 
         <Paginator lastPage={lastPage} handlePageChange={handlePageChange} />
             :
             null

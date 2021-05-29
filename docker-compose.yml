@@ -21,7 +21,7 @@ services:
     depends_on:
       - database
   
-  front:
+  client:
     container_name: elearning_front
     build:
       context: ./e-learning-front
@@ -29,9 +29,12 @@ services:
     ports:
       - "3000:3000"
     volumes:
+      - /app/node_modules
       - ./e-learning-front:/app
-    command: >
-      npm start
+    depends_on:
+      - app
+    links:
+      - app
 
   database:
     container_name: elearning_api_db

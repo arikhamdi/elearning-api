@@ -32,20 +32,6 @@ docker-compose up
 docker-compose run --rm app sh -c "python manage.py loaddata */fixtures/*.json"
 ```
 
-# <p style="color: red">Run tests<p>
-
-<p style="color: red">Tests don't work now - need to be fixed<p> 
-This command works in all cases, whether docker is up or down
-
-```
-docker-compose run --rm app sh -c "python manage.py test"
-```
-
-This command works only if docker is running
-
-```
-docker-compose exec app python manage.py test
-```
 
 # API endpoints
 

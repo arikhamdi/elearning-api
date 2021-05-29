@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subject, Course, Content, Text, Video
+from .models import Subject, Course
 
 
 @admin.register(Subject)
@@ -17,7 +17,3 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['title', 'overview']
     prepopulated_fields = {'slug': ('title',)}
 
-
-# admin.site.register(Content)
-# admin.site.register(Text)
-# admin.site.register(Video)
